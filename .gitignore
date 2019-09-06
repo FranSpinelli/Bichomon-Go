@@ -1,6 +1,6 @@
 .classpath
 .settings
-.iml
+bichomon-go.iml
 .idea
 .project
 /target
