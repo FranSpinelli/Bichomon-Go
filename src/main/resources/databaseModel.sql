@@ -8,7 +8,7 @@ USE epers_persistiendoConEstilo_jdbc;
 
 CREATE TABLE especie (
   id SERIAL NOT NULL UNIQUE PRIMARY KEY ,
-  nombre varchar(30) NOT NULL,
+  nombre varchar(30) NOT NULL UNIQUE,
   altura int NOT NULL,
   peso int NOT NULL,
   tipoDeBicho varchar(30) NOT NULL,
