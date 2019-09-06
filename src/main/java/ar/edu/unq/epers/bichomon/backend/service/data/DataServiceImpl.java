@@ -1,7 +1,5 @@
 package ar.edu.unq.epers.bichomon.backend.service.data;
 
-import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
