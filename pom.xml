@@ -57,6 +57,12 @@
 			<version>3.1.0</version>
 			<scope>compile</scope>
 		</dependency>
+
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>8.0.15</version>
+		</dependency>
 	</dependencies>
 
 	<dependencyManagement>
@@ -88,12 +94,12 @@
 				<version>9.3.11.v20160721</version>
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
-					<connectors>
-						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-							<port>8080</port>
-							<maxIdleTime>60000</maxIdleTime>
-						</connector>
-					</connectors>
+					 <connectors>
+					<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+						<port>8080</port>
+						<maxIdleTime>60000</maxIdleTime>
+					</connector>
+				</connectors>
 				</configuration>
 			</plugin>
 		</plugins>
