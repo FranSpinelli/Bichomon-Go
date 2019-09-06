@@ -9,8 +9,11 @@ USE epers_persistiendoConEstilo_jdbc;
 CREATE TABLE especie (
   id SERIAL NOT NULL UNIQUE PRIMARY KEY ,
   nombre varchar(30) NOT NULL,
+  altura int NOT NULL,
   peso int NOT NULL,
-  tipo varchar(30) NOT NULL,
+  tipoDeBicho varchar(30) NOT NULL,
+  energiaInicial int NOT NULL,
+  urlFoto varchar(50),
   cantidadDeBichos int NOT NULL
 )
 ENGINE = InnoDB;
