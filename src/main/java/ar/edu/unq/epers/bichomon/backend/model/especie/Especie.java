@@ -2,8 +2,6 @@ package ar.edu.unq.epers.bichomon.backend.model.especie;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 
-import javax.validation.constraints.Null;
-
 /**
  * Representa una {@link Especie} de bicho.
  * 
@@ -11,7 +9,6 @@ import javax.validation.constraints.Null;
  */
 public class Especie {
 
-	private Integer id;
 	private String nombre;
 	private int altura;
 	private int peso;
@@ -23,11 +20,8 @@ public class Especie {
 	
 	private int cantidadBichos;
 	
-	public Especie(){
-	}
-	
 	public Especie(String nombre, TipoBicho tipo) {
-	    //this.id = Null;
+	    
 		this.nombre = nombre;
 		this.tipo = tipo;
 	}
