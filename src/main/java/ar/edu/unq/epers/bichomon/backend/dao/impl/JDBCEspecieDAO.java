@@ -120,6 +120,20 @@ public class JDBCEspecieDAO implements EspecieDAO {
         });
     }
 
+    @Override
+    public void eliminarTodos() {
+        this.executeWithConnection(conn -> {
+            PreparedStatement ps = conn.prepareStatement("DELETE FROM especie");
+            ps.execute();
+
+            if (ps.getUpdateCount() != 0) {
+                throw new RuntimeException("No se pudo eliminar los datos de la tabla");
+            }
+            ps.close();
+
+            return null;
+        });
+    }
 
 
 //PRIVATE FUNCTIONS----------------------------------------------------------------------------------------------------------------------
