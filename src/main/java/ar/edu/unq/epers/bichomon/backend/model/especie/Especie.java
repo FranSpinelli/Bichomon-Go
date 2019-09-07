@@ -80,9 +80,7 @@ public class Especie {
 	public int getEnergiaInicial() {
 		return this.energiaInicial;
 	}
-	public void setEnergiaIncial(int energiaInicial) {
-		this.energiaInicial = energiaInicial;
-	}
+
 
 	/**
 	 * @return el tipo de todos los bichos de esta especie
@@ -108,5 +106,9 @@ public class Especie {
 	public Bicho crearBicho(String nombreBicho){
 		this.cantidadBichos++;
 		return new Bicho(this, nombreBicho);
+	}
+
+	public void setEnergiaIncial(int energiaInicial) {
+		this.energiaInicial = energiaInicial;
 	}
 }

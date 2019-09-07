@@ -14,4 +14,6 @@ public interface EspecieDAO {
 
 	List<Especie> recuperarTodos();
 
+	void eliminarTodos();
+
 }

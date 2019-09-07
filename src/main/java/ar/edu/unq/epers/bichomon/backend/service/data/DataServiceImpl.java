@@ -1,12 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.service.data;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
-import connection.ConnectionBlock;
 
 public class DataServiceImpl implements DataService {
 

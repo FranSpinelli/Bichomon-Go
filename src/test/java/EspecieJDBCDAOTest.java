@@ -1,3 +1,4 @@
+package java;
 
 import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
 import static org.junit.Assert.assertEquals;

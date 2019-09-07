@@ -9,13 +9,14 @@ import java.sql.SQLException;
 
 import java.util.ArrayList;
 
+import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import connection.ConnectionBlock;
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
-import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import java.util.List;
 
 public class JDBCEspecieDAO implements EspecieDAO {
+
     @Override
     public void guardar(Especie especie) {
         this.executeWithConnection(conn -> {
@@ -118,6 +119,10 @@ public class JDBCEspecieDAO implements EspecieDAO {
             return especies;
         });
     }
+
+
+
+//PRIVATE FUNCTIONS----------------------------------------------------------------------------------------------------------------------
 
     private <T> T executeWithConnection(ConnectionBlock<T> bloque) {
         Connection connection = this.openConnection();
