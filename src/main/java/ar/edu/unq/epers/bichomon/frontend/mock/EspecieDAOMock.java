@@ -91,6 +91,9 @@ public class EspecieDAOMock implements EspecieDAO {
 	}
 
 	@Override
+	public void eliminarTodos() { DATA.clear();}
+
+	@Override
 	public void actualizar(Especie especie) {
 	}
 
