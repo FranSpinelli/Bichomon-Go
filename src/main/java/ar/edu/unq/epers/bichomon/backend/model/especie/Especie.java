@@ -31,7 +31,7 @@ public class Especie {
 		this.nombre = nombre;
 		this.tipo = tipo;
 	}
-	
+
 	/**
 	 * @return el nombre de la especie (por ejemplo: Perromon)
 	 */
@@ -80,7 +80,7 @@ public class Especie {
 	public int getEnergiaInicial() {
 		return this.energiaInicial;
 	}
-	public void setEnergiaInicial(int energiaInicial) {
+	public void setEnergiaIncial(int energiaInicial) {
 		this.energiaInicial = energiaInicial;
 	}
 
@@ -105,18 +105,8 @@ public class Especie {
 		this.cantidadBichos = i;
 	}
 
-	/*
-	public Integer getId() {
-		return id;
-	}
-	public void setId(Integer id) {
-		this.id = id;
-	}
-	*/
-
 	public Bicho crearBicho(String nombreBicho){
 		this.cantidadBichos++;
 		return new Bicho(this, nombreBicho);
 	}
-	
 }
