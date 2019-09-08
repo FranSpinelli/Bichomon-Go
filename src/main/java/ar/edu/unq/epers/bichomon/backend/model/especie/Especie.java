@@ -21,7 +21,7 @@ public class Especie {
 	private int cantidadBichos;
 	
 	public Especie(String nombre, TipoBicho tipo) {
-	    
+
 		this.nombre = nombre;
 		this.tipo = tipo;
 	}
@@ -75,6 +75,13 @@ public class Especie {
 		return this.energiaInicial;
 	}
 
+	/*Todo: un set de energia inicial es para EspecieDAOMock que no lo detecta, el otro para JDBCEspecieDAO que tampoco lo detecta, a solucionar */
+	public void setEnergiaInicial(int energiaInicial) {
+		this.energiaInicial = energiaInicial;
+	}
+	public void setEnergiaIncial(int energiaInicial) {
+		this.energiaInicial = energiaInicial;
+	}
 
 	/**
 	 * @return el tipo de todos los bichos de esta especie
@@ -102,7 +109,6 @@ public class Especie {
 		return new Bicho(this, nombreBicho);
 	}
 
-	public void setEnergiaIncial(int energiaInicial) {
-		this.energiaInicial = energiaInicial;
-	}
 }
+
+
