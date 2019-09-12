@@ -40,7 +40,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
     @Override
     public void actualizar(Especie especie) {
         this.executeWithConnection(conn -> {
-            PreparedStatement ps = conn.prepareStatement("UPDATE especies SET nombre=?, altura=?, peso=?, energiaInicial=?, tipoDeBicho=?, cantidadDeBichos=?, urlFoto=? WHERE nombre=?");
+            PreparedStatement ps = conn.prepareStatement("UPDATE especie SET nombre=?, altura=?, peso=?, energiaInicial=?, tipoDeBicho=?, cantidadDeBichos=?, urlFoto=? WHERE nombre=?");
             ps.setString(1, especie.getNombre());
             ps.setInt(2, especie.getAltura());
             ps.setInt(3, especie.getPeso());
@@ -52,7 +52,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
             ps.execute();
 
             if (ps.getUpdateCount() != 1) {
-                throw new RuntimeException("No se inserto el personaje " + especie);
+                throw new RuntimeException("No existe el personaje " + especie);
             }
             ps.close();
 
@@ -155,7 +155,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
         try {
             /*todo: se puede mejorar el metodo para que la URL no aparezca aca?*/
 
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/epers_persistiendoconestilo_jdbc?user=root&password=42547268&serverTimezone=UTC");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_jdbc?user=root&password=root&serverTimezone=UTC");
         } catch (SQLException e) {
             throw new RuntimeException("No se puede establecer una conexion", e);
         }
