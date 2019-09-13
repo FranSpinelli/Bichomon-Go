@@ -121,7 +121,8 @@ public class JDBCEspecieDAOTest {
 
         especies.add(this.charmandar);
         this.dao.guardar(this.charmandar);
-        this.comprobarListasSimilares(especies, this.dao.recuperarTodos());
+        List<Especie> especies2 = this.dao.recuperarTodos();
+        this.comprobarListasSimilares(especies, especies2);
 
         especies.add(this.charmilian);
         especies.add(this.chorizard);

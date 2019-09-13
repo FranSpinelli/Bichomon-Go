@@ -1,11 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.dao.impl;
 
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 
 import java.util.ArrayList;
 
@@ -20,7 +16,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
     @Override
     public void guardar(Especie especie) {
         this.executeWithConnection(conn -> {
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO especie (nombre, altura, peso, tipoDeBicho, energiaInicial, urlFoto, cantidadDeBichos) VALUES (?,?,?,?,?,?,0)");
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO especie (nombre, altura, peso, tipoDeBicho, energiaInicial, urlFoto, cantidadDeBichos) VALUES (?,?,?,?,?,?,0)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, especie.getNombre());
             ps.setInt(2, especie.getAltura());
             ps.setInt(3, especie.getPeso());
@@ -29,11 +25,9 @@ public class JDBCEspecieDAO implements EspecieDAO {
             ps.setString(6, especie.getUrlFoto());
             ps.execute();
 
-            ps = conn.prepareStatement("SELECT id FROM especie WHERE nombre=?");
-            ps.setString(1, especie.getNombre());
-            ResultSet resultSet = ps.executeQuery();
-            while (resultSet.next()) {
-                especie.setId(resultSet.getInt("id"));
+            ResultSet resultSet = ps.getGeneratedKeys();
+            if (resultSet.next()){
+                especie.setId(resultSet.getInt(1));
             }
             ps.close();
             return null;
@@ -69,27 +63,12 @@ public class JDBCEspecieDAO implements EspecieDAO {
     @Override
     public Especie recuperar(String nombreEspecie) {
         return this.executeWithConnection(conn -> {
-            PreparedStatement ps = conn.prepareStatement("SELECT id, altura, peso, tipoDeBicho, energiaInicial, urlFoto, cantidadDeBichos FROM especie WHERE nombre = ?");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM especie WHERE nombre = ?");
             ps.setString(1, nombreEspecie);
-
             ResultSet resultSet = ps.executeQuery();
-
             Especie especie = null;
-            while (resultSet.next()) {
-
-                //if (especie != null) {
-                  //  throw new RuntimeException("Existe mas de un personaje con el nombre " + nombreEspecie);
-                //}
-
-                TipoBicho tipo = TipoBicho.valueOf(resultSet.getString("tipoDeBicho"));
-
-                especie = new Especie(nombreEspecie, tipo);
-                especie.setId(resultSet.getInt("id"));
-                especie.setAltura(resultSet.getInt("altura"));
-                especie.setPeso(resultSet.getInt("peso"));
-                especie.setEnergiaInicial(resultSet.getInt("energiaInicial"));
-                especie.setUrlFoto(resultSet.getString("urlFoto"));
-                especie.setCantidadBichos(resultSet.getInt("cantidadDeBichos"));
+            if(resultSet.next()){
+                especie = this.crearEspecieConResultSet(resultSet);
             }
             ps.close();
             return especie;
@@ -100,23 +79,10 @@ public class JDBCEspecieDAO implements EspecieDAO {
     public List<Especie> recuperarTodos(){
         return this.executeWithConnection(conn -> {
             PreparedStatement ps = conn.prepareStatement("SELECT * FROM especie");
-
             ResultSet resultSet = ps.executeQuery();
-
             List<Especie> especies = new ArrayList<Especie>();
-            while (resultSet.next()) {
-
-                Especie especie = new Especie(
-                        resultSet.getString("nombre"),
-                        TipoBicho.valueOf(resultSet.getString("tipoDeBicho"))
-                );
-                especie.setId(resultSet.getInt("id"));
-                especie.setAltura(resultSet.getInt("altura"));
-                especie.setPeso(resultSet.getInt("peso"));
-                especie.setEnergiaInicial(resultSet.getInt("energiaInicial"));
-                especie.setUrlFoto(resultSet.getString("urlFoto"));
-                especie.setCantidadBichos(resultSet.getInt("cantidadDeBichos"));
-                especies.add(especie);
+            while(resultSet.next()){
+                especies.add(this.crearEspecieConResultSet(resultSet));
             }
 
             ps.close();
@@ -165,5 +131,20 @@ public class JDBCEspecieDAO implements EspecieDAO {
         } catch (SQLException e) {
             throw new RuntimeException("Error al cerrar la conexion", e);
         }
+    }
+
+    private Especie crearEspecieConResultSet(ResultSet resultSet) throws SQLException {
+
+        Especie especie = null;
+        String nombreEspecie = resultSet.getString("nombre");
+        TipoBicho tipo = TipoBicho.valueOf(resultSet.getString("tipoDeBicho"));
+        especie = new Especie(nombreEspecie, tipo);
+        especie.setId(resultSet.getInt("id"));
+        especie.setAltura(resultSet.getInt("altura"));
+        especie.setPeso(resultSet.getInt("peso"));
+        especie.setEnergiaInicial(resultSet.getInt("energiaInicial"));
+        especie.setUrlFoto(resultSet.getString("urlFoto"));
+        especie.setCantidadBichos(resultSet.getInt("cantidadDeBichos"));
+        return especie;
     }
 }
