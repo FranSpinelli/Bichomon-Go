@@ -20,13 +20,14 @@ public class JDBCEspecieDAO implements EspecieDAO {
     @Override
     public void guardar(Especie especie) {
         this.executeWithConnection(conn -> {
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO especie (nombre, altura, peso, tipoDeBicho, energiaInicial, urlFoto, cantidadDeBichos) VALUES (?,?,?,?,?,?,0)");
-            ps.setString(1, especie.getNombre());
-            ps.setInt(2, especie.getAltura());
-            ps.setInt(3, especie.getPeso());
-            ps.setString(4, especie.getTipo().name());
-            ps.setInt(5, especie.getEnergiaInicial());
-            ps.setString(6, especie.getUrlFoto());
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO especie (id,nombre, altura, peso, tipoDeBicho, energiaInicial, urlFoto, cantidadDeBichos) VALUES (?,?,?,?,?,?,?,0)");
+            ps.setInt(1,especie.getId());
+            ps.setString(2, especie.getNombre());
+            ps.setInt(3, especie.getAltura());
+            ps.setInt(4, especie.getPeso());
+            ps.setString(5, especie.getTipo().name());
+            ps.setInt(6, especie.getEnergiaInicial());
+            ps.setString(7, especie.getUrlFoto());
             ps.execute();
 
             if (ps.getUpdateCount() != 1) {
@@ -79,8 +80,9 @@ public class JDBCEspecieDAO implements EspecieDAO {
                 }
 
                 TipoBicho tipo = TipoBicho.valueOf(resultSet.getString("tipoDeBicho"));
+                int idDeEspecie = resultSet.getInt("id");
 
-                especie = new Especie(nombreEspecie, tipo);
+                especie = new Especie(idDeEspecie,nombreEspecie, tipo);
                 especie.setAltura(resultSet.getInt("altura"));
                 especie.setPeso(resultSet.getInt("peso"));
                 especie.setEnergiaInicial(resultSet.getInt("energiaInicial"));
@@ -105,6 +107,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
             while (resultSet.next()) {
 
                 Especie especie = new Especie(
+                        resultSet.getInt("id"),
                         resultSet.getString("nombre"),
                         TipoBicho.valueOf(resultSet.getString("tipoDeBicho"))
                 );//TODO Revisar tipo de bicho
