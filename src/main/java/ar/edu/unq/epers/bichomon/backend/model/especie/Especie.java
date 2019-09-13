@@ -17,6 +17,10 @@ public class Especie {
 	private int energiaInicial;
 	private String urlFoto;
 	private int cantidadBichos;
+
+	public Especie(){
+
+	}
 	
 	public Especie(String nombre, TipoBicho tipo) {
 
