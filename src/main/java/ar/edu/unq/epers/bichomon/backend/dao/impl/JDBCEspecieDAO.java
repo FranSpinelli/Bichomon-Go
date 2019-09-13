@@ -46,7 +46,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
             ps.setInt(2, especie.getAltura());
             ps.setInt(3, especie.getPeso());
             ps.setInt(4, especie.getEnergiaInicial());
-            ps.setString(5, especie.getTipo().toString());//TODO Revisar
+            ps.setString(5, especie.getTipo().toString());
             ps.setInt(6, especie.getCantidadBichos());
             ps.setString(7, especie.getUrlFoto());
             ps.setInt(8, especie.getId());
@@ -88,10 +88,8 @@ public class JDBCEspecieDAO implements EspecieDAO {
                 especie.setEnergiaInicial(resultSet.getInt("energiaInicial"));
                 especie.setUrlFoto(resultSet.getString("urlFoto"));
                 especie.setCantidadBichos(resultSet.getInt("cantidadDeBichos"));
-
+            }
             ps.close();
-            return especie;
-        }
             return especie;
         });
     }
@@ -110,7 +108,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
                         resultSet.getInt("id"),
                         resultSet.getString("nombre"),
                         TipoBicho.valueOf(resultSet.getString("tipoDeBicho"))
-                );//TODO Revisar tipo de bicho
+                );
 
                 especie.setAltura(resultSet.getInt("altura"));
                 especie.setPeso(resultSet.getInt("peso"));

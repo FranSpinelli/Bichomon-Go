@@ -99,6 +99,29 @@ public class JDBCEspecieDAOTest {
         this.comprobarListasSimilares(especies, this.dao.recuperarTodos());
     }
 
+    @Test
+    public void testEliminarTodos(){
+        //Guardo especies
+        this.dao.guardar(this.pacacho);
+        this.dao.guardar(this.charmandar);
+        this.dao.guardar(this.charmilian);
+        this.dao.guardar(this.chorizard);
+        //Compruebo que esten
+        this.comprobarEspeciesSimilares(this.pacacho, this.dao.recuperar(this.pacacho.getNombre()));
+        this.comprobarEspeciesSimilares(this.charmandar, this.dao.recuperar(this.charmandar.getNombre()));
+        this.comprobarEspeciesSimilares(this.charmilian, this.dao.recuperar(this.charmilian.getNombre()));
+        this.comprobarEspeciesSimilares(this.chorizard, this.dao.recuperar(this.chorizard.getNombre()));
+        //Elimino todas las especies de la base
+        this.dao.eliminarTodos();
+        //Compruebo que no esten
+        assertNull(this.dao.recuperar(this.pacacho.getNombre()));
+        assertNull(this.dao.recuperar(this.charmilian.getNombre()));
+        assertNull(this.dao.recuperar(this.charmandar.getNombre()));
+        assertNull(this.dao.recuperar(this.chorizard.getNombre()));
+        //Compruebo que no haya nada
+        assertEquals(new ArrayList<Especie>(), this.dao.recuperarTodos());
+    }
+
     private void comprobarListasSimilares(List<Especie> especies, List<Especie> otrasEspecies) {
         assertEquals(especies.size(), otrasEspecies.size());
         for(Integer i = 0; i < especies.size(); i++){
