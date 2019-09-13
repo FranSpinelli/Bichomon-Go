@@ -5,7 +5,7 @@ USE epers_persistiendoConEstilo_jdbc;
 /* esta sentencia indica a mySql que use esa BD por defecto para las prox sentencias*/
 
 CREATE TABLE especie (
-  id SERIAL NOT NULL UNIQUE PRIMARY KEY ,
+  id int NOT NULL UNIQUE PRIMARY KEY ,
   nombre varchar(30) NOT NULL UNIQUE,
   altura int NOT NULL,
   peso int NOT NULL,

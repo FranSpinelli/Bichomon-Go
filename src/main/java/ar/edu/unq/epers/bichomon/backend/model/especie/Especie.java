@@ -9,19 +9,18 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
  */
 public class Especie {
 
+	private int id;
 	private String nombre;
 	private int altura;
 	private int peso;
 	private TipoBicho tipo;
-
 	private int energiaInicial;
-	
 	private String urlFoto;
-	
 	private int cantidadBichos;
 	
-	public Especie(String nombre, TipoBicho tipo) {
+	public Especie(int id, String nombre, TipoBicho tipo) {
 
+		this.id = id;
 		this.nombre = nombre;
 		this.tipo = tipo;
 	}
@@ -109,6 +108,17 @@ public class Especie {
 		return new Bicho(this, nombreBicho);
 	}
 
+	/**
+	 * @return el id de la especie
+	 */
+
+	public int getId(){
+		return this.id;
+	}
+
+	public void setId(int nuevoId){
+		this.id=nuevoId;
+	}
 }
 
 
