@@ -17,7 +17,7 @@ public class EspecieJDBCDAOTest {
 
     @Before
     public void crearModelo() {
-        this.pacacho = new Especie("Pacachu", ELECTRICIDAD);
+        this.pacacho = new Especie(1,"Pacachu", ELECTRICIDAD);
         this.pacacho.setAltura(400);//en cm
         this.pacacho.setPeso(5);
         this.pacacho.setUrlFoto("https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png");
