@@ -7,6 +7,9 @@ import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.util.List;
+import java.util.ArrayList;
+
 import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
 
 public class JDBCEspecieDAOTest {
@@ -16,7 +19,7 @@ public class JDBCEspecieDAOTest {
     @Before
     public void crearModelo() {
         this.dao.eliminarTodos();
-        this.pacacho = new Especie("Pacachu", ELECTRICIDAD);
+        this.pacacho = new Especie(0,"Pacachu", ELECTRICIDAD);
         this.pacacho.setAltura(400);//en cm
         this.pacacho.setPeso(5);
         this.pacacho.setUrlFoto("https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png");
@@ -35,7 +38,10 @@ public class JDBCEspecieDAOTest {
 
         this.dao.guardar(this.pacacho);
         Especie pacachoRecuperado = this.dao.recuperar("Pacachu");
+        this.comprobarEspeciesSimilares(pacacho, pacachoRecuperado);
+
         //Compruebo que los atributos coincidan
+        /*
         assertEquals(pacachoRecuperado.getNombre(), pacacho.getNombre());
         assertEquals(pacachoRecuperado.getAltura(), pacacho.getAltura());
         assertEquals(pacachoRecuperado.getPeso(), pacacho.getPeso());
@@ -43,6 +49,8 @@ public class JDBCEspecieDAOTest {
         assertEquals(pacachoRecuperado.getCantidadBichos(), pacacho.getCantidadBichos());
         assertEquals(pacachoRecuperado.getEnergiaInicial(), pacacho.getEnergiaInicial());
         assertEquals(pacachoRecuperado.getUrlFoto(), pacacho.getUrlFoto());
+        */
+
         //Modifico los atributos de el original
         this.pacacho.setCantidadBichos(20);
         this.pacacho.setNombre("Pacacho");
@@ -63,7 +71,10 @@ public class JDBCEspecieDAOTest {
         //Actualizo los datos
         this.dao.actualizar(this.pacacho);
         pacachoRecuperado = this.dao.recuperar("Pacacho");
+        this.comprobarEspeciesSimilares(pacacho, pacachoRecuperado);
+
         //Compruebo que los atributos coincidan
+        /*
         assertEquals(pacachoRecuperado.getNombre(), pacacho.getNombre());
         assertEquals(pacachoRecuperado.getAltura(), pacacho.getAltura());
         assertEquals(pacachoRecuperado.getPeso(), pacacho.getPeso());
@@ -71,7 +82,7 @@ public class JDBCEspecieDAOTest {
         assertEquals(pacachoRecuperado.getCantidadBichos(), pacacho.getCantidadBichos());
         assertEquals(pacachoRecuperado.getEnergiaInicial(), pacacho.getEnergiaInicial());
         assertEquals(pacachoRecuperado.getUrlFoto(), pacacho.getUrlFoto());
-
+        */
         //==================Caso Feliz==================
         //Guardar
         //Recuperar
@@ -86,6 +97,54 @@ public class JDBCEspecieDAOTest {
         //Comprobar excepcion
 
 
+    }
+
+    @Test
+    public void testRecuperarTodos(){
+        //Crear lista vacia
+        //RecuperarTodos
+        //Comparar que sean iguales
+        //Crear y Guardar una especie
+        //Agregar especie a la lista
+        //RecuperarTodos y comparar que sean listas similares
+        //Crear y Guardar mas especies
+        //Agragar las especies a la lista
+        //RecuperarTodos y comparar que sean listas similares
+        Especie charmandar = new Especie(1, "Charmandar", FUEGO);
+        Especie charmilian = new Especie(2, "Charmilian", FUEGO);
+        Especie chorizard = new Especie(3, "Chorizard", FUEGO);
+        List<Especie> especies = new ArrayList<Especie>();
+
+        assertEquals(especies, this.dao.recuperarTodos());
+
+        especies.add(charmandar);
+        this.dao.guardar(charmandar);
+        this.comprobarListasSimilares(especies, this.dao.recuperarTodos());
+
+        especies.add(charmilian);
+        especies.add(chorizard);
+        this.dao.guardar(charmilian);
+        this.dao.guardar(chorizard);
+        this.comprobarListasSimilares(especies, this.dao.recuperarTodos());
+    }
+
+    private void comprobarListasSimilares(List<Especie> especies, List<Especie> otrasEspecies) {
+        assertEquals(especies.size(), otrasEspecies.size());
+        for(Integer i = 0; i < especies.size(); i++){
+            this.comprobarEspeciesSimilares(especies.get(i), otrasEspecies.get(i));
+        }
+    }
+
+    private void comprobarEspeciesSimilares(Especie especie, Especie otraEspecie) {
+        assertEquals(especie.getId(), otraEspecie.getId());
+        assertEquals(especie.getNombre(), otraEspecie.getNombre());
+        assertEquals(especie.getAltura(), otraEspecie.getAltura());
+        assertEquals(especie.getPeso(), otraEspecie.getPeso());
+        assertEquals(especie.getTipo(), otraEspecie.getTipo());
+        assertEquals(especie.getCantidadBichos(), otraEspecie.getCantidadBichos());
+        assertEquals(especie.getEnergiaInicial(), otraEspecie.getEnergiaInicial());
+        assertEquals(especie.getUrlFoto(), otraEspecie.getUrlFoto());
+        assertNotEquals(especie, otraEspecie);
     }
 
 

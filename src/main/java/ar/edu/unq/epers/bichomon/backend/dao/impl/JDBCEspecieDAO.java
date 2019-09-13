@@ -40,7 +40,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
     @Override
     public void actualizar(Especie especie) {
         this.executeWithConnection(conn -> {
-            PreparedStatement ps = conn.prepareStatement("UPDATE especie SET nombre=?, altura=?, peso=?, energiaInicial=?, tipoDeBicho=?, cantidadDeBichos=?, urlFoto=? WHERE nombre=?");
+            PreparedStatement ps = conn.prepareStatement("UPDATE especie SET nombre=?, altura=?, peso=?, energiaInicial=?, tipoDeBicho=?, cantidadDeBichos=?, urlFoto=? WHERE id=?");
             ps.setString(1, especie.getNombre());
             ps.setInt(2, especie.getAltura());
             ps.setInt(3, especie.getPeso());
@@ -48,7 +48,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
             ps.setString(5, especie.getTipo().toString());//TODO Revisar
             ps.setInt(6, especie.getCantidadBichos());
             ps.setString(7, especie.getUrlFoto());
-            ps.setString(8, especie.getNombre());
+            ps.setString(8, especie.getId());
             ps.execute();
 
             if (ps.getUpdateCount() != 1) {
@@ -105,6 +105,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
             while (resultSet.next()) {
 
                 Especie especie = new Especie(
+                        resultSet.getInt("id"),
                         resultSet.getString("nombre"),
                         TipoBicho.valueOf(resultSet.getString("tipoDeBicho"))
                 );//TODO Revisar tipo de bicho
