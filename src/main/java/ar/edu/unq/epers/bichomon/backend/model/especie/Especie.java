@@ -73,12 +73,7 @@ public class Especie {
 	public int getEnergiaInicial() {
 		return this.energiaInicial;
 	}
-
-	/*Todo: un set de energia inicial es para EspecieDAOMock que no lo detecta, el otro para JDBCEspecieDAO que tampoco lo detecta, a solucionar */
 	public void setEnergiaInicial(int energiaInicial) {
-		this.energiaInicial = energiaInicial;
-	}
-	public void setEnergiaIncial(int energiaInicial) {
 		this.energiaInicial = energiaInicial;
 	}
 

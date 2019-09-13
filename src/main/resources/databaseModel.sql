@@ -2,7 +2,6 @@ DROP SCHEMA IF EXISTS epers_persistiendoConEstilo_jdbc;
 CREATE SCHEMA epers_persistiendoConEstilo_jdbc;
 
 USE epers_persistiendoConEstilo_jdbc;
-/* esta sentencia indica a mySql que use esa BD por defecto para las prox sentencias*/
 
 CREATE TABLE especie (
   id int NOT NULL UNIQUE PRIMARY KEY ,

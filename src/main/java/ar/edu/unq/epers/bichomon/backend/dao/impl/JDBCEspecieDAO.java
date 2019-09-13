@@ -30,9 +30,6 @@ public class JDBCEspecieDAO implements EspecieDAO {
             ps.setString(7, especie.getUrlFoto());
             ps.execute();
 
-            if (ps.getUpdateCount() != 1) {
-                throw new RuntimeException("No se inserto la especie " + especie);
-            }
             return null;
         });
     }
@@ -73,8 +70,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
 
             Especie especie = null;
             while (resultSet.next()) {
-                //si personaje no es null aca significa que el while dio mas de una vuelta, eso
-                //suele pasar cuando el resultado (resultset) tiene mas de un elemento.
+
                 if (especie != null) {
                     throw new RuntimeException("Existe mas de un personaje con el nombre " + nombreEspecie);
                 }
@@ -128,10 +124,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
         this.executeWithConnection(conn -> {
             PreparedStatement ps = conn.prepareStatement("DELETE FROM especie");
             ps.execute();
-            /*todo: esperar respuesta del mail para saber como chequear esto, y si hacerlo o no */
-            /*if (ps.getUpdateCount() != 0 ) {
-                throw new RuntimeException("No se pudo eliminar los datos de la tabla");
-            }*/
+
             ps.close();
 
             return null;
@@ -154,9 +147,8 @@ public class JDBCEspecieDAO implements EspecieDAO {
 
     private Connection openConnection() {
         try {
-            /*todo: se puede mejorar el metodo para que la URL no aparezca aca?*/
 
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_jdbc?user=root&password=root&serverTimezone=UTC");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_jdbc?user=root&password=42547268&serverTimezone=UTC");
         } catch (SQLException e) {
             throw new RuntimeException("No se puede establecer una conexion", e);
         }

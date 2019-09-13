@@ -26,11 +26,34 @@ public class JDBCEspecieDAOTest {
         this.pacacho.setAltura(400);//en cm
         this.pacacho.setPeso(5);
         this.pacacho.setUrlFoto("https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png");
-        this.pacacho.setEnergiaIncial(10);
+        this.pacacho.setEnergiaInicial(10);
         this.pacacho.setCantidadBichos(0);
         this.charmandar = new Especie(1, "Charmandar", FUEGO);
         this.charmilian = new Especie(2, "Charmilian", FUEGO);
         this.chorizard = new Especie(3, "Chorizard", FUEGO);
+    }
+
+    @Test
+    public void al_guardar_y_luego_recuperar_se_obtiene_objetos_similares() {
+        this.dao.guardar(this.pacacho);
+
+        //Los personajes son iguales
+        Especie otroPacacho = this.dao.recuperar("Pacachu");
+        assertEquals(this.pacacho.getNombre(), otroPacacho.getNombre());
+        assertEquals(this.pacacho.getAltura(), otroPacacho.getAltura());
+        assertEquals(this.pacacho.getPeso(), otroPacacho.getPeso());
+        assertEquals(this.pacacho.getUrlFoto(), otroPacacho.getUrlFoto());
+        assertEquals(this.pacacho.getEnergiaInicial(), otroPacacho.getEnergiaInicial());
+        assertEquals(this.pacacho.getTipo(), otroPacacho.getTipo());
+        assertEquals(this.pacacho.getCantidadBichos(), otroPacacho.getCantidadBichos());
+        assertEquals(this.pacacho.getId(), otroPacacho.getId());
+
+        //Pero no son el mismo objeto =(
+        //A esto nos referimos con "perdida de identidad"
+
+        assertTrue(this.pacacho != otroPacacho);
+
+        this.dao.eliminarTodos();
     }
 
     @Test
@@ -50,7 +73,7 @@ public class JDBCEspecieDAOTest {
         this.pacacho.setNombre("Pacacho");
         this.pacacho.setAltura(10);
         this.pacacho.setPeso(30);
-        this.pacacho.setEnergiaIncial(100);
+        this.pacacho.setEnergiaInicial(100);
         this.pacacho.setUrlFoto("hola");
         this.pacacho.setTipo(AGUA);
         //Compruebo que los atributos no coincidan
@@ -121,6 +144,7 @@ public class JDBCEspecieDAOTest {
         //Compruebo que no haya nada
         assertEquals(new ArrayList<Especie>(), this.dao.recuperarTodos());
     }
+//PRIVATE FUNCTION---------------------------------------------------------------------------------------------
 
     private void comprobarListasSimilares(List<Especie> especies, List<Especie> otrasEspecies) {
         assertEquals(especies.size(), otrasEspecies.size());

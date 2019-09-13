@@ -1,4 +1,4 @@
-package DAOandServicesTests;
+package ar.edu.unq.epers.bichomon.backend.service.data;
 
 import ar.edu.unq.epers.bichomon.backend.dao.impl.JDBCEspecieDAO;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
