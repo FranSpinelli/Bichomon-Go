@@ -4,7 +4,7 @@ CREATE SCHEMA epers_persistiendoConEstilo_jdbc;
 USE epers_persistiendoConEstilo_jdbc;
 
 CREATE TABLE especie (
-  id int NOT NULL UNIQUE PRIMARY KEY ,
+  id serial NOT NULL UNIQUE PRIMARY KEY ,
   nombre varchar(30) NOT NULL UNIQUE,
   altura int NOT NULL,
   peso int NOT NULL,

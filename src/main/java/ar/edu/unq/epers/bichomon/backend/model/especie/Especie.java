@@ -18,9 +18,8 @@ public class Especie {
 	private String urlFoto;
 	private int cantidadBichos;
 	
-	public Especie(int id, String nombre, TipoBicho tipo) {
+	public Especie(String nombre, TipoBicho tipo) {
 
-		this.id = id;
 		this.nombre = nombre;
 		this.tipo = tipo;
 	}
