@@ -22,43 +22,43 @@ public class DataServiceImpl implements DataService {
     @Override
     public void crearSetDatosIniciales() {
 
-        Especie especie1 = new Especie(1,"especie1", TipoBicho.FUEGO);
+        Especie especie1 = new Especie("especie1", TipoBicho.FUEGO);
         especie1.setAltura(100);
         especie1.setPeso(100);
         especie1.setEnergiaInicial(100);
         especie1.setUrlFoto("/image/respecie1.jpg");
 
-        Especie especie2 = new Especie(2,"especie2", TipoBicho.AGUA);
+        Especie especie2 = new Especie("especie2", TipoBicho.AGUA);
         especie2.setAltura(200);
         especie2.setPeso(200);
         especie2.setEnergiaInicial(200);
         especie2.setUrlFoto("/image/especie2.jpg");
 
-        Especie especie3 = new Especie(3,"especie3", TipoBicho.AIRE);
+        Especie especie3 = new Especie("especie3", TipoBicho.AIRE);
         especie3.setAltura(300);
         especie3.setPeso(300);
         especie3.setEnergiaInicial(300);
         especie3.setUrlFoto("/image/especie3.jpg");
 
-        Especie especie4 = new Especie(4,"especie4", TipoBicho.ELECTRICIDAD);
+        Especie especie4 = new Especie("especie4", TipoBicho.ELECTRICIDAD);
         especie4.setAltura(400);
         especie4.setPeso(400);
         especie4.setEnergiaInicial(400);
         especie4.setUrlFoto("/image/especie4.jpg");
 
-        Especie especie5 = new Especie(5,"especie5", TipoBicho.PLANTA);
+        Especie especie5 = new Especie("especie5", TipoBicho.PLANTA);
         especie5.setAltura(500);
         especie5.setPeso(500);
         especie5.setEnergiaInicial(500);
         especie5.setUrlFoto("/image/especie5.jpg");
 
-        Especie especie6 = new Especie(6,"especie6", TipoBicho.TIERRA);
+        Especie especie6 = new Especie("especie6", TipoBicho.TIERRA);
         especie6.setAltura(600);
         especie6.setPeso(600);
         especie6.setEnergiaInicial(600);
         especie6.setUrlFoto("/image/especie6.jpg");
 
-        Especie especie7 = new Especie(7,"especie7", TipoBicho.CHOCOLATE);
+        Especie especie7 = new Especie("especie7", TipoBicho.CHOCOLATE);
         especie7.setAltura(700);
         especie7.setPeso(700);
         especie7.setEnergiaInicial(700);

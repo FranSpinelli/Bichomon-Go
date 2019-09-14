@@ -21,7 +21,7 @@ public class EspecieTest {
     @Before
 	public void setUp() {
     	condicion = mock(CondicionDeEvolucion.class);
-    	especie = new Especie(1,"nombreEspecie", AIRE);
+    	especie = new Especie("nombreEspecie", AIRE);
     	otraEspecie = mock (Especie.class);
     	bicho= mock(Bicho.class);
     	when(condicion.puedeEvolucionar(bicho)).thenReturn(true);

@@ -4,7 +4,10 @@ import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.service.data.*;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 import static org.junit.Assert.*;
 
 import java.util.List;
@@ -22,15 +25,15 @@ public class JDBCEspecieDAOTest {
     @Before
     public void crearModelo() {
         this.dao.eliminarTodos();
-        this.pacacho = new Especie(0,"Pacachu", ELECTRICIDAD);
+        this.pacacho = new Especie("Pacachu", ELECTRICIDAD);
         this.pacacho.setAltura(400);//en cm
         this.pacacho.setPeso(5);
         this.pacacho.setUrlFoto("https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png");
         this.pacacho.setEnergiaInicial(10);
         this.pacacho.setCantidadBichos(0);
-        this.charmandar = new Especie(1, "Charmandar", FUEGO);
-        this.charmilian = new Especie(2, "Charmilian", FUEGO);
-        this.chorizard = new Especie(3, "Chorizard", FUEGO);
+        this.charmandar = new Especie( "Charmandar", FUEGO);
+        this.charmilian = new Especie( "Charmilian", FUEGO);
+        this.chorizard = new Especie( "Chorizard", FUEGO);
     }
 
     @Test
@@ -56,14 +59,23 @@ public class JDBCEspecieDAOTest {
         this.dao.eliminarTodos();
     }
 
+    @Rule
+    public ExpectedException thrown= ExpectedException.none();
+
     @Test
-    public void testActualizar() {
-        try{
-            this.dao.actualizar(this.pacacho);
-            fail("Deberia lanzar RuntimeException");
-        }catch(RuntimeException ex){
-            assertEquals("No existe el personaje " + pacacho,ex.getMessage());
-        }
+    public void testActualizarCasoNoFeliz(){
+        thrown.expect(RuntimeException.class);
+        thrown.expectMessage("No existe el personaje " + pacacho);
+        this.dao.actualizar(this.pacacho);
+        //=================Caso No Feliz================
+        //Modificar -> En el crearModelo()
+        //Actualizar
+        //Comprobar excepcion
+    }
+
+    @Test
+    public void testActualizarCasoFeliz() {
+
         this.dao.guardar(this.pacacho);
         Especie pacachoRecuperado = this.dao.recuperar("Pacachu");
         this.comprobarEspeciesSimilares(pacacho, pacachoRecuperado);
@@ -99,10 +111,6 @@ public class JDBCEspecieDAOTest {
         //Comprobar instancias no similares
         //Actualizar
         //Comprobar instancias similares
-        //=================Caso No Feliz================
-        //Modificar
-        //Actualizar
-        //Comprobar excepcion
     }
 
     @Test
@@ -113,7 +121,8 @@ public class JDBCEspecieDAOTest {
 
         especies.add(this.charmandar);
         this.dao.guardar(this.charmandar);
-        this.comprobarListasSimilares(especies, this.dao.recuperarTodos());
+        List<Especie> especies2 = this.dao.recuperarTodos();
+        this.comprobarListasSimilares(especies, especies2);
 
         especies.add(this.charmilian);
         especies.add(this.chorizard);

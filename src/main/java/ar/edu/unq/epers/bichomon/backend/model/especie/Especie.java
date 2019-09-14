@@ -22,13 +22,14 @@ public class Especie {
 	private int cantidadBichos;
 	private Especie especieAEvolucionar;
 	private ArrayList<CondicionDeEvolucion> condicion;
-	private Especie evolucion;
+	private Especie evolucionRaiz;
 	
-	public Especie(int id, String nombre, TipoBicho tipo) {
+	public Especie(String nombre, TipoBicho tipo) {
 
-		this.id = id;
 		this.nombre = nombre;
 		this.tipo = tipo;
+		this.especieAEvolucionar = null;
+		this.setEvolucionRaiz(this);
 	}
 
 	/**
@@ -122,7 +123,7 @@ public class Especie {
 	}
 
 	public void evolucionar(Bicho bicho) {
-		if (this.evolucion != null && this.puedeEvolucionar(bicho)) {
+		if (this.especieAEvolucionar != null && this.puedeEvolucionar(bicho)) {
 			bicho.setEspecie(this.especieAEvolucionar);
 		}
 		
@@ -130,6 +131,20 @@ public class Especie {
 
 	private boolean puedeEvolucionar(Bicho bicho) {
 		return this.condicion.stream().allMatch(condition ->condition.puedeEvolucionar(bicho));
+	}
+
+	public Especie getEvolucionRaiz() {
+		return evolucionRaiz;
+	}
+
+	public void setEvolucionRaiz(Especie evolucionRaiz) {
+		
+		this.evolucionRaiz = evolucionRaiz;
+	}
+	
+	public void setEspecieAEvolucionar(Especie especie) {
+		this.especieAEvolucionar = especie;
+		especie.setEvolucionRaiz(this.evolucionRaiz);
 	}
 }
 

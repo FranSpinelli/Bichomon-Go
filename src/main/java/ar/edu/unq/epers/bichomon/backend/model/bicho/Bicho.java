@@ -18,6 +18,9 @@ public class Bicho {
 	
 	public Bicho(Especie especie) {
 		this.especie = especie;
+		this.edad = 0;
+		this.cantidadDeVictorias = 0;
+		this.energia = especie.getEnergiaInicial();
 	}
 	
 	/**
