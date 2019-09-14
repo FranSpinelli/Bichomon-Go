@@ -1,6 +1,9 @@
 package ar.edu.unq.epers.bichomon.backend.model.especie;
 
+import java.util.ArrayList;
+
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion;
 
 /**
  * Representa una {@link Especie} de bicho.
@@ -17,6 +20,9 @@ public class Especie {
 	private int energiaInicial;
 	private String urlFoto;
 	private int cantidadBichos;
+	private Especie especieAEvolucionar;
+	private ArrayList<CondicionDeEvolucion> condicion;
+	private Especie evolucion;
 	
 	public Especie(int id, String nombre, TipoBicho tipo) {
 
@@ -98,9 +104,9 @@ public class Especie {
 		this.cantidadBichos = i;
 	}
 
-	public Bicho crearBicho(String nombreBicho){
+	public Bicho crearBicho(){
 		this.cantidadBichos++;
-		return new Bicho(this, nombreBicho);
+		return new Bicho(this);
 	}
 
 	/**
@@ -113,6 +119,17 @@ public class Especie {
 
 	public void setId(int nuevoId){
 		this.id=nuevoId;
+	}
+
+	public void evolucionar(Bicho bicho) {
+		if (this.evolucion != null && this.puedeEvolucionar(bicho)) {
+			bicho.setEspecie(this.especieAEvolucionar);
+		}
+		
+	}
+
+	private boolean puedeEvolucionar(Bicho bicho) {
+		return this.condicion.stream().allMatch(condition ->condition.puedeEvolucionar(bicho));
 	}
 }
 
