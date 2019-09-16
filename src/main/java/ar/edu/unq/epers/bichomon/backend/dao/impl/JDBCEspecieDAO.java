@@ -78,7 +78,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
     @Override
     public List<Especie> recuperarTodos(){
         return this.executeWithConnection(conn -> {
-            PreparedStatement ps = conn.prepareStatement("SELECT * FROM especie");
+            PreparedStatement ps = conn.prepareStatement("SELECT * FROM especie ORDER BY nombre ASC");
             ResultSet resultSet = ps.executeQuery();
             List<Especie> especies = new ArrayList<Especie>();
             while(resultSet.next()){
