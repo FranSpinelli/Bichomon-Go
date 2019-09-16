@@ -16,13 +16,14 @@ public class JDBCEspecieDAO implements EspecieDAO {
     @Override
     public void guardar(Especie especie) {
         this.executeWithConnection(conn -> {
-            PreparedStatement ps = conn.prepareStatement("INSERT INTO especie (nombre, altura, peso, tipoDeBicho, energiaInicial, urlFoto, cantidadDeBichos) VALUES (?,?,?,?,?,?,0)", Statement.RETURN_GENERATED_KEYS);
+            PreparedStatement ps = conn.prepareStatement("INSERT INTO especie (nombre, altura, peso, tipoDeBicho, energiaInicial, urlFoto, cantidadDeBichos) VALUES (?,?,?,?,?,?,?)", Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, especie.getNombre());
             ps.setInt(2, especie.getAltura());
             ps.setInt(3, especie.getPeso());
             ps.setString(4, especie.getTipo().name());
             ps.setInt(5, especie.getEnergiaInicial());
             ps.setString(6, especie.getUrlFoto());
+            ps.setInt(7,especie.getCantidadBichos());
             ps.execute();
 
             ResultSet resultSet = ps.getGeneratedKeys();
