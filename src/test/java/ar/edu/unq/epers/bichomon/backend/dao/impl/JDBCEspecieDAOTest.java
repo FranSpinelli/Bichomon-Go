@@ -3,9 +3,7 @@ package ar.edu.unq.epers.bichomon.backend.dao.impl;
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.service.data.*;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
@@ -22,9 +20,16 @@ public class JDBCEspecieDAOTest {
     private Especie charmilian;
     private Especie chorizard;
 
+    //TODO Esperar respuesta para descomentar o descartar
+    /*
+    @BeforeClass
+    public static void prepararEscenario(){
+        (new JDBCEspecieDAO()).eliminarTodos();
+    }
+    */
+
     @Before
     public void crearModelo() {
-        this.dao.eliminarTodos();
         this.pacacho = new Especie("Pacachu", ELECTRICIDAD);
         this.pacacho.setAltura(400);//en cm
         this.pacacho.setPeso(5);
@@ -34,6 +39,11 @@ public class JDBCEspecieDAOTest {
         this.charmandar = new Especie( "Charmandar", FUEGO);
         this.charmilian = new Especie( "Charmilian", FUEGO);
         this.chorizard = new Especie( "Chorizard", FUEGO);
+    }
+
+    @After
+    public void limpiarEscenario(){
+        this.dao.eliminarTodos();
     }
 
     @Test
@@ -55,8 +65,6 @@ public class JDBCEspecieDAOTest {
         //A esto nos referimos con "perdida de identidad"
 
         assertTrue(this.pacacho != otroPacacho);
-
-        this.dao.eliminarTodos();
     }
 
     @Rule
@@ -115,19 +123,21 @@ public class JDBCEspecieDAOTest {
 
     @Test
     public void testRecuperarTodos(){
+        //Compruebo que se devuelva una lista vacia cuando la base esta vacia
         List<Especie> especies = new ArrayList<Especie>();
-
         assertEquals(especies, this.dao.recuperarTodos());
-
+        //Agrego un elemento y compruebo que se devuelve una lista con solo ese elemento
         especies.add(this.charmandar);
         this.dao.guardar(this.charmandar);
         List<Especie> especies2 = this.dao.recuperarTodos();
         this.comprobarListasSimilares(especies, especies2);
-
+        //Agrago el resto de especies a la lista de modo que queden en orden alfabetico
         especies.add(this.charmilian);
         especies.add(this.chorizard);
-        this.dao.guardar(this.charmilian);
+        //Agrego el resto de las especies a la base de modo que no queden ordenadas alfabeticamente
         this.dao.guardar(this.chorizard);
+        this.dao.guardar(this.charmilian);
+        //Compruebo que recuperarTodos efectivamente devuelve todos ordenados alfabeticamente
         this.comprobarListasSimilares(especies, this.dao.recuperarTodos());
     }
 
