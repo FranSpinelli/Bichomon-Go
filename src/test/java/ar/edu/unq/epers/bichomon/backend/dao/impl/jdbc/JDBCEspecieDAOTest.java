@@ -35,6 +35,10 @@ public class JDBCEspecieDAOTest {
     
     @After
     public void cleanUp() {
+        this.dao.eliminarTodos();    }
+
+    @After
+    public void limpiarEscenario(){
         this.dao.eliminarTodos();
     }
 
@@ -52,9 +56,7 @@ public class JDBCEspecieDAOTest {
         assertEquals(this.pacacho.getCantidadBichos(), otroPacacho.getCantidadBichos());
         assertEquals(this.pacacho.getId(), otroPacacho.getId());
 
-        assertTrue(this.pacacho != otroPacacho);
-
-        this.dao.eliminarTodos();
+        assertNotEquals(this.pacacho, otroPacacho);
     }
 
     @Rule
@@ -113,19 +115,21 @@ public class JDBCEspecieDAOTest {
 
     @Test
     public void testRecuperarTodos(){
+        //Compruebo que se devuelva una lista vacia cuando la base esta vacia
         List<Especie> especies = new ArrayList<Especie>();
-
         assertEquals(especies, this.dao.recuperarTodos());
-
+        //Agrego un elemento y compruebo que se devuelve una lista con solo ese elemento
         especies.add(this.charmandar);
         this.dao.guardar(this.charmandar);
         List<Especie> especies2 = this.dao.recuperarTodos();
         this.comprobarListasSimilares(especies, especies2);
-
+        //Agrago el resto de especies a la lista de modo que queden en orden alfabetico
         especies.add(this.charmilian);
         especies.add(this.chorizard);
-        this.dao.guardar(this.charmilian);
+        //Agrego el resto de las especies a la base de modo que no queden ordenadas alfabeticamente
         this.dao.guardar(this.chorizard);
+        this.dao.guardar(this.charmilian);
+        //Compruebo que recuperarTodos efectivamente devuelve todos ordenados alfabeticamente
         this.comprobarListasSimilares(especies, this.dao.recuperarTodos());
     }
 
