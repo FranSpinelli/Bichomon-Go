@@ -10,7 +10,7 @@ public class CondicionBasadaEnNivel extends CondicionDeEvolucion{
 	
 	@Override
 	public boolean puedeEvolucionar(Bicho bicho) {
-		return bicho.getEntrenador().getNivel() > this.cantidad;
+		return bicho.getNivelDelEntrenador() > this.cantidad;
 	}
 
 }

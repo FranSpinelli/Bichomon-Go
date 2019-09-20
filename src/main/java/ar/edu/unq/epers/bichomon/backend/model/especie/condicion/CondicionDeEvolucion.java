@@ -2,7 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.especie.condicion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 
-public class CondicionDeEvolucion {
+public abstract class CondicionDeEvolucion {
 	
 	protected int cantidad;
 	
@@ -10,9 +10,6 @@ public class CondicionDeEvolucion {
 		this.cantidad = cantidad;
 	}
 
-	public boolean puedeEvolucionar(Bicho bicho) {
-		// TODO Auto-generated method stub
-		return false;
-	}
+	public abstract boolean puedeEvolucionar(Bicho bicho);
 
 }

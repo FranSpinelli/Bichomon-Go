@@ -133,6 +133,10 @@ public class Especie {
 		return this.condicion.stream().allMatch(condition ->condition.puedeEvolucionar(bicho));
 	}
 
+	public void setCondicion(ArrayList<CondicionDeEvolucion> condicion) {
+		this.condicion = condicion;
+	}
+
 	public Especie getEvolucionRaiz() {
 		return evolucionRaiz;
 	}
@@ -142,8 +146,9 @@ public class Especie {
 		this.evolucionRaiz = evolucionRaiz;
 	}
 	
-	public void setEspecieAEvolucionar(Especie especie) {
+	public void setEspecieAEvolucionar(Especie especie, ArrayList<CondicionDeEvolucion> condicion) {
 		this.especieAEvolucionar = especie;
+		this.setCondicion(condicion);
 		especie.setEvolucionRaiz(this.evolucionRaiz);
 	}
 }

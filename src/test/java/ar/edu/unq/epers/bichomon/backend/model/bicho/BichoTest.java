@@ -1,16 +1,11 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
-import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
-import ar.edu.unq.epers.bichomon.backend.service.data.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
 import static org.junit.Assert.*;
 
-import java.util.List;
-import java.util.ArrayList;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -19,6 +14,7 @@ public class BichoTest {
 
     public Especie especie;
     public Especie otraEspecie;
+    public Entrenador entrenador;
     public Bicho bicho;
 	
     @Before
@@ -26,6 +22,7 @@ public class BichoTest {
     	especie = mock(Especie.class);
     	otraEspecie = mock(Especie.class);
     	bicho= new Bicho(especie);
+    	entrenador = mock(Entrenador.class);
     }
     @Test
     public void unBichoMandaElMensajeEvolucionarASuEspecie(){
@@ -43,6 +40,19 @@ public class BichoTest {
     
     @Test
     public void unBichoConoceASuEntrenador() {
+    	bicho.setEntrenador(entrenador);
+    	assertEquals(entrenador, bicho.getEntrenador());
+    }
+    
+    @Test
+    public void unBichoTePuedeDevolverElNivelDeSuEntrenador(){
+    	bicho.setEntrenador(entrenador);
+    	when(entrenador.getNivel()).thenReturn(5);
+    	assertEquals(bicho.getNivelDelEntrenador(), 5);
+    }
+    
+    @Test
+    public void unBichoPuedeSerAbandonaDoPorSuEntrenadorActualYRe() {
     	
     }
 }

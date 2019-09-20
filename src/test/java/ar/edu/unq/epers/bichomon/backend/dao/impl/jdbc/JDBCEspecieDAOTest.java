@@ -1,8 +1,11 @@
-package ar.edu.unq.epers.bichomon.backend.dao.impl;
+package ar.edu.unq.epers.bichomon.backend.dao.impl.jdbc;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.JDBCEspecieDAO;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
-import ar.edu.unq.epers.bichomon.backend.service.data.*;
+import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
+
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -24,23 +27,21 @@ public class JDBCEspecieDAOTest {
 
     @Before
     public void crearModelo() {
+        this.pacacho = crearEspecie("Pacachu", ELECTRICIDAD, 400, 5, "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png", 10);
+        this.charmandar = crearEspecie( "Charmandar", FUEGO, 400, 5, "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png", 10);
+        this.charmilian = crearEspecie( "Charmilian", FUEGO, 400, 5, "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png", 10);
+        this.chorizard = crearEspecie( "Chorizard", FUEGO, 400, 5, "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png", 10);
+    }
+    
+    @After
+    public void cleanUp() {
         this.dao.eliminarTodos();
-        this.pacacho = new Especie("Pacachu", ELECTRICIDAD);
-        this.pacacho.setAltura(400);//en cm
-        this.pacacho.setPeso(5);
-        this.pacacho.setUrlFoto("https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png");
-        this.pacacho.setEnergiaInicial(10);
-        this.pacacho.setCantidadBichos(0);
-        this.charmandar = new Especie( "Charmandar", FUEGO);
-        this.charmilian = new Especie( "Charmilian", FUEGO);
-        this.chorizard = new Especie( "Chorizard", FUEGO);
     }
 
     @Test
     public void al_guardar_y_luego_recuperar_se_obtiene_objetos_similares() {
         this.dao.guardar(this.pacacho);
 
-        //Los personajes son iguales
         Especie otroPacacho = this.dao.recuperar("Pacachu");
         assertEquals(this.pacacho.getNombre(), otroPacacho.getNombre());
         assertEquals(this.pacacho.getAltura(), otroPacacho.getAltura());
@@ -50,9 +51,6 @@ public class JDBCEspecieDAOTest {
         assertEquals(this.pacacho.getTipo(), otroPacacho.getTipo());
         assertEquals(this.pacacho.getCantidadBichos(), otroPacacho.getCantidadBichos());
         assertEquals(this.pacacho.getId(), otroPacacho.getId());
-
-        //Pero no son el mismo objeto =(
-        //A esto nos referimos con "perdida de identidad"
 
         assertTrue(this.pacacho != otroPacacho);
 
@@ -173,4 +171,16 @@ public class JDBCEspecieDAOTest {
         assertEquals(especie.getUrlFoto(), otraEspecie.getUrlFoto());
         assertNotEquals(especie, otraEspecie);
     }
+
+    private Especie crearEspecie(String nombre, TipoBicho tipo, int altura, int peso, String url, int energia) {
+    	Especie newEspecie;
+    	newEspecie = new Especie(nombre, tipo);
+    	newEspecie.setAltura(altura);
+    	newEspecie.setPeso(peso);
+    	newEspecie.setUrlFoto(url);
+    	newEspecie.setEnergiaInicial(energia);
+    	newEspecie.setCantidadBichos(0);
+    	return newEspecie;
+    }
 }
+

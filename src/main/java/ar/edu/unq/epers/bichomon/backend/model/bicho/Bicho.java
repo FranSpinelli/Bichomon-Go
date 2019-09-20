@@ -62,4 +62,13 @@ public class Bicho {
 		return this.entrenador;
 	}
 
+	public void setEntrenador(Entrenador entrenador) {
+		this.entrenador = entrenador;
+	}
+
+	public int getNivelDelEntrenador() {
+		// TODO Auto-generated method stub
+		return this.entrenador.getNivel();
+	}
+
 }

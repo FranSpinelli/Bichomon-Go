@@ -10,6 +10,7 @@ import org.junit.runner.RunWith;
         "ar.edu.unq.epers.bichomon.backend.model.bicho",
         "ar.edu.unq.epers.bichomon.backend.model.especie",
         "ar.edu.unq.epers.bichomon.backend.model.serviceData",
+        "ar.edu.unq.epers.bichomon.backend.model.condicionDeEvolucion",
 })
 
 public class AllTests {
