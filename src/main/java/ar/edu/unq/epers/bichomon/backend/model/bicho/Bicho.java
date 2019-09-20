@@ -26,7 +26,7 @@ public class Bicho {
 	public String getNombre() {
 		return this.nombre;
 	}
-	
+
 	/**
 	 * @return la especie a la que este bicho pertenece.
 	 */
