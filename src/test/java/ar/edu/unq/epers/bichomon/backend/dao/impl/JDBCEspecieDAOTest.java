@@ -20,14 +20,6 @@ public class JDBCEspecieDAOTest {
     private Especie charmilian;
     private Especie chorizard;
 
-    //TODO Esperar respuesta para descomentar o descartar
-    /*
-    @BeforeClass
-    public static void prepararEscenario(){
-        (new JDBCEspecieDAO()).eliminarTodos();
-    }
-    */
-
     @Before
     public void crearModelo() {
         this.pacacho = new Especie("Pacachu", ELECTRICIDAD);
