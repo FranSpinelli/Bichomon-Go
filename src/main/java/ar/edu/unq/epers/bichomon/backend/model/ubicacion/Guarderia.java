@@ -1,0 +1,17 @@
+package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
+
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+
+import java.util.Set;
+
+public class Guarderia extends Ubicacion{
+
+    private Set<Bicho> bichosAbandonados;
+
+    public Guarderia(){}
+
+    public void recibirBicho(Bicho bichoAbandonado){
+
+        this.bichosAbandonados.add(bichoAbandonado);
+    }
+}

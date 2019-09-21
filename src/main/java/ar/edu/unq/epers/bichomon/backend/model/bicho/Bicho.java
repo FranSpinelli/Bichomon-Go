@@ -1,6 +1,10 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
+import com.sun.org.apache.xpath.internal.operations.Bool;
+import com.sun.org.apache.xpath.internal.operations.Equals;
+
+import java.util.Set;
 
 /**
  * Un {@link Bicho} existente en el sistema, el mismo tiene un nombre
@@ -10,6 +14,8 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
  */
 public class Bicho {
 
+	private int id;
+	private Set<Entrenador> exDuenhos;
 	private Especie especie;
 	private int energia;
 	private int edad;
@@ -71,4 +77,17 @@ public class Bicho {
 		return this.entrenador.getNivel();
 	}
 
+	public int getId(){
+		return this.id;
+	}
+
+	public void agregarEx(Entrenador nuevoExDuenho){
+		this.exDuenhos.add(nuevoExDuenho);
+	}
+
+	@Override
+	public boolean equals(Object o){
+
+		return o instanceof Bicho && ((Bicho) o).getId() == this.id;
+	}
 }
