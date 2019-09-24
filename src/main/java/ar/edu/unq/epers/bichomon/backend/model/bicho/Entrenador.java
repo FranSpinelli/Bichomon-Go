@@ -4,8 +4,10 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
+@Entity
 public class Entrenador {
 
 	@Id
@@ -21,6 +23,11 @@ public class Entrenador {
 	private Ubicacion ubicacionActual;
 
 	public Entrenador(){}
+
+	public Entrenador(String nombre){
+		this.nombre = nombre;
+		this.inventarioDeBichos = new HashSet();
+	}
 
 	public int getId() {
 		return this.id;
@@ -87,5 +94,11 @@ public class Entrenador {
 	public Boolean tieneBicho(Bicho bicho) {
 
 		return inventarioDeBichos.contains(bicho);
+	}
+
+	public void addBicho(Bicho bicho) {
+
+		bicho.setEntrenador(this);
+		this.inventarioDeBichos.add(bicho);
 	}
 }

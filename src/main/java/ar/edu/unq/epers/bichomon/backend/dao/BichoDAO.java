@@ -6,5 +6,5 @@ public interface BichoDAO {
 
     void guardar(Bicho bicho);
 
-    Bicho recuperar(Long id);
+    Bicho recuperar(Integer id);
 }

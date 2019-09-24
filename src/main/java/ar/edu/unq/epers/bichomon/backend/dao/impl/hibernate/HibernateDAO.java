@@ -16,7 +16,7 @@ public class HibernateDAO<T> {
         session.save(item);
     }
 
-    public T recuperar(Long id) {
+    public T recuperar(Integer id) {
         Session session = TransactionRunner.getCurrentSession();
         return session.get(entityType, id);
     }

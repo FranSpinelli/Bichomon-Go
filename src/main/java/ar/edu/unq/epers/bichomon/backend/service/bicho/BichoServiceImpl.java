@@ -17,7 +17,6 @@ public class BichoServiceImpl {
     }
 
     public void abandonar(String nombreEntrenador, int idBicho){
-        run(() -> {
             Entrenador entrenador = this.getEntrenador(nombreEntrenador);
 
             Bicho bicho= this.getBicho(idBicho);
@@ -26,8 +25,7 @@ public class BichoServiceImpl {
 
             if(entrenador.getCantidadDeBichos() <= 1){ throw new BichosInsuficientes("El entrenador debe tener al menos un bicho luego de abandonar"); }
 
-            entrenador.abandonar(bicho);
-        });
+            run(() -> entrenador.abandonar(bicho));
     }
 
     private Entrenador getEntrenador(String nombreDeEntrenador){
@@ -42,7 +40,7 @@ public class BichoServiceImpl {
 
     private Bicho getBicho(Integer idDeBicho){
         return run(() -> {
-            Bicho bicho = this.bichoDAO.recuperar(new Long(idDeBicho));
+            Bicho bicho = this.bichoDAO.recuperar(idDeBicho);
             if(bicho == null){
                 throw new BichoInexistente();
             }

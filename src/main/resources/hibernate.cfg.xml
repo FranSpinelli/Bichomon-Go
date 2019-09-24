@@ -1,4 +1,3 @@
-
 <?xml version='1.0' encoding='utf-8'?>
 <!DOCTYPE hibernate-configuration PUBLIC
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
@@ -12,7 +11,7 @@
         <property name="connection.password">root</property>
 
         <!-- SQL dialect -->
-        <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
+        <property name="dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
         <!-- Disable the second-level cache -->
         <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
@@ -22,12 +21,19 @@
 
         <property name="hibernate.hbm2ddl.auto">create-drop</property>
 
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador" />
+
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.Especie" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEdad" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEnergia" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnNivel" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnVictorias" />
 
     </session-factory>
 </hibernate-configuration>

@@ -20,7 +20,7 @@ public class Bicho {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Entrenador> exDuenhos;
 	@ManyToOne
 	private Especie especie;
@@ -29,7 +29,9 @@ public class Bicho {
 	private int cantidadDeVictorias;
 	@ManyToOne
 	private Entrenador entrenador;
-	
+
+	public Bicho(){}
+
 	public Bicho(Especie especie) {
 		this.especie = especie;
 		this.edad = 0;
@@ -105,5 +107,12 @@ public class Bicho {
 	public boolean equals(Object o){
 
 		return o instanceof Bicho && ((Bicho) o).getId() == this.id;
+	}
+
+	@Override
+	public int hashCode(){
+		int result = 145;
+		result = 31 * result + this.id;
+		return result;
 	}
 }

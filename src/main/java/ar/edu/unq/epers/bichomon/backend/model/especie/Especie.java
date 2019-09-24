@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.especie;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion;
@@ -23,17 +24,18 @@ public class Especie {
 	private String nombre;
 	private int altura;
 	private int peso;
-	@ManyToOne
 	private TipoBicho tipo;
 	private int energiaInicial;
 	private String urlFoto;
 	private int cantidadBichos;
 	@OneToOne
 	private Especie especieAEvolucionar;
-	@OneToMany //TODO: Suponiendo que la misma condicion(con mismo id) no puede ser compartida entre distintas especies
-	private ArrayList<CondicionDeEvolucion> condicion;
+	@OneToMany(fetch = FetchType.EAGER) //TODO: Suponiendo que la misma condicion(con mismo id) no puede ser compartida entre distintas especies
+	private List<CondicionDeEvolucion> condicion;
 	@ManyToOne
 	private Especie evolucionRaiz;
+
+	public Especie(){}
 
 	public Especie(String nombre, TipoBicho tipo) {
 
