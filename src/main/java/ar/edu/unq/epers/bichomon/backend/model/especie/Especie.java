@@ -5,23 +5,34 @@ import java.util.ArrayList;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion;
 
+import javax.persistence.*;
+
 /**
  * Representa una {@link Especie} de bicho.
  * 
  * @author Charly Backend
  */
+
+@Entity
 public class Especie {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@Column(unique = true)
 	private String nombre;
 	private int altura;
 	private int peso;
+	@ManyToOne
 	private TipoBicho tipo;
 	private int energiaInicial;
 	private String urlFoto;
 	private int cantidadBichos;
+	@OneToOne
 	private Especie especieAEvolucionar;
+	@OneToMany //TODO: Suponiendo que la misma condicion(con mismo id) no puede ser compartida entre distintas especies
 	private ArrayList<CondicionDeEvolucion> condicion;
+	@ManyToOne
 	private Especie evolucionRaiz;
 
 	public Especie(String nombre, TipoBicho tipo) {
