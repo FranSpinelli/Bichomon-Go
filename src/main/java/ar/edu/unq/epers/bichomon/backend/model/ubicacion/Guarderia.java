@@ -10,6 +10,7 @@ public class Guarderia extends Ubicacion{
 
     public Guarderia(){}
 
+    @Override
     public void recibirBicho(Bicho bichoAbandonado){
 
         this.bichosAbandonados.add(bichoAbandonado);

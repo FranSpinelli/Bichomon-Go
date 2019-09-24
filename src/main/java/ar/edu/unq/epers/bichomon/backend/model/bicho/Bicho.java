@@ -4,6 +4,8 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import com.sun.org.apache.xpath.internal.operations.Equals;
 
+
+import javax.persistence.*;
 import java.util.Set;
 
 /**
@@ -12,14 +14,20 @@ import java.util.Set;
  * 
  * @author Charly Backend
  */
+@Entity
 public class Bicho {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@ManyToMany(fetch = FetchType.LAZY)
 	private Set<Entrenador> exDuenhos;
+	@ManyToOne
 	private Especie especie;
 	private int energia;
 	private int edad;
 	private int cantidadDeVictorias;
+	@ManyToOne
 	private Entrenador entrenador;
 	
 	public Bicho(Especie especie) {
@@ -62,6 +70,14 @@ public class Bicho {
 	public int getVictorias() {
 		// TODO Auto-generated method stub
 		return this.cantidadDeVictorias;
+	}
+
+	public Set<Entrenador> getExDuenhos() {
+		return this.exDuenhos;
+	}
+
+	public void setExDuenhos(Set<Entrenador> exDuenhos) {
+		this.exDuenhos = exDuenhos;
 	}
 
 	public Entrenador getEntrenador() {
