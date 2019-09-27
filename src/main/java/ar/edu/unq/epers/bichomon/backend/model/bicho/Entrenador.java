@@ -27,6 +27,9 @@ public class Entrenador {
 	public Entrenador(String nombre){
 		this.nombre = nombre;
 		this.inventarioDeBichos = new HashSet();
+		this.xp = 0;
+		this.nivel = 0;
+		/* todo: falta ver como setear la ubicacion */
 	}
 
 	public int getId() {
@@ -61,6 +64,10 @@ public class Entrenador {
 		this.xp = xp;
 	}
 
+	public void addXp(int xpAAgregar){
+		this.xp = xp + xpAAgregar;
+	}
+
 	public Set<Bicho> getInventarioDeBichos() {
 		return this.inventarioDeBichos;
 	}
@@ -69,22 +76,12 @@ public class Entrenador {
 		this.inventarioDeBichos = inventarioDeBichos;
 	}
 
-	public Ubicacion getUbicacionActual() {
-		return this.ubicacionActual;
-	}
-
-	public void setUbicacionActual(Ubicacion ubicacionActual) {
-		this.ubicacionActual = ubicacionActual;
-	}
-
-    public void abandonar(Bicho bicho) {
+	public void abandonar(Bicho bicho) {
 
 		((Guarderia)this.ubicacionActual).recibirBicho(bicho);
 		this.inventarioDeBichos.remove(bicho);
 		bicho.agregarEx(this);
     }
-
-
 
     public Integer getCantidadDeBichos(){
 
@@ -100,5 +97,17 @@ public class Entrenador {
 
 		bicho.setEntrenador(this);
 		this.inventarioDeBichos.add(bicho);
+	}
+
+	public Ubicacion getUbicacionActual() {
+		return this.ubicacionActual;
+	}
+
+	public void setUbicacionActual(Ubicacion ubicacionActual) {
+		this.ubicacionActual = ubicacionActual;
+	}
+
+	public void desafiarCampeonActualCon(Bicho bicho){
+		this.ubicacionActual.realizarDuelo(bicho);
 	}
 }

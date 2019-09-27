@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.ContenedorConDatosDelDuelo;
 
 import javax.persistence.*;
 
@@ -11,8 +12,13 @@ public abstract class Ubicacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
     public void recibirBicho(Bicho bichoAbandonado){
         throw new UbicacionIncorrectaException("No se puede abandonar un bicho en esta ubicacion");
+    }
+
+    public ContenedorConDatosDelDuelo realizarDuelo(Bicho bichoRetador){
+        throw new UbicacionIncorrectaException("No se puede desafiar a duelo en esta ubicacion");
     }
 
     public int getId(){

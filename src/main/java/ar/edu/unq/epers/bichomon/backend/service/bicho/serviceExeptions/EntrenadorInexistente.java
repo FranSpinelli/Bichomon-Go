@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.bichomon.backend.service.bicho;
+package ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions;
 
 public class EntrenadorInexistente extends RuntimeException {
     public EntrenadorInexistente(String nombreEntrenador){

@@ -1,9 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
-import com.sun.org.apache.xpath.internal.operations.Bool;
-import com.sun.org.apache.xpath.internal.operations.Equals;
-
 
 import javax.persistence.*;
 import java.util.Set;
@@ -24,6 +21,7 @@ public class Bicho {
 	private Set<Entrenador> exDuenhos;
 	@ManyToOne
 	private Especie especie;
+
 	private int energia;
 	private int edad;
 	private int cantidadDeVictorias;

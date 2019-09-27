@@ -11,20 +11,20 @@ import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateUbicacionDA
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
-import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
-import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.Dojo;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.DueloHelper;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
+import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
+import static org.junit.Assert.assertNotEquals;
 
 public class BichoServiceImplTest {
 
@@ -37,6 +37,7 @@ public class BichoServiceImplTest {
     private Bicho bichoCharizard2;
     private Bicho bichoSquirtle;
     private Ubicacion guarderia;
+    private DueloHelper dueloHelper;
     private Ubicacion dojo;
     private Ubicacion pueblo;
     private EntrenadorDAO entrenadorDAO;
@@ -58,7 +59,8 @@ public class BichoServiceImplTest {
         this.bichoSquirtle = new Bicho(this.squirtle);
 
         this.guarderia = new Guarderia();
-        this.dojo = new Dojo();
+        this.dueloHelper = new DueloHelper();
+        this.dojo = new Dojo(dueloHelper);
         this.pueblo = new Pueblo();
 
         this.ubicacionDAO = new HibernateUbicacionDAO();
