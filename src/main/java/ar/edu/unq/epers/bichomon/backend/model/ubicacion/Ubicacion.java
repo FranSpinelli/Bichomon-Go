@@ -9,5 +9,4 @@ public abstract class Ubicacion {
 	}
 	
 	abstract void buscar();
-
 }

@@ -2,7 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
-import java.util.List;
+import java.util.Set;
 
 
 /**
@@ -15,7 +15,7 @@ import java.util.List;
 public class Bicho {
 	
 	private int id;
-	private List<Entrenador> exDuenhos;
+	private Set<Entrenador> exDuenhos;
 	private Especie especie;
 	private int energia;
 	private int edad;
@@ -28,7 +28,7 @@ public class Bicho {
 		this.cantidadDeVictorias = 0;
 		this.energia = especie.getEnergiaInicial();
 	}
-	
+
 	/**
 	 * @return la especie a la que este bicho pertenece.
 	 */
@@ -85,7 +85,7 @@ public class Bicho {
 		return this.especie.puedeEvolucionar(this);
 	}
 
-	public List<Entrenador> getExEntrenadores() {
+	public Set<Entrenador> getExEntrenadores() {
 		return this.exDuenhos;
 	}
 
@@ -102,5 +102,5 @@ public class Bicho {
 		this.entrenador = entrenador;
 		
 	}
->>>>>>> Stashed changes
+	
 }

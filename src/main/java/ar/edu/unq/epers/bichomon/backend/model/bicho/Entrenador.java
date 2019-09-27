@@ -1,10 +1,12 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.UbicacionIncorrectaException;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.persistence.*;
 
 
@@ -14,17 +16,20 @@ public class Entrenador {
 	@Id
 	private String nombre;
 	private int nivel;
-	@OneToMany
-	private List<Bicho> inventarioDeBichos;
 	@ManyToOne
 	private Ubicacion ubicacionActual;
+	private Set<Bicho> inventarioDeBichos;
 
 	public Entrenador(String nombre){
 		this.nombre = nombre;
-		this.inventarioDeBichos = new ArrayList<Bicho>();
+		this.inventarioDeBichos = new HashSet<Bicho>();
 	}
 
+
+	public Entrenador(){}
+
 	public int getNivel() {
+
 		return this.nivel;
 	}
 
@@ -36,6 +41,10 @@ public class Entrenador {
 		} catch (UbicacionIncorrectaException e) {
 			e.printStackTrace();
 		}
+
+		this.inventarioDeBichos.remove(bicho);
+		bicho.agregarEx(this);
+		((Guarderia)this.ubicacionActual).recibirBicho(bicho);
     }
 
     public Integer getCantidadDeBichos(){
@@ -56,5 +65,4 @@ public class Entrenador {
 		bicho.serCapturadoPor(this);
 		this.inventarioDeBichos.add(bicho);
 	}
-	
 }
