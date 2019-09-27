@@ -1,15 +1,13 @@
 package ar.edu.unq.epers.bichomon.backend.dao.impl.jdbc;
 
-import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.impl.JDBCEspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.especie.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.especie.impl.JDBCEspecieDAO;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
 
@@ -58,19 +56,15 @@ public class JDBCEspecieDAOTest {
 
         assertNotEquals(this.pacacho, otroPacacho);
     }
+    
+//    @Rule
+//    public ExpectedException thrown= ExpectedException.none();
 
-    @Rule
-    public ExpectedException thrown= ExpectedException.none();
-
-    @Test
+    @Test(expected = RuntimeException.class)
     public void testActualizarCasoNoFeliz(){
-        thrown.expect(RuntimeException.class);
-        thrown.expectMessage("No existe el personaje " + pacacho);
+//        thrown.expect(RuntimeException.class);
+//        thrown.expectMessage("No existe el personaje " + pacacho);
         this.dao.actualizar(this.pacacho);
-        //=================Caso No Feliz================
-        //Modificar -> En el crearModelo()
-        //Actualizar
-        //Comprobar excepcion
     }
 
     @Test

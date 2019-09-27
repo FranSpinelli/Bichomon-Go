@@ -2,6 +2,8 @@ package ar.edu.unq.epers.bichomon.backend.model.especie;
 
 import java.util.ArrayList;
 
+import javax.persistence.*;
+
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion;
 
@@ -10,8 +12,10 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvol
  * 
  * @author Charly Backend
  */
+@Entity
 public class Especie {
 
+	@Id
 	private int id;
 	private String nombre;
 	private int altura;
@@ -20,10 +24,15 @@ public class Especie {
 	private int energiaInicial;
 	private String urlFoto;
 	private int cantidadBichos;
+	@OneToOne
 	private Especie especieAEvolucionar;
+	@ManyToMany
 	private ArrayList<CondicionDeEvolucion> condicion;
+	@OneToOne
 	private Especie evolucionRaiz;
-
+	
+	public Especie() {};
+	
 	public Especie(String nombre, TipoBicho tipo) {
 
 		this.nombre = nombre;
@@ -129,7 +138,7 @@ public class Especie {
 		
 	}
 
-	private boolean puedeEvolucionar(Bicho bicho) {
+	public boolean puedeEvolucionar(Bicho bicho) {
 		return this.condicion.stream().allMatch(condition ->condition.puedeEvolucionar(bicho));
 	}
 

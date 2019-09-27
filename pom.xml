@@ -32,6 +32,32 @@
 			<version>4.12</version>
 		</dependency>
 
+<<<<<<< Updated upstream
+=======
+		
+
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-runner</artifactId>
+			<version>1.5.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-suite-api</artifactId>
+			<version>1.5.2</version>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.junit.platform</groupId>
+			<artifactId>junit-platform-launcher</artifactId>
+			<version>1.5.2</version>
+			<scope>test</scope>
+		</dependency>
+
+>>>>>>> Stashed changes
 		<!-- Dependencias de frontend -->
 
 		<dependency>
@@ -56,6 +82,12 @@
 			<artifactId>javax.servlet-api</artifactId>
 			<version>3.1.0</version>
 			<scope>compile</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>5.2.2.Final</version>
 		</dependency>
 
 		<dependency>

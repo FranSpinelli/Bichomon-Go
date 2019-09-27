@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.bichomon.backend.dao;
+package ar.edu.unq.epers.bichomon.backend.dao.especie;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 

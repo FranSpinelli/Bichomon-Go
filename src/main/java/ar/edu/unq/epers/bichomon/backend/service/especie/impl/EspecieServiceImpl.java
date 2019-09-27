@@ -1,10 +1,11 @@
-	package ar.edu.unq.epers.bichomon.backend.service.especie;
+	package ar.edu.unq.epers.bichomon.backend.service.especie.impl;
 
 import java.util.List;
 
-import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.especie.EspecieDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
+import ar.edu.unq.epers.bichomon.backend.service.especie.EspecieService;
 
 
 public class EspecieServiceImpl implements EspecieService {
@@ -44,6 +45,20 @@ public class EspecieServiceImpl implements EspecieService {
 		Bicho bicho = especie.crearBicho();
 		especieDAO.actualizar(especie);
 		return bicho;
+	}
+
+
+	@Override
+	public List<Especie> populares() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Especie> impopulares() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

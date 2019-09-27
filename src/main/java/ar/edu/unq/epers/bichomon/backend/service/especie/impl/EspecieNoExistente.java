@@ -1,4 +1,4 @@
-package ar.edu.unq.epers.bichomon.backend.service.especie;
+package ar.edu.unq.epers.bichomon.backend.service.especie.impl;
 
 /**
  * Situación excepcional en que una especie buscada no es

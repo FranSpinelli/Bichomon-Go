@@ -2,14 +2,20 @@ package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
+import java.util.List;
+
+
 /**
  * Un {@link Bicho} existente en el sistema, el mismo tiene un nombre
  * y pertenece a una {@link Especie} en particular.
  * 
  * @author Charly Backend
  */
-public class Bicho {
 
+public class Bicho {
+	
+	private int id;
+	private List<Entrenador> exDuenhos;
 	private Especie especie;
 	private int energia;
 	private int edad;
@@ -45,16 +51,11 @@ public class Bicho {
 		this.energia = energia;
 	}
 
-	public void evolucionar() {
-		this.especie.evolucionar(this);
-	}
-
 	public int getEdad() {
 		return this.edad;
 	}
 
 	public int getVictorias() {
-		// TODO Auto-generated method stub
 		return this.cantidadDeVictorias;
 	}
 
@@ -67,8 +68,39 @@ public class Bicho {
 	}
 
 	public int getNivelDelEntrenador() {
-		// TODO Auto-generated method stub
 		return this.entrenador.getNivel();
 	}
 
+	public int getId(){
+		return this.id;
+	}
+
+	@Override
+	public boolean equals(Object o){
+
+		return o instanceof Bicho && ((Bicho) o).getId() == this.id;
+	}
+
+	public boolean puedeEvolucionar() {
+		return this.especie.puedeEvolucionar(this);
+	}
+
+	public List<Entrenador> getExEntrenadores() {
+		return this.exDuenhos;
+	}
+
+	public void agregarEx(Entrenador nuevoExDuenho){
+		this.entrenador = null;
+		this.exDuenhos.add(nuevoExDuenho);
+	}
+
+	public void evolucionar() {
+		this.especie.evolucionar(this);
+	}
+
+	public void serCapturadoPor(Entrenador entrenador) {
+		this.entrenador = entrenador;
+		
+	}
+>>>>>>> Stashed changes
 }
