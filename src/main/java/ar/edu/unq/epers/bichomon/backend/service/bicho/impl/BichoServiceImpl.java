@@ -28,14 +28,23 @@ public class BichoServiceImpl implements BichoService{
     }
 
     private Entrenador getEntrenador(String nombreDeEntrenador){
-    	
-        return null;
+    	return run(() ->{
+    		Entrenador e = this.entrenadorDAO.recuperar(nombreDeEntrenador);
+    		if (e == null) {
+    			throw new EntrenadorInexistente(nombreDeEntrenador);
+    		}
+    		return e;
+    	});
     }
     
     public Bicho getBicho(int idDeBicho){
-        return Runner.runInSession(() ->{
-        	return this.bichoDAO.recuperar(idDeBicho);
-        		});
+        return run(() ->{
+    		Bicho b = this.bichoDAO.recuperar(idDeBicho);
+    		if (b == null) {
+    			throw new BichoInexistente(idDeBicho);
+    		}
+    		return b;
+    	});
     }
     
     private Boolean esBichoDeEntrenador(Entrenador entrenador, Bicho bicho){
@@ -43,16 +52,22 @@ public class BichoServiceImpl implements BichoService{
     }
     
     public boolean puedeEvolucionar(String entrenador, int idDeBicho){
+    	Bicho bicho = this.getBicho(idDeBicho);
+    	return bicho.puedeEvolucionar();
+    }
+    
+    
+    /*{
     	Bicho bichoRecuperado;
     	bichoRecuperado = Runner.runInSession(() ->{
         	return this.bichoDAO.recuperar(idDeBicho);
 		});
 		return bichoRecuperado.puedeEvolucionar();}
-    
+    */
     public Bicho evolucionar(String entrenador, int idDeBicho){
-    	return Runner.runInSession(() ->{
-    		return this.bichoDAO.updatePorEvolucion(idDeBicho);
-			});
+    	Bicho bicho = this.getBicho(idDeBicho);
+    	bicho.evolucionar();
+    	return bicho;
 		}
 
 	@Override
@@ -60,4 +75,6 @@ public class BichoServiceImpl implements BichoService{
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
 }
+
