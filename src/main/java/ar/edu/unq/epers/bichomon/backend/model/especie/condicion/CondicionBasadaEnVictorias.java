@@ -6,7 +6,8 @@ import javax.persistence.Entity;
 
 @Entity
 public class CondicionBasadaEnVictorias extends CondicionDeEvolucion{
-	
+
+	public CondicionBasadaEnVictorias(){}
 
 	public CondicionBasadaEnVictorias(int victorias) {
 		super(victorias);

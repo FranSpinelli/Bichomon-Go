@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.Campeon;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;

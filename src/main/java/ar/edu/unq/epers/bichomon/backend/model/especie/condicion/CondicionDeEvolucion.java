@@ -16,6 +16,8 @@ public abstract class CondicionDeEvolucion {
 		this.cantidad = cantidad;
 	}
 
+	public CondicionDeEvolucion(){}
+
 	public abstract boolean puedeEvolucionar(Bicho bicho);
 
 	public int getId(){
