@@ -6,6 +6,7 @@ import com.sun.org.apache.xpath.internal.operations.Equals;
 
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -21,13 +22,13 @@ public class Bicho {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@ManyToMany(fetch = FetchType.EAGER)
-	private Set<Entrenador> exDuenhos;
+	private Set<Entrenador> exDuenhos = new HashSet<>();
 	@ManyToOne
 	private Especie especie;
 	private int energia;
 	private int edad;
 	private int cantidadDeVictorias;
-	@ManyToOne
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Entrenador entrenador;
 
 	public Bicho(){}
@@ -86,8 +87,8 @@ public class Bicho {
 		return this.entrenador;
 	}
 
-	public void setEntrenador(Entrenador entrenador) {
-		this.entrenador = entrenador;
+	public void setEntrenador(Entrenador nentrenador) {
+		this.entrenador = nentrenador;
 	}
 
 	public int getNivelDelEntrenador() {
@@ -100,6 +101,7 @@ public class Bicho {
 	}
 
 	public void agregarEx(Entrenador nuevoExDuenho){
+		this.entrenador = null;
 		this.exDuenhos.add(nuevoExDuenho);
 	}
 

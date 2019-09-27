@@ -66,29 +66,35 @@ public class BichoServiceImplTest {
         this.bichoDAO = new HibernateBichoDAO();
         this.especieDAO = new HibernateEspecieDAO();
         this.bichoService = new BichoServiceImpl(entrenadorDAO, bichoDAO);
+
+        this.ash.setUbicacionActual(this.guarderia);
+
+        run(() -> {
+            this.especieDAO.guardar(this.picachu);
+            this.especieDAO.guardar(this.charizard);
+            this.especieDAO.guardar(this.squirtle);
+            this.ubicacionDAO.guardar(this.guarderia);
+            this.entrenadorDAO.guardar(this.ash);
+
+            this.ash.addBicho(this.bichoPicachu);
+            this.ash.addBicho(this.bichoCharizard1);
+            this.ash.addBicho(this.bichoCharizard2);
+            this.ash.addBicho(this.bichoSquirtle);
+
+            this.bichoDAO.guardar(this.bichoPicachu);
+            this.bichoDAO.guardar(this.bichoCharizard1);
+            this.bichoDAO.guardar(this.bichoCharizard2);
+            this.bichoDAO.guardar(this.bichoSquirtle);
+        });
     }
 
     @Test
     public void testAbandonar(){
-        this.ash.setUbicacionActual(this.guarderia);
-        run(() -> this.especieDAO.guardar(this.picachu));
-        run(() -> this.especieDAO.guardar(this.charizard));
-        run(() -> this.especieDAO.guardar(this.squirtle));
-        run(() -> this.ubicacionDAO.guardar(this.guarderia));
-        run(() -> this.entrenadorDAO.guardar(this.ash));
-        this.ash.addBicho(this.bichoPicachu);
-        this.ash.addBicho(this.bichoCharizard1);
-        this.ash.addBicho(this.bichoCharizard2);
-        this.ash.addBicho(this.bichoSquirtle);
-        run(() -> this.bichoDAO.guardar(this.bichoPicachu));
-        run(() -> this.bichoDAO.guardar(this.bichoCharizard1));
-        run(() -> this.bichoDAO.guardar(this.bichoCharizard2));
-        run(() -> this.bichoDAO.guardar(this.bichoSquirtle));
-
 
         this.bichoService.abandonar("Ash", this.bichoPicachu.getId());
 
-        Set<Bicho> bichos = new HashSet<Bicho>();
+        Entrenador ashe = run(()->this.entrenadorDAO.recuperar("Ash"));
+        Set<Bicho> bichos = ashe.getInventarioDeBichos();
         assertNotEquals(bichos, this.ash.getInventarioDeBichos());
     }
 }

@@ -16,39 +16,49 @@ public class BichoServiceImpl {
         this.bichoDAO = bichoDAO;
     }
 
+    /*public Bicho buscar(String entrenador){
+       // Entrenador entrenador1 = this.getEntrenador(entrenador);
+       // return run(() -> {
+       //     if(this.esBusquedaExitosa(entrenador1)){
+       //         Bicho bicho = generarBicho(entrenador1);
+       //         entrenador1.addBicho(bicho);
+       //         return this.generarBicho(entrenador1);
+       //     }
+       //     return null;
+        // });
+    }*/
+
     public void abandonar(String nombreEntrenador, int idBicho){
-            Entrenador entrenador = this.getEntrenador(nombreEntrenador);
+        run(() -> {
+               Entrenador entrenador = this.getEntrenador(nombreEntrenador);
 
-            Bicho bicho= this.getBicho(idBicho);
+               Bicho bicho = this.getBicho(idBicho);
 
-            if(! this.esBichoDeEntrenador(entrenador,bicho)){ throw new BichoAjeno("No se pueden abandonar bichos ajenos"); }
+               if(! this.esBichoDeEntrenador(entrenador,bicho)){ throw new BichoAjeno("No se pueden abandonar bichos ajenos"); }
 
-            if(entrenador.getCantidadDeBichos() <= 1){ throw new BichosInsuficientes("El entrenador debe tener al menos un bicho luego de abandonar"); }
+               if(entrenador.getCantidadDeBichos() <= 1){ throw new BichosInsuficientes("El entrenador debe tener al menos un bicho luego de abandonar"); }
 
-            run(() -> entrenador.abandonar(bicho));
+               entrenador.abandonar(bicho);
+        });
     }
 
     private Entrenador getEntrenador(String nombreDeEntrenador){
-        return run(() -> {
             Entrenador entrenador = this.entrenadorDAO.recuperar(nombreDeEntrenador);
             if(entrenador == null){
                 throw new EntrenadorInexistente(nombreDeEntrenador);
             }
             return entrenador;
-        });
     }
 
     private Bicho getBicho(Integer idDeBicho){
-        return run(() -> {
             Bicho bicho = this.bichoDAO.recuperar(idDeBicho);
             if(bicho == null){
                 throw new BichoInexistente();
             }
             return bicho;
-        });
     }
 
     private Boolean esBichoDeEntrenador(Entrenador entrenador, Bicho bicho){
-        return run(() -> entrenador.tieneBicho(bicho));
+        return entrenador.tieneBicho(bicho);
     }
 }

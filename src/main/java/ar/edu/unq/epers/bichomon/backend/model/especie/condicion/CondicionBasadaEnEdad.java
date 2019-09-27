@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 @Entity
 public class CondicionBasadaEnEdad extends CondicionDeEvolucion{
 
+	public CondicionBasadaEnEdad(){}
+
 	public CondicionBasadaEnEdad(int edad) {
 		super(edad);
 	}

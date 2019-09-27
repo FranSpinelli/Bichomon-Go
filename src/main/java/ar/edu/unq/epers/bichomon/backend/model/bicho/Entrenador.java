@@ -18,7 +18,7 @@ public class Entrenador {
 	private int nivel;
 	private int xp;
 	@OneToMany(mappedBy = "entrenador", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private Set<Bicho> inventarioDeBichos;
+	private Set<Bicho> inventarioDeBichos = new HashSet<>();
 	@ManyToOne
 	private Ubicacion ubicacionActual;
 
@@ -79,9 +79,9 @@ public class Entrenador {
 
     public void abandonar(Bicho bicho) {
 
-		((Guarderia)this.ubicacionActual).recibirBicho(bicho);
+		this.ubicacionActual.recibirBicho(bicho);
+        bicho.agregarEx(this);
 		this.inventarioDeBichos.remove(bicho);
-		bicho.agregarEx(this);
     }
 
 
@@ -97,8 +97,7 @@ public class Entrenador {
 	}
 
 	public void addBicho(Bicho bicho) {
-
-		bicho.setEntrenador(this);
 		this.inventarioDeBichos.add(bicho);
+		bicho.setEntrenador(this);
 	}
 }

@@ -6,7 +6,9 @@ import javax.persistence.Entity;
 
 @Entity
 public class CondicionBasadaEnNivel extends CondicionDeEvolucion{
-	
+
+	public CondicionBasadaEnNivel(){}
+
 	public CondicionBasadaEnNivel(int nivel){
 		super(nivel);	
 	}
