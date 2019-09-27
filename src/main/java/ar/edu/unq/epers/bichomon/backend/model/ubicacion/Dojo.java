@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
+<<<<<<< HEAD
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 
 public class Dojo extends Ubicacion {
@@ -45,4 +46,10 @@ public class Dojo extends Ubicacion {
 			//error you dont have permision to do that
 		}
 	}
+=======
+import javax.persistence.Entity;
+
+@Entity
+public class Dojo extends Ubicacion{
+>>>>>>> development
 }

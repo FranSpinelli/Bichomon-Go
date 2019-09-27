@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
+<<<<<<< HEAD
 public class Pueblo extends Ubicacion {
 	
 	private String nombre;
@@ -22,4 +23,10 @@ public class Pueblo extends Ubicacion {
 		this.nombre = nombre;
 	}
 
+=======
+import javax.persistence.Entity;
+
+@Entity
+public class Pueblo extends Ubicacion{
+>>>>>>> development
 }

@@ -2,6 +2,9 @@ package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
+
+import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 
@@ -11,17 +14,30 @@ import java.util.Set;
  * 
  * @author Charly Backend
  */
+<<<<<<< HEAD
 
 public class Bicho {
 	
+=======
+@Entity
+public class Bicho {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+>>>>>>> development
 	private int id;
-	private Set<Entrenador> exDuenhos;
+	@ManyToMany(fetch = FetchType.EAGER)
+	private Set<Entrenador> exDuenhos = new HashSet<>();
+	@ManyToOne
 	private Especie especie;
 	private int energia;
 	private int edad;
 	private int cantidadDeVictorias;
+	@ManyToOne(cascade = CascadeType.ALL)
 	private Entrenador entrenador;
-	
+
+	public Bicho(){}
+
 	public Bicho(Especie especie) {
 		this.especie = especie;
 		this.edad = 0;
@@ -59,12 +75,20 @@ public class Bicho {
 		return this.cantidadDeVictorias;
 	}
 
+	public Set<Entrenador> getExDuenhos() {
+		return this.exDuenhos;
+	}
+
+	public void setExDuenhos(Set<Entrenador> exDuenhos) {
+		this.exDuenhos = exDuenhos;
+	}
+
 	public Entrenador getEntrenador() {
 		return this.entrenador;
 	}
 
-	public void setEntrenador(Entrenador entrenador) {
-		this.entrenador = entrenador;
+	public void setEntrenador(Entrenador nentrenador) {
+		this.entrenador = nentrenador;
 	}
 
 	public int getNivelDelEntrenador() {
@@ -102,5 +126,15 @@ public class Bicho {
 		this.entrenador = entrenador;
 		
 	}
+<<<<<<< HEAD
 	
+=======
+
+	@Override
+	public int hashCode(){
+		int result = 145;
+		result = 31 * result + this.id;
+		return result;
+	}
+>>>>>>> development
 }
