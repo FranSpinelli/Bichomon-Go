@@ -73,9 +73,9 @@ public class DueloHelperTest {
         assertEquals(bicho1.getEnergia(),10);
 
         Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
-        ContenedorConDatosDelDuelo datos = dueloHelperSpy.realizarDuelo(bicho1,dojo);
+        ResultadoCombate datos = dueloHelperSpy.realizarDuelo(bicho1,dojo);
 
-        assertEquals(dojo.getCampeonActual(), bicho1);
+        assertEquals(dojo.getCampeonActual().getBicho(), bicho1);
         assertEquals(datos.getGanadorDelDuelo(), bicho1);
 
         assertEquals(entrenador1.getXp(), 10);
@@ -88,16 +88,16 @@ public class DueloHelperTest {
 
         assertNull(dojo.getCampeonActual());
         dojo.setCampeonActual(bicho2);
-        assertEquals(dojo.getCampeonActual(), bicho2);
+        assertEquals(dojo.getCampeonActual().getBicho(), bicho2);
 
-        assertEquals(dojo.getCampeonActual().getEnergia(), 1000);
+        assertEquals(dojo.getCampeonActual().getBicho().getEnergia(), 1000);
 
         Mockito.when(dueloHelperSpy.getRandom(0.5, 1.0)).thenReturn(1.0);
         Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
 
-        ContenedorConDatosDelDuelo datos = dueloHelperSpy.realizarDuelo(bicho1,dojo);
+        ResultadoCombate datos = dueloHelperSpy.realizarDuelo(bicho1,dojo);
 
-        assertEquals(dojo.getCampeonActual(),bicho2);
+        assertEquals(dojo.getCampeonActual().getBicho(),bicho2);
 
         assertEquals(bicho2.getEnergia(), 1003);
         assertEquals(bicho1.getEnergia(), 13);
@@ -111,7 +111,7 @@ public class DueloHelperTest {
         //CASO3: el dojo tiene un campeon pero el retador no llega a ganarle en los 10 turnos del duelo (los 5 que le correspondian a el)
 
         dojo.setCampeonActual(bicho2);
-        assertEquals(dojo.getCampeonActual(), bicho2);
+        assertEquals(dojo.getCampeonActual().getBicho(), bicho2);
 
         Bicho bicho3 = new Bicho(especieMock2);
         bicho3.setEntrenador(entrenador1);
@@ -119,9 +119,9 @@ public class DueloHelperTest {
         Mockito.when(dueloHelperSpy.getRandom(0.5, 1.0)).thenReturn(0.01);
         Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
 
-        ContenedorConDatosDelDuelo datos = dueloHelperSpy.realizarDuelo(bicho3,dojo);
+        ResultadoCombate datos = dueloHelperSpy.realizarDuelo(bicho3,dojo);
 
-        assertEquals(dojo.getCampeonActual(),bicho2);
+        assertEquals(dojo.getCampeonActual().getBicho(),bicho2);
         assertEquals(datos.getGanadorDelDuelo(), bicho2);
 
         assertEquals(bicho2.getEnergia(), 1003);
@@ -136,13 +136,14 @@ public class DueloHelperTest {
         //CASO4: el dojo tiene un campeon y este pierde, el titulo pasa a manos del retador
 
         dojo.setCampeonActual(bicho1);
-        assertEquals(dojo.getCampeonActual(), bicho1);
+        assertEquals(dojo.getCampeonActual().getBicho(), bicho1);
 
         Mockito.when(dueloHelperSpy.getRandom(0.5, 1.0)).thenReturn(1.0);
         Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
 
-        ContenedorConDatosDelDuelo datos = dueloHelperSpy.realizarDuelo(bicho2,dojo);
-        assertEquals(dojo.getCampeonActual(),bicho2);
+        ResultadoCombate datos = dueloHelperSpy.realizarDuelo(bicho2,dojo);
+
+        assertEquals(dojo.getCampeonActual().getBicho(),bicho2);
 
         assertEquals(bicho2.getEnergia(), 1003);
         assertEquals(bicho1.getEnergia(), 13);

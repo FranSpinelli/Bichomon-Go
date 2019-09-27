@@ -1,6 +1,5 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 import javax.persistence.*;
@@ -78,7 +77,7 @@ public class Entrenador {
 
 	public void abandonar(Bicho bicho) {
 
-		((Guarderia)this.ubicacionActual).recibirBicho(bicho);
+		this.ubicacionActual.recibirBicho(bicho);
 		this.inventarioDeBichos.remove(bicho);
 		bicho.agregarEx(this);
     }

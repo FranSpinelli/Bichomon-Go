@@ -8,14 +8,14 @@ import org.mockito.Mockito;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-public class ContenedorConDatosDelDueloTest {
+public class ResultadoCombateTest {
 
-    private ContenedorConDatosDelDuelo contenedor;
+    private ResultadoCombate contenedor;
     private Bicho bichoMock1;
 
     @Before
     public void setUp(){
-        contenedor = new ContenedorConDatosDelDuelo();
+        contenedor = new ResultadoCombate();
         Bicho bichoMock1 = Mockito.mock(Bicho.class);
     }
 

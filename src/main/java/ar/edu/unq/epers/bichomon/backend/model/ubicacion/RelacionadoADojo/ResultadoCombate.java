@@ -5,14 +5,14 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ContenedorConDatosDelDuelo {
+public class ResultadoCombate {
 
     private Bicho ganadorDelDuelo;
 
     private List<Double>danhoRecibidoPorBichoCampeon;
     private List<Double>danhoRecibidoPorBichoRetador;
 
-    public ContenedorConDatosDelDuelo(){
+    public ResultadoCombate(){
         this.ganadorDelDuelo = null;
         this.danhoRecibidoPorBichoCampeon = new ArrayList<Double>();
         this.danhoRecibidoPorBichoRetador = new ArrayList<Double>();

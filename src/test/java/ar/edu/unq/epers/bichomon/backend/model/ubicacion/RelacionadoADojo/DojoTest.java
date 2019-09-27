@@ -5,7 +5,10 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import java.time.LocalDate;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 import static org.mockito.Mockito.verify;
 
 public class DojoTest {
@@ -24,23 +27,61 @@ public class DojoTest {
 
     @Test
     public void getCampeonActual() {
-        assertEquals(dojo.getCampeonActual(), null);
+        assertNull(dojo.getCampeonActual());
     }
 
     @Test
     public void setCampeonActual() {
+        //CASO1= el dojo no tenia ningun campeon
+        assertEquals(dojo.getListaDeCampeones().size(), 0);
+
         dojo.setCampeonActual(bichoMock);
 
-        assertEquals(dojo.getCampeonActual(), bichoMock);
+        assertEquals(dojo.getCampeonActual().getBicho(), bichoMock);
+        assertEquals(dojo.getCampeonActual().getFechaDeInicio(), LocalDate.now());
+
+        assertEquals(dojo.getListaDeCampeones().size(), 1);
+        assertEquals(dojo.getListaDeCampeones().get(dojo.getListaDeCampeones().size()-1).getBicho(), bichoMock);
+    }
+
+    @Test
+    public void setCampeonActualCaso2() {
+        //CASO2= el dojo no tenia ningun campeon
+
+        assertEquals(dojo.getListaDeCampeones().size(), 0);
+
+        dojo.setCampeonActual(bichoMock);
+
+        assertEquals(dojo.getCampeonActual().getBicho(), bichoMock);
+        assertEquals(dojo.getCampeonActual().getFechaDeInicio(), LocalDate.now());
+
+        assertEquals(dojo.getListaDeCampeones().size(), 1);
+        assertEquals(dojo.getListaDeCampeones().get(dojo.getListaDeCampeones().size()-1).getBicho(), bichoMock);
+
+        Bicho bichoMock2 = Mockito.mock(Bicho.class);
+        dojo.setCampeonActual(bichoMock2);
+
+        assertEquals(dojo.getCampeonActual().getBicho(), bichoMock2);
+        assertEquals(dojo.getCampeonActual().getFechaDeInicio(), LocalDate.now());
+
+        assertEquals(dojo.getListaDeCampeones().size(), 2);
+        assertEquals(dojo.getListaDeCampeones().get(0).getFechaDeFin(), LocalDate.now());
+    }
+
+    @Test
+    public void getDueloHelper(){
+
+        assertEquals(dojo.getDueloHelper(), dueloHelperMock);
     }
 
     @Test
     public void realizarDuelo() {
 
-        ContenedorConDatosDelDuelo datosMock = Mockito.mock(ContenedorConDatosDelDuelo.class);
+        ResultadoCombate datosMock = Mockito.mock(ResultadoCombate.class);
 
         Mockito.doReturn(datosMock).when(dueloHelperMock).realizarDuelo(bichoMock,dojo);
         dojo.realizarDuelo(bichoMock);
         verify(dueloHelperMock).realizarDuelo(bichoMock,dojo);
     }
+
 }

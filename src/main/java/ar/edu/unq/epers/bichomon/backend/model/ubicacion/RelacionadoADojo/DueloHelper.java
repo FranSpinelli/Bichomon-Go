@@ -7,8 +7,8 @@ import java.util.List;
 public class DueloHelper {
     /*todo REFACTOR DEL DUELO*/
 
-    public ContenedorConDatosDelDuelo realizarDuelo(Bicho bichoRetador, Dojo lugarDePelea){
-        ContenedorConDatosDelDuelo datosDeLaBatalla= new ContenedorConDatosDelDuelo();
+    public ResultadoCombate realizarDuelo(Bicho bichoRetador, Dojo lugarDePelea){
+        ResultadoCombate datosDeLaBatalla= new ResultadoCombate();
 
         if(lugarDePelea.getCampeonActual() == null){
             this.casoDojoNoTieneCampeon(bichoRetador, lugarDePelea, datosDeLaBatalla);
@@ -37,7 +37,7 @@ public class DueloHelper {
 
 //PRIVATE FUNCTIONS-----------------------------------------------------------------------------------------------------------------------------------------
 
-    private void casoDojoNoTieneCampeon(Bicho bichoRetador, Dojo lugarDePelea, ContenedorConDatosDelDuelo contenedorACompletar) {
+    private void casoDojoNoTieneCampeon(Bicho bichoRetador, Dojo lugarDePelea, ResultadoCombate contenedorACompletar) {
 
         lugarDePelea.setCampeonActual(bichoRetador);
         contenedorACompletar.setGanadorDelDuelo(bichoRetador);
@@ -45,9 +45,9 @@ public class DueloHelper {
         this.setearEnergiaYXPDeEntrenadorDe(bichoRetador);
     }
 
-    private void casoDojoTieneCampeon(Bicho bichoRetador, Dojo lugarDePelea, ContenedorConDatosDelDuelo contenedorACompletar){
+    private void casoDojoTieneCampeon(Bicho bichoRetador, Dojo lugarDePelea, ResultadoCombate contenedorACompletar){
 
-        Bicho bichoCampeon = lugarDePelea.getCampeonActual();
+        Bicho bichoCampeon = lugarDePelea.getCampeonActual().getBicho();
         Integer cantidadDeAtaquesRealizados = 0;
 
         while (this.bichosSiguenConEnergia(bichoRetador, bichoCampeon, contenedorACompletar) && (10 > cantidadDeAtaquesRealizados)) {
@@ -84,12 +84,12 @@ public class DueloHelper {
         bicho.getEntrenador().addXp(10);
     }
 
-    private boolean bichoCampeonSigueVivo(Bicho campeonActual, ContenedorConDatosDelDuelo datosDeBatalla) {
+    private boolean bichoCampeonSigueVivo(Bicho campeonActual, ResultadoCombate datosDeBatalla) {
 
         return datosDeBatalla.getDanhoTotalRecibidoPorCampeon() < campeonActual.getEnergia();
     }
 
-    private Boolean bichosSiguenConEnergia(Bicho bichoRetador, Bicho campeonActual, ContenedorConDatosDelDuelo datosDeBatalla){
+    private Boolean bichosSiguenConEnergia(Bicho bichoRetador, Bicho campeonActual, ResultadoCombate datosDeBatalla){
 
         Boolean campeonTieneEnergia = this.bichoCampeonSigueVivo(campeonActual, datosDeBatalla);
         Boolean retadorTieneEnergia = datosDeBatalla.getDanhoTotalRecibidoPorRetador() < bichoRetador.getEnergia();
