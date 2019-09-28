@@ -7,19 +7,19 @@ import java.util.ArrayList;
 import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
 import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEdad;
 import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion;
-import ar.edu.unq.epers.bichomon.backend.service.bicho.impl.BichoServiceImpl;
+import ar.edu.unq.epers.bichomon.backend.service.bicho.BichoServiceImpl;
 
 import org.junit.Before;
 
-import ar.edu.unq.epers.bichomon.backend.dao.bicho.BichoDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.bicho.impl.HibernateBichoDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.BichoDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateBichoDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
 public class HibernateBichoDAOTest {
 
-	private BichoDAO bichoDAO;
+	/*private BichoDAO bichoDAO;
 	private BichoServiceImpl service;
 	private Bicho bichomon;
 	private Entrenador entrenador;
@@ -31,7 +31,7 @@ public class HibernateBichoDAOTest {
 	public void setUp() {
 		
 		bichoDAO = new HibernateBichoDAO();
-		service = new BichoServiceImpl(bichoDAO);
+		service = new BichoServiceImpl(entrenadorDAO, bichoDAO);
 		
 		condicion = new CondicionBasadaEnEdad(2);
 		ArrayList<CondicionDeEvolucion> condiciones = new ArrayList<CondicionDeEvolucion>();
@@ -58,5 +58,5 @@ public class HibernateBichoDAOTest {
 	
 	public void unBichoEvoluciona() {
 		service.evolucionar(entrenador.getNombre(), picachu.getId());
-	}
+	}*/
 }

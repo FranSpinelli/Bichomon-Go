@@ -61,4 +61,13 @@ public class BichoServiceImpl {
     private Boolean esBichoDeEntrenador(Entrenador entrenador, Bicho bicho){
         return entrenador.tieneBicho(bicho);
     }
+
+    public boolean puedeEvolucionar(String entrenador, int idDeBicho) {
+        return getBicho(idDeBicho).puedeEvolucionar();
+    }
+
+    public Bicho evolucionar(String entrenador, int idDeBicho) {
+        getBicho(idDeBicho).evolucionar();
+        return getBicho(idDeBicho);
+    }
 }

@@ -1,18 +1,13 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
+import javax.persistence.Entity;
 
-<<<<<<< HEAD
+@Entity
 public class Pueblo extends Ubicacion {
 	
 	private String nombre;
 	
 	public Pueblo(String nombre) {
 		this.setNombre(nombre);
-	}
-
-	@Override
-	void buscar() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public String getNombre() {
@@ -23,10 +18,5 @@ public class Pueblo extends Ubicacion {
 		this.nombre = nombre;
 	}
 
-=======
-import javax.persistence.Entity;
 
-@Entity
-public class Pueblo extends Ubicacion{
->>>>>>> development
 }

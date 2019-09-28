@@ -1,7 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.dao.impl.jdbc;
 
-import ar.edu.unq.epers.bichomon.backend.dao.especie.EspecieDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.especie.impl.JDBCEspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.JDBCEspecieDAO;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 

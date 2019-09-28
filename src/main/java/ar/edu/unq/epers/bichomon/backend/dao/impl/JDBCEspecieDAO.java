@@ -1,20 +1,17 @@
-package ar.edu.unq.epers.bichomon.backend.dao.especie.impl;
+package ar.edu.unq.epers.bichomon.backend.dao.impl;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+
+import java.sql.*;
+
 import java.util.ArrayList;
+
+import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
+import connection.ConnectionBlock;
+import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import java.util.List;
 
-import ar.edu.unq.epers.bichomon.backend.dao.especie.EspecieDAO;
-import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
-import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
-import connection.ConnectionBlock;
-
-public class HibernateEspeciDao implements EspecieDAO {
+public class JDBCEspecieDAO implements EspecieDAO {
 
     @Override
     public void guardar(Especie especie) {
@@ -122,8 +119,8 @@ public class HibernateEspeciDao implements EspecieDAO {
 
     private Connection openConnection() {
         try {
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_jdbc?user=root&password=root	&serverTimezone=UTC");
 
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_jdbc?user=root&password=42547268&serverTimezone=UTC");
         } catch (SQLException e) {
             throw new RuntimeException("No se puede establecer una conexion", e);
         }

@@ -13,8 +13,7 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
 import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
+import static org.junit.Assert.*;
 
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
@@ -58,8 +57,8 @@ public class BichoServiceImplTest {
         this.bichoSquirtle = new Bicho(this.squirtle);
 
         this.guarderia = new Guarderia();
-        this.dojo = new Dojo();
-        this.pueblo = new Pueblo();
+        this.dojo = new Dojo("Gimnasio Agua");
+        this.pueblo = new Pueblo("Paleta");
 
         this.ubicacionDAO = new HibernateUbicacionDAO();
         this.entrenadorDAO = new HibernateEntrenadorDAO();
@@ -97,4 +96,22 @@ public class BichoServiceImplTest {
         Set<Bicho> bichos = ashe.getInventarioDeBichos();
         assertNotEquals(bichos, this.ash.getInventarioDeBichos());
     }
+
+    @Test
+    public void testNoPuedeEvolucionar(){
+        assertFalse(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
+    }
+
+    @Test
+    public void testPuedeEvolucionar(){
+        this.bichoDAO.recuperar(this.bichoPicachu.getId()).setEdad(5);
+        assertTrue(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
+    }
+
+    @Test
+    public void testEvolucionar(){
+        Bicho bichoEvolucionado = this.bichoService.evolucionar("Ash", this.bichoPicachu.getId());
+        assertTrue(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
+    }
+
 }

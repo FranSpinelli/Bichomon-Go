@@ -3,58 +3,37 @@
         "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
         "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        <!-- Database connection settings -->
-        <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-<<<<<<< HEAD
-        <property name="connection.url">jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_jdbc?user=root&password=root&serverTimezone=UTC</property>
-        <property name="connection.username">root</property>
-        <property name="connection.password">root</property>
+        <session-factory>
+                <!-- Database connection settings -->
+                <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
+                <property name="connection.url">jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_hibernate</property>
+                <property name="connection.username">root</property>
+                <property name="connection.password">root</property>
+                <property name="connection.serverTimezone">UTC</property>
 
-        <!-- SQL dialect -->
-        <property name="dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
-=======
-        <property name="connection.url">jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_hibernate</property>
-        <property name="connection.username">root</property>
-        <property name="connection.password">root</property>
-        <property name="connection.serverTimezone">UTC</property>
+                <!-- SQL dialect -->
+                <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
 
-        <!-- SQL dialect -->
-        <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
->>>>>>> development
+                <!-- Disable the second-level cache -->
+                <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
 
-        <!-- Disable the second-level cache -->
-        <property name="cache.provider_class">org.hibernate.cache.internal.NoCacheProvider</property>
+                <!-- Echo all executed SQL to stdout -->
+                <property name="show_sql">true</property>
 
-        <!-- Echo all executed SQL to stdout -->
-        <property name="show_sql">true</property>
+                <property name="hibernate.hbm2ddl.auto">create-drop</property>
 
-        <property name="hibernate.hbm2ddl.auto">create-drop</property>
 
-<<<<<<< HEAD
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.Especie" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador" /> 
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo" />
-=======
-
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.Especie" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia" />
-        <!--
-
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEdad" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEnergia" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnNivel" />
-        <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnVictorias" />
--->
->>>>>>> development
-    </session-factory>
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho" />
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador" />
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.Especie" />
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion" />
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion" />
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia" />
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo" />
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo" />
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEdad" />
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEnergia" />
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnNivel" />
+                <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnVictorias" />
+        </session-factory>
 </hibernate-configuration>

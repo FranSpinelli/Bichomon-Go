@@ -14,17 +14,11 @@ import java.util.Set;
  * 
  * @author Charly Backend
  */
-<<<<<<< HEAD
 
-public class Bicho {
-	
-=======
-@Entity
 public class Bicho {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
->>>>>>> development
 	private int id;
 	@ManyToMany(fetch = FetchType.EAGER)
 	private Set<Entrenador> exDuenhos = new HashSet<>();
@@ -71,6 +65,8 @@ public class Bicho {
 		return this.edad;
 	}
 
+	public void setEdad(int edad) {this.edad = edad;}
+
 	public int getVictorias() {
 		return this.cantidadDeVictorias;
 	}
@@ -99,16 +95,6 @@ public class Bicho {
 		return this.id;
 	}
 
-	@Override
-	public boolean equals(Object o){
-
-		return o instanceof Bicho && ((Bicho) o).getId() == this.id;
-	}
-
-	public boolean puedeEvolucionar() {
-		return this.especie.puedeEvolucionar(this);
-	}
-
 	public Set<Entrenador> getExEntrenadores() {
 		return this.exDuenhos;
 	}
@@ -122,13 +108,11 @@ public class Bicho {
 		this.especie.evolucionar(this);
 	}
 
-	public void serCapturadoPor(Entrenador entrenador) {
-		this.entrenador = entrenador;
-		
+	public boolean puedeEvolucionar() {
+		return this.especie.puedeEvolucionar(this);
 	}
-<<<<<<< HEAD
-	
-=======
+
+	public void serCapturadoPor(Entrenador entrenador) {this.entrenador = entrenador;}
 
 	@Override
 	public int hashCode(){
@@ -136,5 +120,10 @@ public class Bicho {
 		result = 31 * result + this.id;
 		return result;
 	}
->>>>>>> development
+
+	@Override
+	public boolean equals(Object o){
+		return o instanceof Bicho && ((Bicho) o).getId() == this.id;
+	}
+
 }

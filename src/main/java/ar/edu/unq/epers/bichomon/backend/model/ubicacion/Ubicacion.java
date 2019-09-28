@@ -1,10 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
-<<<<<<< HEAD
-
-public abstract class Ubicacion {
-=======
 
 import javax.persistence.*;
 
@@ -26,11 +22,5 @@ public abstract class Ubicacion {
     public void setId(int id){
         this.id = id;
     }
->>>>>>> development
 
-	public void recibirBicho(Bicho bicho) throws UbicacionIncorrectaException {
-		throw new UbicacionIncorrectaException("");
-	}
-	
-	abstract void buscar();
 }

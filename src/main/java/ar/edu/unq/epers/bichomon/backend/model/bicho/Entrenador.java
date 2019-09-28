@@ -4,45 +4,24 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.UbicacionIncorrectaException;
 
-<<<<<<< HEAD
 import java.util.HashSet;
 import java.util.Set;
-
 import javax.persistence.*;
 
-
-=======
-import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
-
->>>>>>> development
 @Entity
 public class Entrenador {
 
 	@Id
-<<<<<<< HEAD
-	private String nombre;
-	private int nivel;
-=======
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(unique = true)
 	private String nombre;
 	private int nivel;
 	private int xp;
 	@OneToMany(mappedBy = "entrenador", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private Set<Bicho> inventarioDeBichos = new HashSet<>();
->>>>>>> development
 	@ManyToOne
 	private Ubicacion ubicacionActual;
-	private Set<Bicho> inventarioDeBichos;
-
-	public Entrenador(String nombre){
-		this.nombre = nombre;
-		this.inventarioDeBichos = new HashSet<Bicho>();
-	}
-
 
 	public Entrenador(){}
 
@@ -99,7 +78,7 @@ public class Entrenador {
 		this.ubicacionActual = ubicacionActual;
 	}
 
-    public void abandonar(Bicho bicho) {
+    public void abandonar(Bicho bicho) throws UbicacionIncorrectaException {
 		try {
 			ubicacionActual.recibirBicho(bicho);
 			this.inventarioDeBichos.remove(bicho);
@@ -113,8 +92,6 @@ public class Entrenador {
 		this.inventarioDeBichos.remove(bicho);
     }
 
-
-
     public Integer getCantidadDeBichos(){
 
 		return this.inventarioDeBichos.size();
@@ -124,19 +101,13 @@ public class Entrenador {
 
 		return inventarioDeBichos.contains(bicho);
 	}
-
-<<<<<<< HEAD
-	public String getNombre() {
-		return this.nombre;
-	}
 	
 	public void capturarBicho(Bicho bicho) {
 		bicho.serCapturadoPor(this);
 		this.inventarioDeBichos.add(bicho);
-=======
+	}
 	public void addBicho(Bicho bicho) {
 		this.inventarioDeBichos.add(bicho);
 		bicho.setEntrenador(this);
->>>>>>> development
 	}
 }
