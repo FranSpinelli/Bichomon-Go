@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.ResultadoCombate;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 import javax.persistence.*;
@@ -28,6 +29,7 @@ public class Entrenador {
 		this.inventarioDeBichos = new HashSet();
 		this.xp = 0;
 		this.nivel = 0;
+
 		/* todo: falta ver como setear la ubicacion */
 	}
 
@@ -102,7 +104,7 @@ public class Entrenador {
 		return this.ubicacionActual;
 	}
 
-	public void desafiarCampeonActualCon(Bicho bicho){
-		this.ubicacionActual.realizarDuelo(bicho);
+	public ResultadoCombate desafiarCampeonActualCon(Bicho bicho){
+		return this.ubicacionActual.realizarDuelo(bicho);
 	}
 }
