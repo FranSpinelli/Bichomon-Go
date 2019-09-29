@@ -5,6 +5,7 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -84,6 +85,14 @@ public class Entrenador {
 		this.inventarioDeBichos.remove(bicho);
     }
 
+    public Bicho buscar(){
+	    Bicho bicho = this.ubicacionActual.buscar(this);
+        if(bicho != null){
+            this.addBicho(bicho);
+        }
+        return bicho;
+	}
+
 
 
     public Integer getCantidadDeBichos(){
@@ -100,4 +109,17 @@ public class Entrenador {
 		this.inventarioDeBichos.add(bicho);
 		bicho.setEntrenador(this);
 	}
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Entrenador that = (Entrenador) o;
+        return id == that.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }

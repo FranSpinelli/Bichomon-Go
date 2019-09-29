@@ -4,4 +4,9 @@ import javax.persistence.Entity;
 
 @Entity
 public class Dojo extends Ubicacion{
+    public Dojo(){}
+
+    public Dojo(BusquedaHelperMock busquedaHelper) {
+        super(busquedaHelper);
+    }
 }
