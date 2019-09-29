@@ -180,6 +180,11 @@ public class BichoServiceImplTest {
         assertEquals(this.picachu, this.ashRecuperado.getInventarioDeBichos().iterator().next().getEspecie());
     }
 
+    @Test(expected = EntrenadorInexistente.class)
+    public void testBuscarNoEncuentraEntrenador(){
+        this.bichoService.buscar("Ash");
+    }
+
     private List<Bicho> listaDeBichos() {
         List<Bicho> bichos = new ArrayList();
         bichos.add(this.bichoPicachu);
