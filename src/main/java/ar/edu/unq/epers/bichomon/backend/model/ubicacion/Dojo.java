@@ -4,7 +4,6 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.DueloHelper;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.ResultadoCombate;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 import javax.persistence.Entity;
 import java.time.LocalDate;
@@ -56,8 +55,11 @@ public class Dojo extends Ubicacion {
     }
 
     @Override
-    public ResultadoCombate realizarDuelo(Bicho bichoRetador){
-
+    public ResultadoCombate realizarDuelo(Bicho bichoRetador) {
         return this.dueloHelper.realizarDuelo(bichoRetador, this);
+
+    /*public Dojo(BusquedaHelperMock busquedaHelper) {
+        super(busquedaHelper);
+    }*/
     }
 }

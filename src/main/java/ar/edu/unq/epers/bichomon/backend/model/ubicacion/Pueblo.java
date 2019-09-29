@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 public class Pueblo extends Ubicacion{
     public Pueblo(){}
 
-    public Pueblo(BusquedaHelperMock busquedaHelper){
+    /*public Pueblo(BusquedaHelperMock busquedaHelper){
         super(busquedaHelper);
-    }
+    }*/
 }

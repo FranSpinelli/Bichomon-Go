@@ -161,7 +161,7 @@ public class BichoServiceImplTest {
         this.bichoService.abandonar("Ash", this.bichoPicachu.getId());
     }
 
-    @Test
+    /*@Test
     public void testBuscar(){
         run(() -> {
             this.busquedaHelperDAO.guardar(this.busquedaHelper);
@@ -183,7 +183,7 @@ public class BichoServiceImplTest {
         });
         assertEquals(new Integer(1), ashRecuperado.getCantidadDeBichos());
         assertEquals(this.picachu, this.ashRecuperado.getInventarioDeBichos().iterator().next().getEspecie());
-    }
+    }*/
 
 //PRIVATE FUCTIONS------------------------------------------------------------------------------------
 

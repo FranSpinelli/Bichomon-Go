@@ -18,10 +18,10 @@ public class Guarderia extends Ubicacion{
         bichosAbandonados = new HashSet<Bicho>();
     }
 
-    public Guarderia(BusquedaHelperMock busquedaHelper){
+    /*public Guarderia(BusquedaHelperMock busquedaHelper){
         super(busquedaHelper);
     }
-
+*/
     public Set<Bicho> getBichosAbandonados() {
         return bichosAbandonados;
     }
