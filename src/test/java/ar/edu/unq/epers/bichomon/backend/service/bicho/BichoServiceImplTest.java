@@ -6,7 +6,7 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.*;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.DueloHelper;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.DueloHelper;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoAjeno;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoInexistente;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichosInsuficientes;

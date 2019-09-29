@@ -8,7 +8,7 @@
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_hibernate</property>
         <property name="connection.username">root</property>
-        <property name="connection.password">42547268</property>
+        <property name="connection.password">root</property>
 
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.MySQL8Dialect</property>
@@ -29,8 +29,6 @@
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo" />
-
-<!--
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEdad" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEnergia" />
@@ -38,6 +36,8 @@
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnVictorias" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.BusquedaHelperMock" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.BusquedaHelper" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.DueloHelper" />
 
     </session-factory>
 </hibernate-configuration>

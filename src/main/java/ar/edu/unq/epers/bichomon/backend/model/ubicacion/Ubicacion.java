@@ -1,8 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
-import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.ResultadoCombate;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 
 import javax.persistence.*;
 
@@ -13,7 +12,7 @@ public abstract class Ubicacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    private BusquedaHelperMock busquedaHelperMock;
+    //private BusquedaHelperMock busquedaHelperMock;
 
     public Ubicacion(){}
 

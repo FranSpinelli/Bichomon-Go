@@ -1,15 +1,23 @@
-package ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo;
+package ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class ResultadoCombate {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+    @ManyToOne(cascade = CascadeType.ALL)
     private Bicho ganadorDelDuelo;
 
+    @ManyToMany
     private List<Double>danhoRecibidoPorBichoCampeon;
+    @ManyToMany
     private List<Double>danhoRecibidoPorBichoRetador;
 
     public ResultadoCombate(){

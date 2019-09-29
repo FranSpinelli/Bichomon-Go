@@ -1,12 +1,30 @@
-package ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo;
+package ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import java.util.List;
-
+@Entity
 public class DueloHelper {
     /*todo REFACTOR DEL DUELO*/
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    public DueloHelper(){}
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public ResultadoCombate realizarDuelo(Bicho bichoRetador, Dojo lugarDePelea){
         ResultadoCombate datosDeLaBatalla= new ResultadoCombate();

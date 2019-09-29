@@ -1,11 +1,11 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.Campeon;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.DueloHelper;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.RelacionadoADojo.ResultadoCombate;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.DueloHelper;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +13,14 @@ import java.util.List;
 @Entity
 public class Dojo extends Ubicacion {
 
+    @OneToOne
     private Campeon campeonActual;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Campeon> campeonesDelPasado;
+    @OneToOne
     private DueloHelper dueloHelper;
 
+    public Dojo(){}
     public Dojo(DueloHelper dueloHelper){
 
         this.campeonesDelPasado = new ArrayList<Campeon>();
