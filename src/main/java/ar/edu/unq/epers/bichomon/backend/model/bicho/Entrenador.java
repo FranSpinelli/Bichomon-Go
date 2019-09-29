@@ -85,13 +85,13 @@ public class Entrenador {
 		this.inventarioDeBichos.remove(bicho);
     }
 
-    public Bicho buscar(){
+    /*public Bicho buscar(){
 	    Bicho bicho = this.ubicacionActual.buscar(this);
         if(bicho != null){
             this.addBicho(bicho);
         }
         return bicho;
-	}
+	}*/
 
 
 

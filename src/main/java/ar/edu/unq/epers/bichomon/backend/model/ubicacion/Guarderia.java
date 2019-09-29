@@ -15,10 +15,10 @@ public class Guarderia extends Ubicacion{
 
     public Guarderia(){}
 
-    public Guarderia(BusquedaHelperMock busquedaHelper){
+    /*public Guarderia(BusquedaHelperMock busquedaHelper){
         super(busquedaHelper);
     }
-
+*/
     public Set<Bicho> getBichosAbandonados() {
         return bichosAbandonados;
     }

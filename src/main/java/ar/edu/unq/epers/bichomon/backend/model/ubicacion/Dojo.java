@@ -6,7 +6,7 @@ import javax.persistence.Entity;
 public class Dojo extends Ubicacion{
     public Dojo(){}
 
-    public Dojo(BusquedaHelperMock busquedaHelper) {
+    /*public Dojo(BusquedaHelperMock busquedaHelper) {
         super(busquedaHelper);
     }
-}
+*/}
