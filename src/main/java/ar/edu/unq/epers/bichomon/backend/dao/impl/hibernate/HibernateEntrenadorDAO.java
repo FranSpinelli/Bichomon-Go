@@ -6,6 +6,8 @@ import ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
+import javax.persistence.NoResultException;
+
 public class HibernateEntrenadorDAO extends HibernateDAO<Entrenador> implements EntrenadorDAO {
     public HibernateEntrenadorDAO() {
         super(Entrenador.class);
@@ -20,6 +22,10 @@ public class HibernateEntrenadorDAO extends HibernateDAO<Entrenador> implements 
         query.setParameter("nombre", nombre);
         query.setMaxResults(1);
 
-        return query.getSingleResult();
+        try{
+            return query.getSingleResult();
+        }catch (NoResultException ex){
+            return null;
+        }
     }
 }

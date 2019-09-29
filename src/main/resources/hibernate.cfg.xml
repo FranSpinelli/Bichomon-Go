@@ -36,6 +36,8 @@
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEnergia" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnNivel" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnVictorias" />
--->
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.BusquedaHelperMock" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.BusquedaHelper" />
+
     </session-factory>
 </hibernate-configuration>

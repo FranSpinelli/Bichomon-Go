@@ -21,17 +21,12 @@ public class BichoServiceImpl {
         this.bichoDAO = bichoDAO;
     }
 
-    /*public Bicho buscar(String entrenador){
-       // Entrenador entrenador1 = this.getEntrenador(entrenador);
-       // return run(() -> {
-       //     if(this.esBusquedaExitosa(entrenador1)){
-       //         Bicho bicho = generarBicho(entrenador1);
-       //         entrenador1.addBicho(bicho);
-       //         return this.generarBicho(entrenador1);
-       //     }
-       //     return null;
-        // });
-    }*/
+    public Bicho buscar(String entrenador){
+       return run(() -> {
+           Entrenador entrenador1 = this.getEntrenador(entrenador);
+           return entrenador1.buscar();
+       });
+    }
 
     public void abandonar(String nombreEntrenador, int idBicho){
         run(() -> {
