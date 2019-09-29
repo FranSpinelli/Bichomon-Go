@@ -4,7 +4,7 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.BusquedaHelper;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.BusquedaHelperMock;
 
 public interface BusquedaHelperDAO {
-    void guardar(BusquedaHelperMock busqedaHelper);
+    void guardar(BusquedaHelper busqedaHelper);
 
-    BusquedaHelperMock recuperar(Integer id);
+    BusquedaHelper recuperar(Integer id);
 }

@@ -13,21 +13,22 @@ public abstract class Ubicacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    //private BusquedaHelperMock busquedaHelperMock;
+    @OneToOne(cascade = CascadeType.ALL)
+    private BusquedaHelper busquedaHelper;
 
     public Ubicacion(){}
 
-    /*public Ubicacion(BusquedaHelperMock busquedaHelper){
-        this.busquedaHelperMock = busquedaHelper;
-    }*/
+    public Ubicacion(BusquedaHelper busquedaHelper){
+        this.busquedaHelper = busquedaHelper;
+    }
 
-    /*public BusquedaHelperMock getBusquedaHelperMock() {
-        return busquedaHelperMock;
-    }*/
+    public BusquedaHelper getBusquedaHelper() {
+        return busquedaHelper;
+    }
 
-    /*public void setBusquedaHelperMock(BusquedaHelperMock busquedaHelper) {
-        this.busquedaHelperMock = busquedaHelper;
-    }*/
+    public void setBusquedaHelper(BusquedaHelper busquedaHelper) {
+        this.busquedaHelper = busquedaHelper;
+    }
 
     public void recibirBicho(Bicho bichoAbandonado){
         throw new UbicacionIncorrectaException("No se puede abandonar un bicho en esta ubicacion");
@@ -41,19 +42,19 @@ public abstract class Ubicacion {
         this.id = id;
     }
 
-    /*public Bicho buscar(Entrenador entrenador){
+    public Bicho buscar(Entrenador entrenador){
         Bicho bicho = null;
         if(this.esBusquedaExitosa(entrenador)){
             bicho = this.generarBicho();
         }
         return bicho;
-    }*/
+    }
 
-    /*protected Boolean esBusquedaExitosa(Entrenador entrenador){
-        return this.busquedaHelperMock.factorTiempo(entrenador) && this.busquedaHelperMock.factorNivel(entrenador) && this.busquedaHelperMock.factorPoblacion(this) && this.busquedaHelperMock.factorRandom();
+    protected Boolean esBusquedaExitosa(Entrenador entrenador){
+        return this.busquedaHelper.factorTiempo(entrenador) && this.busquedaHelper.factorNivel(entrenador) && this.busquedaHelper.factorPoblacion(this) && this.busquedaHelper.factorRandom();
     }
 
     protected Bicho generarBicho(){
-        return this.busquedaHelperMock.generarBicho(this);
-    }*/
+        return this.busquedaHelper.generarBicho(this);
+    }
 }

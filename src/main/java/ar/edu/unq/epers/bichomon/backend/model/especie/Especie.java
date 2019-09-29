@@ -2,6 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.especie;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion;
@@ -163,6 +164,19 @@ public class Especie {
 		this.especieAEvolucionar = especie;
 		this.setCondicion(condicion);
 		especie.setEvolucionRaiz(this.evolucionRaiz);
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Especie especie = (Especie) o;
+		return id == especie.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
 	}
 }
 

@@ -15,7 +15,7 @@ public class Guarderia extends Ubicacion{
 
     public Guarderia(){}
 
-    /*public Guarderia(BusquedaHelperMock busquedaHelper){
+    /*public Guarderia(BusquedaHelper busquedaHelper){
         super(busquedaHelper);
     }
 */
