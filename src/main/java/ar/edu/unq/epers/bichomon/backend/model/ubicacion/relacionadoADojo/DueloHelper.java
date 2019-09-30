@@ -5,7 +5,7 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 
 import javax.persistence.Entity;
 import java.util.List;
-@Entity
+
 public class DueloHelper implements Estrategia{
     /*todo REFACTOR DEL DUELO*/
 

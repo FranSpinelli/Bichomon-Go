@@ -27,6 +27,7 @@ import static org.junit.Assert.assertNull;
 public class BichoServiceImplTest {
 
     private Entrenador ash;
+    private Entrenador brook;
     private Especie picachu;
     private Especie charizard;
     private Especie squirtle;
@@ -49,10 +50,12 @@ public class BichoServiceImplTest {
     private BusquedaHelperDAO busquedaHelperDAO;
     private BusquedaHelper busquedaHelper;
     private Dojo dojoRecuperado;
+    //private CampeonDAO campeonDAO;
 
     @Before
     public void crearModelo(){
         this.ash = new Entrenador("Ash");
+        this.brook = new Entrenador("Brook");
         this.picachu = new Especie("Picachu", ELECTRICIDAD);
         this.picachu.setEnergiaInicial(1000);
         this.charizard = new Especie("Charizard", FUEGO);
@@ -74,6 +77,7 @@ public class BichoServiceImplTest {
         this.bichoDAO = new HibernateBichoDAO();
         this.especieDAO = new HibernateEspecieDAO();
         this.busquedaHelperDAO = new HibernateBusquedaHelperDAO();
+        //this.campeonDAO = new HibernateCampeonDAO();
         this.busquedaHelper = new BusquedaHelperMock(true,true,true,true,this.picachu);
         this.bichoService = new BichoServiceImpl(entrenadorDAO, bichoDAO);
     }
@@ -234,33 +238,41 @@ public class BichoServiceImplTest {
     @Test
     public void testDuelo(){
         run(() -> {
-            this.dojo.setCampeonActual(this.bichoCharizard1);
             this.especieDAO.guardarTodos(this.listaDeEspecies());
             this.ubicacionDAO.guardarTodos(this.listaDeUbicaciones());
             this.ash.setUbicacionActual(this.dojo);
             this.entrenadorDAO.guardarTodos(this.listaDeEntrenadores());
+            this.brook.addBicho(this.bichoCharizard1);
             this.ash.addBicho(this.bichoPicachu);
             this.ash.addBicho(this.bichoCharizard2);
             this.ash.addBicho(this.bichoSquirtle);
             this.bichoDAO.guardarTodos(this.listaDeBichos());
         });
         run(() -> {
-            this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+            //this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar(this.dojo.getId());
-            this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
+            //this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
         });
-
         assertEquals(0, dojoRecuperado.getListaDeCampeones().size());
         assertNull(this.dojoRecuperado.getCampeonActual());
+        run(() -> {
+            //this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+            this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar(this.dojo.getId());
+            this.dojoRecuperado.setCampeonActual(this.bichoCharizard1);
+            //this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
+        });
+
+        assertEquals(1, dojoRecuperado.getListaDeCampeones().size());
+        assertEquals(this.bichoCharizard1, this.dojoRecuperado.getCampeonActual().getBicho());
 
         this.bichoService.duelo("Ash", this.bichoPicachu.getId());
 
         run(() -> {
-            ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+            //ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar(this.dojo.getId());
-            this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
+            //this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
         });
-        assertEquals(1, dojoRecuperado.getListaDeCampeones().size());
+        assertEquals(2, dojoRecuperado.getListaDeCampeones().size());
         assertEquals(bichoPicachu,this.dojoRecuperado.getCampeonActual().getBicho());
 
     }
@@ -279,6 +291,7 @@ public class BichoServiceImplTest {
     private List<Entrenador> listaDeEntrenadores() {
         List<Entrenador> entrenadores = new ArrayList();
         entrenadores.add(this.ash);
+        entrenadores.add(this.brook);
         return entrenadores;
     }
 
