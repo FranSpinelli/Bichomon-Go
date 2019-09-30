@@ -1,5 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.DueloHelper;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
@@ -114,7 +116,9 @@ public class Entrenador {
 	}
 
 	public ResultadoCombate desafiarCampeonActualCon(Bicho bicho){
-		return this.ubicacionActual.realizarDuelo(bicho);
+
+		Estrategia dueloHelper = new DueloHelper();
+		return this.ubicacionActual.realizarDuelo(bicho,dueloHelper);
 	}
 
     @Override

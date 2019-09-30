@@ -2,6 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 
 import javax.persistence.*;
@@ -34,7 +35,7 @@ public abstract class Ubicacion {
         throw new UbicacionIncorrectaException("No se puede abandonar un bicho en esta ubicacion");
     }
 
-    public ResultadoCombate realizarDuelo(Bicho bichoRetador){
+    public ResultadoCombate realizarDuelo(Bicho bichoRetador, Estrategia estrategia){
         throw new UbicacionIncorrectaException("No se puede desafiar a duelo en esta ubicacion");
     }
 

@@ -22,8 +22,8 @@ public class DojoTest {
     @Before
     public void setUp(){
 
+        dojo = new Dojo();
         dueloHelperMock = Mockito.mock(DueloHelper.class);
-        dojo = new Dojo(dueloHelperMock);
         bichoMock = Mockito.mock(Bicho.class);
     }
 
@@ -71,19 +71,13 @@ public class DojoTest {
     }
 
     @Test
-    public void getDueloHelper(){
-
-        assertEquals(dojo.getDueloHelper(), dueloHelperMock);
-    }
-
-    @Test
     public void realizarDuelo() {
 
         ResultadoCombate datosMock = Mockito.mock(ResultadoCombate.class);
 
-        Mockito.doReturn(datosMock).when(dueloHelperMock).realizarDuelo(bichoMock,dojo);
-        dojo.realizarDuelo(bichoMock);
-        verify(dueloHelperMock).realizarDuelo(bichoMock,dojo);
+        Mockito.doReturn(datosMock).when(dueloHelperMock).calcularDuelo(bichoMock,dojo);
+        dojo.realizarDuelo(bichoMock,dueloHelperMock);
+        verify(dueloHelperMock).calcularDuelo(bichoMock,dojo);
     }
 
 }

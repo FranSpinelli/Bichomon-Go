@@ -2,7 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.DueloHelper;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 
 import javax.persistence.*;
@@ -17,15 +17,11 @@ public class Dojo extends Ubicacion {
     private Campeon campeonActual;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Campeon> campeonesDelPasado;
-    @OneToOne
-    private DueloHelper dueloHelper;
 
-    public Dojo(){}
-    public Dojo(DueloHelper dueloHelper){
+    public Dojo(){
 
         this.campeonesDelPasado = new ArrayList<Campeon>();
         this.campeonActual = null;
-        this.dueloHelper = dueloHelper;
     }
 
     public Campeon getCampeonActual() {
@@ -43,10 +39,6 @@ public class Dojo extends Ubicacion {
         this.campeonActual = nuevoCampeon;
     }
 
-    public DueloHelper getDueloHelper() {
-        return dueloHelper;
-    }
-
     public List<Campeon> getListaDeCampeones(){
         List<Campeon> listaAEntregar = new ArrayList<Campeon>();
 
@@ -59,8 +51,9 @@ public class Dojo extends Ubicacion {
     }
 
     @Override
-    public ResultadoCombate realizarDuelo(Bicho bichoRetador) {
-        return this.dueloHelper.realizarDuelo(bichoRetador, this);
+    public ResultadoCombate realizarDuelo(Bicho bichoRetador, Estrategia estrategiaAUtilizar) {
+
+        return estrategiaAUtilizar.calcularDuelo(bichoRetador, this);
 
     /*public Dojo(BusquedaHelper busquedaHelper) {
         super(busquedaHelper);

@@ -22,6 +22,7 @@ import java.util.List;
 import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
 import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class BichoServiceImplTest {
 
@@ -35,7 +36,7 @@ public class BichoServiceImplTest {
     private Bicho bichoSquirtle;
     private Ubicacion guarderia;
     private DueloHelper dueloHelper;
-    private Ubicacion dojo;
+    private Dojo dojo;
     private Ubicacion pueblo;
     private EntrenadorDAO entrenadorDAO;
     private BichoDAO bichoDAO;
@@ -47,12 +48,15 @@ public class BichoServiceImplTest {
     private Guarderia guarderiaRecuperada;
     private BusquedaHelperDAO busquedaHelperDAO;
     private BusquedaHelper busquedaHelper;
+    private Dojo dojoRecuperado;
 
     @Before
     public void crearModelo(){
         this.ash = new Entrenador("Ash");
         this.picachu = new Especie("Picachu", ELECTRICIDAD);
+        this.picachu.setEnergiaInicial(1000);
         this.charizard = new Especie("Charizard", FUEGO);
+        this.charizard.setEnergiaInicial(100);
         this.squirtle = new Especie("Squirtle", AGUA);
 
         this.bichoPicachu = new Bicho(this.picachu);
@@ -62,7 +66,7 @@ public class BichoServiceImplTest {
 
         this.guarderia = new Guarderia();
         this.dueloHelper = new DueloHelper();
-        this.dojo = new Dojo(dueloHelper);
+        this.dojo = new Dojo();
         this.pueblo = new Pueblo();
 
         this.ubicacionDAO = new HibernateUbicacionDAO();
@@ -190,6 +194,77 @@ public class BichoServiceImplTest {
         this.bichoService.buscar("Ash");
     }
 
+    @Test(expected = EntrenadorInexistente.class)
+    public void testdueloNoEncuentraEntrenador(){
+        this.bichoService.duelo("Ash", bichoPicachu.getId());
+    }
+    @Test(expected = BichoInexistente.class)
+    public void testDueloNoEncuentraBicho(){
+        run(() -> this.entrenadorDAO.guardar(this.ash));
+
+        this.bichoService.duelo("Ash", bichoPicachu.getId());
+    }
+
+    @Test(expected = BichoAjeno.class)
+    public void testDueloBichoNoEsDelEntrenador(){
+        run(() -> {
+            this.especieDAO.guardar(this.picachu);
+            this.bichoDAO.guardar(this.bichoPicachu);
+            this.entrenadorDAO.guardar(this.ash);
+        });
+        this.bichoService.duelo("Ash", this.bichoPicachu.getId());
+    }
+
+    @Test(expected = UbicacionIncorrectaException.class)
+    public void testDueloEntrenadorNoEstaEnUnDojo(){
+        run(() -> {
+            this.ubicacionDAO.guardar(this.pueblo);
+            this.especieDAO.guardar(this.picachu);
+            this.especieDAO.guardar(this.squirtle);
+            this.bichoDAO.guardar(this.bichoPicachu);
+            this.ash.setUbicacionActual(this.pueblo);
+            this.ash.addBicho(this.bichoPicachu);
+            this.ash.addBicho(this.bichoSquirtle);
+            this.entrenadorDAO.guardar(this.ash);
+        });
+
+        this.bichoService.duelo("Ash", bichoPicachu.getId());
+    }
+
+    @Test
+    public void testDuelo(){
+        run(() -> {
+            this.dojo.setCampeonActual(this.bichoCharizard1);
+            this.especieDAO.guardarTodos(this.listaDeEspecies());
+            this.ubicacionDAO.guardarTodos(this.listaDeUbicaciones());
+            this.ash.setUbicacionActual(this.dojo);
+            this.entrenadorDAO.guardarTodos(this.listaDeEntrenadores());
+            this.ash.addBicho(this.bichoPicachu);
+            this.ash.addBicho(this.bichoCharizard2);
+            this.ash.addBicho(this.bichoSquirtle);
+            this.bichoDAO.guardarTodos(this.listaDeBichos());
+        });
+        run(() -> {
+            this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+            this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar(this.dojo.getId());
+            this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
+        });
+
+        assertEquals(0, dojoRecuperado.getListaDeCampeones().size());
+        assertNull(this.dojoRecuperado.getCampeonActual());
+
+        this.bichoService.duelo("Ash", this.bichoPicachu.getId());
+
+        run(() -> {
+            ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+            this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar(this.dojo.getId());
+            this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
+        });
+        assertEquals(1, dojoRecuperado.getListaDeCampeones().size());
+        assertEquals(bichoPicachu,this.dojoRecuperado.getCampeonActual().getBicho());
+
+    }
+
 //PRIVATE FUCTIONS------------------------------------------------------------------------------------
 
     private List<Bicho> listaDeBichos() {
@@ -210,6 +285,7 @@ public class BichoServiceImplTest {
     private List<Ubicacion> listaDeUbicaciones() {
         List<Ubicacion> ubicaciones = new ArrayList();
         ubicaciones.add(this.guarderia);
+        ubicaciones.add(this.dojo);
         return ubicaciones;
     }
 

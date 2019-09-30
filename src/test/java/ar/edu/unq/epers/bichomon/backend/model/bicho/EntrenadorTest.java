@@ -1,7 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -9,12 +9,16 @@ import org.mockito.Mockito;
 import static org.junit.Assert.*;
 
 public class EntrenadorTest {
+
+    Estrategia estrategiaMock;
     Bicho bichoMock;
     Entrenador entrenador;
     Ubicacion ubicacion;
 
     @Before
     public void setUp(){
+
+        estrategiaMock = Mockito.mock(Estrategia.class);
         ubicacion = Mockito.mock(Ubicacion.class);
 
         entrenador = new Entrenador("pepe");
@@ -62,15 +66,5 @@ public class EntrenadorTest {
         assertFalse(entrenador.tieneBicho(bichoMock));
         entrenador.addBicho(bichoMock);
         assertTrue(entrenador.tieneBicho(bichoMock));
-    }
-
-    @Test
-    public void desafiarCampeonActualCon() {
-
-        ResultadoCombate datosMock = Mockito.mock(ResultadoCombate.class);
-
-        Mockito.doReturn(datosMock).when(ubicacion).realizarDuelo(bichoMock);
-        entrenador.desafiarCampeonActualCon(bichoMock);
-        Mockito.verify(ubicacion).realizarDuelo(bichoMock);
     }
 }

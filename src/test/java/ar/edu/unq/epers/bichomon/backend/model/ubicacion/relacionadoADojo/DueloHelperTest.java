@@ -24,7 +24,7 @@ public class DueloHelperTest {
     @Before
     public void setUp(){
         ///dueloHelper = new DueloHelper();
-        dojo = new Dojo(dueloHelperSpy);
+        dojo = new Dojo();
 
         especieMock = Mockito.mock(Especie.class);
         Mockito.when(especieMock.getEnergiaInicial()).thenReturn(10);
@@ -74,7 +74,7 @@ public class DueloHelperTest {
         assertEquals(bicho1.getEnergia(),10);
 
         Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
-        ResultadoCombate datos = dueloHelperSpy.realizarDuelo(bicho1,dojo);
+        ResultadoCombate datos = dueloHelperSpy.calcularDuelo(bicho1,dojo);
 
         assertEquals(dojo.getCampeonActual().getBicho(), bicho1);
         assertEquals(datos.getGanadorDelDuelo(), bicho1);
@@ -96,7 +96,7 @@ public class DueloHelperTest {
         Mockito.when(dueloHelperSpy.getRandom(0.5, 1.0)).thenReturn(1.0);
         Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
 
-        ResultadoCombate datos = dueloHelperSpy.realizarDuelo(bicho1,dojo);
+        ResultadoCombate datos = dueloHelperSpy.calcularDuelo(bicho1,dojo);
 
         assertEquals(dojo.getCampeonActual().getBicho(),bicho2);
 
@@ -120,7 +120,7 @@ public class DueloHelperTest {
         Mockito.when(dueloHelperSpy.getRandom(0.5, 1.0)).thenReturn(0.01);
         Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
 
-        ResultadoCombate datos = dueloHelperSpy.realizarDuelo(bicho3,dojo);
+        ResultadoCombate datos = dueloHelperSpy.calcularDuelo(bicho3,dojo);
 
         assertEquals(dojo.getCampeonActual().getBicho(),bicho2);
         assertEquals(datos.getGanadorDelDuelo(), bicho2);
@@ -142,7 +142,7 @@ public class DueloHelperTest {
         Mockito.when(dueloHelperSpy.getRandom(0.5, 1.0)).thenReturn(1.0);
         Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
 
-        ResultadoCombate datos = dueloHelperSpy.realizarDuelo(bicho2,dojo);
+        ResultadoCombate datos = dueloHelperSpy.calcularDuelo(bicho2,dojo);
 
         assertEquals(dojo.getCampeonActual().getBicho(),bicho2);
 
