@@ -6,4 +6,6 @@ public interface UbicacionDAO {
     void guardar(Ubicacion ubicacion);
 
     Ubicacion recuperar(Integer id);
+
+    void eliminarTodos();
 }

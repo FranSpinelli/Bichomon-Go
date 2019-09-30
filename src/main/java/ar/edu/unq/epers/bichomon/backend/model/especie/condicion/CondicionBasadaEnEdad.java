@@ -15,6 +15,9 @@ public class CondicionBasadaEnEdad extends CondicionDeEvolucion{
 	
 	@Override
 	public boolean puedeEvolucionar(Bicho bicho) {
+		System.out.println(this.cantidad);
+		System.out.println(bicho.getEdad());
+		System.out.println(bicho.getEdad() > this.cantidad);
 		return bicho.getEdad() > this.cantidad;
 	}
 

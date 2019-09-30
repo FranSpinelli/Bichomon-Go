@@ -1,13 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.service.bicho;
 
-import ar.edu.unq.epers.bichomon.backend.dao.BichoDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateBichoDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateEntrenadorDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateEspecieDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateUbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.*;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.*;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
@@ -15,13 +9,20 @@ import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
 import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
 import static org.junit.Assert.*;
 
+import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEdad;
+import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
+import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +30,7 @@ public class BichoServiceImplTest {
 
     private Entrenador ash;
     private Especie picachu;
+    private Especie raychu;
     private Especie charizard;
     private Especie squirtle;
     private Bicho bichoPicachu;
@@ -43,13 +45,27 @@ public class BichoServiceImplTest {
     private EspecieDAO especieDAO;
     private BichoServiceImpl bichoService;
     private UbicacionDAO ubicacionDAO;
+    private CondicionDeEvolucion condicion;
+    private HibernateDAO<CondicionDeEvolucion> condicionDAO;
+    //private CondicionDAO condicionDAO;
+
+    @After
+    public void cleanUp() {
+        SessionFactoryProvider.destroy();
+    }
 
     @Before
     public void crearModelo(){
         this.ash = new Entrenador("Ash");
         this.picachu = new Especie("Picachu", ELECTRICIDAD);
+        this.raychu = new Especie("Raychu", ELECTRICIDAD);
         this.charizard = new Especie("Charizard", FUEGO);
         this.squirtle = new Especie("Squirtle", AGUA);
+
+        ArrayList<CondicionDeEvolucion> condiciones = new ArrayList<>();
+        this.condicion = new CondicionBasadaEnEdad(2);
+        condiciones.add(this.condicion);
+        this.picachu.setEspecieAEvolucionar(raychu, condiciones);
 
         this.bichoPicachu = new Bicho(this.picachu);
         this.bichoCharizard1 = new Bicho(this.charizard);
@@ -61,6 +77,7 @@ public class BichoServiceImplTest {
         this.pueblo = new Pueblo("Paleta");
 
         this.ubicacionDAO = new HibernateUbicacionDAO();
+        this.condicionDAO = new HibernateDAO<CondicionDeEvolucion>(CondicionDeEvolucion.class);
         this.entrenadorDAO = new HibernateEntrenadorDAO();
         this.bichoDAO = new HibernateBichoDAO();
         this.especieDAO = new HibernateEspecieDAO();
@@ -70,10 +87,14 @@ public class BichoServiceImplTest {
 
         run(() -> {
             this.especieDAO.guardar(this.picachu);
+            this.especieDAO.guardar(this.raychu);
             this.especieDAO.guardar(this.charizard);
             this.especieDAO.guardar(this.squirtle);
+
             this.ubicacionDAO.guardar(this.guarderia);
+
             this.entrenadorDAO.guardar(this.ash);
+            this.condicionDAO.guardar(this.condicion);
 
             this.ash.addBicho(this.bichoPicachu);
             this.ash.addBicho(this.bichoCharizard1);
@@ -88,6 +109,27 @@ public class BichoServiceImplTest {
     }
 
     @Test
+    public void testNoPuedeEvolucionar(){
+        Entrenador ashe = run(()->this.entrenadorDAO.recuperar("Ash"));
+        assertFalse(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
+    }
+
+    @Test
+    public void testPuedeEvolucionar(){
+        Entrenador ashe = run(()->this.entrenadorDAO.recuperar("Ash"));
+        bichoPicachu.setEdad(5);
+        run(()->this.bichoDAO.guardar(bichoPicachu));
+        assertTrue(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
+    }
+
+    @Test
+    public void testEvolucionar(){
+        Entrenador ashe = run(()->this.entrenadorDAO.recuperar("Ash"));
+        Bicho bichoEvolucionado = this.bichoService.evolucionar("Ash", this.bichoPicachu.getId());
+        assertEquals(bichoEvolucionado.getEspecie().getNombre(), this.raychu.getNombre());
+    }
+
+    @Test
     public void testAbandonar(){
 
         this.bichoService.abandonar("Ash", this.bichoPicachu.getId());
@@ -95,23 +137,6 @@ public class BichoServiceImplTest {
         Entrenador ashe = run(()->this.entrenadorDAO.recuperar("Ash"));
         Set<Bicho> bichos = ashe.getInventarioDeBichos();
         assertNotEquals(bichos, this.ash.getInventarioDeBichos());
-    }
-
-    @Test
-    public void testNoPuedeEvolucionar(){
-        assertFalse(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
-    }
-
-    @Test
-    public void testPuedeEvolucionar(){
-        this.bichoDAO.recuperar(this.bichoPicachu.getId()).setEdad(5);
-        assertTrue(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
-    }
-
-    @Test
-    public void testEvolucionar(){
-        Bicho bichoEvolucionado = this.bichoService.evolucionar("Ash", this.bichoPicachu.getId());
-        assertTrue(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
     }
 
 }

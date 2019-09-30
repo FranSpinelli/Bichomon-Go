@@ -135,14 +135,14 @@ public class Especie {
 	}
 
 	public void evolucionar(Bicho bicho) {
-		if (this.especieAEvolucionar != null && this.puedeEvolucionar(bicho)) {
+		/*if (this.especieAEvolucionar != null && this.puedeEvolucionar(bicho)) {
 			bicho.setEspecie(this.especieAEvolucionar);
-		}
-		
+		}*/
+		bicho.setEspecie(this.especieAEvolucionar);
 	}
 
 	public boolean puedeEvolucionar(Bicho bicho) {
-		return this.condicion.stream().allMatch(condition ->condition.puedeEvolucionar(bicho));
+		return (this.especieAEvolucionar != null) && (this.condicion.stream().allMatch(condition ->condition.puedeEvolucionar(bicho)));
 	}
 
 	public void setCondicion(ArrayList<CondicionDeEvolucion> condicion) {

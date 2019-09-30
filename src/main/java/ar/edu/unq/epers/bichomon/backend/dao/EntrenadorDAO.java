@@ -7,4 +7,6 @@ public interface EntrenadorDAO {
     void guardar(Entrenador entrenador);
 
     Entrenador recuperar(String nombre);
+
+    void eliminarTodos();
 }

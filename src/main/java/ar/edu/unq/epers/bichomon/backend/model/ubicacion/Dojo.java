@@ -2,11 +2,13 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import javax.persistence.Entity;
+import javax.persistence.OneToOne;
 
 @Entity
 public class Dojo extends Ubicacion {
 
 	private String nombre;
+	@OneToOne
 	private Bicho campeon;
 
 	public Dojo(String nombre) {

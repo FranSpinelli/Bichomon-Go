@@ -14,7 +14,7 @@ import java.util.Set;
  * 
  * @author Charly Backend
  */
-
+@Entity
 public class Bicho {
 
 	@Id
