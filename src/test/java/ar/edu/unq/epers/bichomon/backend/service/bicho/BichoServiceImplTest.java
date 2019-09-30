@@ -46,7 +46,7 @@ public class BichoServiceImplTest {
     private Bicho bichoPicachuRecuperado;
     private Guarderia guarderiaRecuperada;
     private BusquedaHelperDAO busquedaHelperDAO;
-    private BusquedaHelperMock busquedaHelper;
+    private BusquedaHelper busquedaHelper;
 
     @Before
     public void crearModelo(){
@@ -161,11 +161,11 @@ public class BichoServiceImplTest {
         this.bichoService.abandonar("Ash", this.bichoPicachu.getId());
     }
 
-    /*@Test
+    @Test
     public void testBuscar(){
         run(() -> {
             this.busquedaHelperDAO.guardar(this.busquedaHelper);
-            this.guarderia.setBusquedaHelperMock(this.busquedaHelper);
+            this.guarderia.setBusquedaHelper(this.busquedaHelper);
             this.especieDAO.guardar(this.picachu);
             this.ubicacionDAO.guardar(this.guarderia);
             this.ash.setUbicacionActual(this.guarderia);
@@ -183,7 +183,12 @@ public class BichoServiceImplTest {
         });
         assertEquals(new Integer(1), ashRecuperado.getCantidadDeBichos());
         assertEquals(this.picachu, this.ashRecuperado.getInventarioDeBichos().iterator().next().getEspecie());
-    }*/
+    }
+
+    @Test(expected = EntrenadorInexistente.class)
+    public void testBuscarNoEncuentraEntrenador(){
+        this.bichoService.buscar("Ash");
+    }
 
 //PRIVATE FUCTIONS------------------------------------------------------------------------------------
 

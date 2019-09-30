@@ -21,12 +21,12 @@ public class BichoServiceImpl {
         this.bichoDAO = bichoDAO;
     }
 
-    /*public Bicho buscar(String entrenador){
+    public Bicho buscar(String entrenador){
        return run(() -> {
            Entrenador entrenador1 = this.getEntrenador(entrenador);
            return entrenador1.buscar();
        });
-    }*/
+    }
 
     public void abandonar(String nombreEntrenador, int idBicho){
         run(() -> {

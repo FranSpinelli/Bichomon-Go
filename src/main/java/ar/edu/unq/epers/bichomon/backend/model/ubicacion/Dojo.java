@@ -62,7 +62,7 @@ public class Dojo extends Ubicacion {
     public ResultadoCombate realizarDuelo(Bicho bichoRetador) {
         return this.dueloHelper.realizarDuelo(bichoRetador, this);
 
-    /*public Dojo(BusquedaHelperMock busquedaHelper) {
+    /*public Dojo(BusquedaHelper busquedaHelper) {
         super(busquedaHelper);
     }*/
     }

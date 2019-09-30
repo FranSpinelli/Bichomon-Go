@@ -7,7 +7,7 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import javax.persistence.*;
 
 @Entity
-public class BusquedaHelperMock {
+public class BusquedaHelperMock extends BusquedaHelper {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
