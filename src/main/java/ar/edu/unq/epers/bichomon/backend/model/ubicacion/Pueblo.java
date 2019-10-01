@@ -2,6 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 import javax.persistence.Entity;
 
 @Entity
+/*
 public class Pueblo extends Ubicacion {
 	
 	private String nombre;
@@ -18,5 +19,11 @@ public class Pueblo extends Ubicacion {
 		this.nombre = nombre;
 	}
 
+*/
+public class Pueblo extends Ubicacion{
+    public Pueblo(){}
 
+    /*public Pueblo(BusquedaHelper busquedaHelper){
+        super(busquedaHelper);
+    }*/
 }

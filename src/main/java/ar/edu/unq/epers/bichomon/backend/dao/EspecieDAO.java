@@ -16,4 +16,6 @@ public interface EspecieDAO {
 
 	void eliminarTodos();
 
+	void guardarTodos(List<Especie> especies);
+
 }

@@ -2,7 +2,6 @@ package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
-
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -24,6 +23,7 @@ public class Bicho {
 	private Set<Entrenador> exDuenhos = new HashSet<>();
 	@ManyToOne
 	private Especie especie;
+
 	private int energia;
 	private int edad;
 	private int cantidadDeVictorias;

@@ -103,6 +103,11 @@ public class JDBCEspecieDAO implements EspecieDAO {
         });
     }
 
+    @Override
+    public void guardarTodos(List<Especie> especies) {
+
+    }
+
 
 //PRIVATE FUNCTIONS----------------------------------------------------------------------------------------------------------------------
 

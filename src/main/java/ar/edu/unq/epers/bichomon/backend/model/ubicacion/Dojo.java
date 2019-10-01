@@ -1,47 +1,61 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
+
+import javax.persistence.*;
+import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Dojo extends Ubicacion {
+    @OneToOne(cascade = CascadeType.ALL)
+    private Campeon campeonActual;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private List<Campeon> campeonesDelPasado;
 
-	private String nombre;
-	@OneToOne
-	private Bicho campeon;
+    public Dojo(){
 
-	public Dojo(String nombre) {
-		this.setNombre(nombre);
-		this.setCampeon(null);
-	}
+        this.campeonesDelPasado = new ArrayList<Campeon>();
+        this.campeonActual = null;
+    }
 
-	void pelear() {
-		// TODO Auto-generated method stub
+    public Campeon getCampeonActual() {
+        return campeonActual;
+    }
 
-	}
+    public void setCampeonActual(Bicho bichoCampeon) {
+        Campeon nuevoCampeon = new Campeon(bichoCampeon, LocalDate.now());
+        Campeon campeonActualAGuardar = this.campeonActual;
 
-	public String getNombre() {
-		return nombre;
-	}
+        if(campeonActualAGuardar != null ){
+            campeonActualAGuardar.setFechaDeFin(LocalDate.now());
+            campeonesDelPasado.add(campeonActualAGuardar);
+        }
+        this.campeonActual = nuevoCampeon;
+    }
 
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
+    public List<Campeon> getListaDeCampeones(){
+        List<Campeon> listaAEntregar = new ArrayList<Campeon>();
 
-	public Bicho getCampeon() {
-		return campeon;
-	}
+        if(campeonActual != null) {
+            listaAEntregar.addAll(campeonesDelPasado);
+            listaAEntregar.add(campeonActual);
+        }
 
-	public void setCampeon(Bicho campeon) {
-		this.campeon = campeon;
-	}
+        return listaAEntregar;
+    }
 
-	public void AsignarBicho(Bicho bicho) {
-		if (this.campeon == null || bicho.getEntrenador() == this.campeon.getEntrenador()) {
-			this.setCampeon(bicho);
-		} else {
-			//error you dont have permision to do that
-		}
-	}
+    @Override
+    public ResultadoCombate realizarDuelo(Bicho bichoRetador, Estrategia estrategiaAUtilizar) {
+
+        return estrategiaAUtilizar.calcularDuelo(bichoRetador, this);
+
+    /*public Dojo(BusquedaHelper busquedaHelper) {
+        super(busquedaHelper);
+    }*/
+    }
 }

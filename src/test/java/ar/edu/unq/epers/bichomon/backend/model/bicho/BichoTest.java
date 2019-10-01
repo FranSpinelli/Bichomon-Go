@@ -50,9 +50,12 @@ public class BichoTest {
     	when(entrenador.getNivel()).thenReturn(5);
     	assertEquals(bicho.getNivelDelEntrenador(), 5);
     }
-    
+
     @Test
-    public void unBichoPuedeSerAbandonaDoPorSuEntrenadorActualYRe() {
-    	
+    public void agregarExTest(){
+
+        assertEquals(bicho.getExDuenhos().size(),0);
+        bicho.agregarEx(entrenador);
+        assertEquals(bicho.getExDuenhos().size(),1);
     }
 }
