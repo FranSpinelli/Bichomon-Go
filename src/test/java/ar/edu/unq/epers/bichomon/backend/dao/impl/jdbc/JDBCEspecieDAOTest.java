@@ -54,7 +54,7 @@ public class JDBCEspecieDAOTest {
         assertEquals(this.pacacho.getCantidadBichos(), otroPacacho.getCantidadBichos());
         assertEquals(this.pacacho.getId(), otroPacacho.getId());
 
-        assertNotEquals(this.pacacho, otroPacacho);
+        assertNotSame(this.pacacho, otroPacacho);
     }
     
 //    @Rule
@@ -167,7 +167,7 @@ public class JDBCEspecieDAOTest {
         assertEquals(especie.getCantidadBichos(), otraEspecie.getCantidadBichos());
         assertEquals(especie.getEnergiaInicial(), otraEspecie.getEnergiaInicial());
         assertEquals(especie.getUrlFoto(), otraEspecie.getUrlFoto());
-        assertNotEquals(especie, otraEspecie);
+        assertNotSame(especie, otraEspecie);
     }
 
     private Especie crearEspecie(String nombre, TipoBicho tipo, int altura, int peso, String url, int energia) {
