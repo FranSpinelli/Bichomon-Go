@@ -67,8 +67,4 @@ public class BichoServiceImpl {
             }
             return bicho;
     }
-
-    private Boolean esBichoDeEntrenador(Entrenador entrenador, Bicho bicho){
-        return entrenador.tieneBicho(bicho);
-    }
 }
