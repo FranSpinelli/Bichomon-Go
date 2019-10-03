@@ -4,6 +4,8 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.DueloH
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
+import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoAjeno;
+import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichosInsuficientes;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -85,7 +87,9 @@ public class Entrenador {
 	}
 
     public void abandonar(Bicho bicho) {
-		this.ubicacionActual.recibirBicho(bicho);
+        if(! this.tieneBicho(bicho)){ throw new BichoAjeno("No se pueden abandonar bichos ajenos"); }
+        if(this.getCantidadDeBichos() <= 1){ throw new BichosInsuficientes("El entrenador debe tener al menos un bicho luego de abandonar"); }
+        this.ubicacionActual.recibirBicho(bicho);
         bicho.agregarEx(this);
 		this.inventarioDeBichos.remove(bicho);
     }
@@ -116,7 +120,7 @@ public class Entrenador {
 	}
 
 	public ResultadoCombate desafiarCampeonActualCon(Bicho bicho){
-
+        if (!this.tieneBicho(bicho)) { throw new BichoAjeno("No se puede retar a duelo con un bicho ajeno"); }
 		Estrategia dueloHelper = new DueloHelper();
 		return this.ubicacionActual.realizarDuelo(bicho,dueloHelper);
 	}

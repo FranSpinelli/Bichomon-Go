@@ -32,13 +32,7 @@ public class BichoServiceImpl {
     public void abandonar(String nombreEntrenador, int idBicho){
         run(() -> {
                Entrenador entrenador = this.getEntrenador(nombreEntrenador);
-
                Bicho bicho = this.getBicho(idBicho);
-
-               if(! this.esBichoDeEntrenador(entrenador,bicho)){ throw new BichoAjeno("No se pueden abandonar bichos ajenos"); }
-
-               if(entrenador.getCantidadDeBichos() <= 1){ throw new BichosInsuficientes("El entrenador debe tener al menos un bicho luego de abandonar"); }
-
                entrenador.abandonar(bicho);
         });
     }
@@ -49,11 +43,6 @@ public class BichoServiceImpl {
         return run(() -> {
             Entrenador entrenador = this.getEntrenador(nombreEntrenador);
             Bicho bicho = this.getBicho(idBicho);
-
-            if (!this.esBichoDeEntrenador(entrenador, bicho)) {
-                throw new BichoAjeno("No se puede retar a duelo con un bicho ajeno");
-            }
-
             return entrenador.desafiarCampeonActualCon(bicho);
         });
     }
