@@ -51,10 +51,10 @@ public class DueloHelperTest {
 
         DueloHelper dueloHelper = new DueloHelper();
 
-        Double azar1 = dueloHelperSpy.getRandom(0.5,1.0);
-        Double azar2 = dueloHelperSpy.getRandom(0.5,1.0);
-        Double azar3 = dueloHelperSpy.getRandom(0.5,1.0);
-        Double azar4 = dueloHelperSpy.getRandom(0.5,1.0);
+        Double azar1 = dueloHelperSpy.getRandomDouble(0.5,1.0);
+        Double azar2 = dueloHelperSpy.getRandomDouble(0.5,1.0);
+        Double azar3 = dueloHelperSpy.getRandomDouble(0.5,1.0);
+        Double azar4 = dueloHelperSpy.getRandomDouble(0.5,1.0);
 
         //uso mas de un decimo, a la hora de hacer el assert, por que podia pasar que el random me de un 1.002... y lo tome como valido
         assertTrue(azar1 >= 0.5 && azar1 <= 1.000);
@@ -73,7 +73,7 @@ public class DueloHelperTest {
         assertEquals(entrenador1.getXp(), 0);
         assertEquals(bicho1.getEnergia(),10);
 
-        Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
+        Mockito.when(dueloHelperSpy.getRandomDouble(1.0, 5.0)).thenReturn(3.0);
         ResultadoCombate datos = dueloHelperSpy.calcularDuelo(bicho1,dojo);
 
         assertEquals(dojo.getCampeonActual().getBicho(), bicho1);
@@ -93,8 +93,8 @@ public class DueloHelperTest {
 
         assertEquals(dojo.getCampeonActual().getBicho().getEnergia(), 1000);
 
-        Mockito.when(dueloHelperSpy.getRandom(0.5, 1.0)).thenReturn(1.0);
-        Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
+        Mockito.when(dueloHelperSpy.getRandomDouble(0.5, 1.0)).thenReturn(1.0);
+        Mockito.when(dueloHelperSpy.getRandomDouble(1.0, 5.0)).thenReturn(3.0);
 
         ResultadoCombate datos = dueloHelperSpy.calcularDuelo(bicho1,dojo);
 
@@ -117,8 +117,8 @@ public class DueloHelperTest {
         Bicho bicho3 = new Bicho(especieMock2);
         bicho3.setEntrenador(entrenador1);
 
-        Mockito.when(dueloHelperSpy.getRandom(0.5, 1.0)).thenReturn(0.01);
-        Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
+        Mockito.when(dueloHelperSpy.getRandomDouble(0.5, 1.0)).thenReturn(0.01);
+        Mockito.when(dueloHelperSpy.getRandomDouble(1.0, 5.0)).thenReturn(3.0);
 
         ResultadoCombate datos = dueloHelperSpy.calcularDuelo(bicho3,dojo);
 
@@ -139,8 +139,8 @@ public class DueloHelperTest {
         dojo.setCampeonActual(bicho1);
         assertEquals(dojo.getCampeonActual().getBicho(), bicho1);
 
-        Mockito.when(dueloHelperSpy.getRandom(0.5, 1.0)).thenReturn(1.0);
-        Mockito.when(dueloHelperSpy.getRandom(1.0, 5.0)).thenReturn(3.0);
+        Mockito.when(dueloHelperSpy.getRandomDouble(0.5, 1.0)).thenReturn(1.0);
+        Mockito.when(dueloHelperSpy.getRandomDouble(1.0, 5.0)).thenReturn(3.0);
 
         ResultadoCombate datos = dueloHelperSpy.calcularDuelo(bicho2,dojo);
 
