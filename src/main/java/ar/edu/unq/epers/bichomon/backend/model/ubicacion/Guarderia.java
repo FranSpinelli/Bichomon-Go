@@ -39,5 +39,13 @@ public class Guarderia extends Ubicacion{
     public Set<Bicho> getBichosEnGuarderia(){
         return this.bichosAbandonados;
     }
+
+    @Override
+    public Bicho generarBicho(){
+        if(this.bichosAbandonados.isEmpty()){
+            throw new BusquedaNoExitosa("No hay bichos que puedas adoptar en esta guarderia");
+        }
+        return this.bichosAbandonados.iterator().next();
+    }
 }
 

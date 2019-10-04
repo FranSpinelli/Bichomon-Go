@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
@@ -41,7 +42,7 @@ public class Dojo extends Ubicacion {
     public List<Campeon> getListaDeCampeones(){
         List<Campeon> listaAEntregar = new ArrayList<Campeon>();
 
-        if(campeonActual != null) {
+        if(this.hayCampeon()) {
             listaAEntregar.addAll(campeonesDelPasado);
             listaAEntregar.add(campeonActual);
         }
@@ -57,5 +58,17 @@ public class Dojo extends Ubicacion {
     /*public Dojo(BusquedaHelper busquedaHelper) {
         super(busquedaHelper);
     }*/
+    }
+
+    @Override
+    protected Especie elegirEspecie(){
+        if(!this.hayCampeon()){
+            throw new BusquedaNoExitosa("No hay campeon en este dojo");
+        }
+        return this.campeonActual.getBicho().getEspecie().getEvolucionRaiz();
+    }
+
+    private Boolean hayCampeon(){
+        return this.campeonActual != null;
     }
 }

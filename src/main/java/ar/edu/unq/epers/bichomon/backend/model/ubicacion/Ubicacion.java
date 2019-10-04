@@ -2,6 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 
@@ -59,7 +60,11 @@ public abstract class Ubicacion {
         return this.busquedaHelper.factorTiempo(entrenador) && this.busquedaHelper.factorNivel(entrenador) && this.busquedaHelper.factorPoblacion(this) && this.busquedaHelper.factorRandom();
     }
 
-    protected Bicho generarBicho(){
-        return this.busquedaHelper.generarBicho(this);
+    protected Bicho generarBicho() {
+        return new Bicho(this.elegirEspecie());
     }
+
+    protected Especie elegirEspecie(){ throw new MetodoRestringido("No se puede usar este metodo"); }
+
+
 }
