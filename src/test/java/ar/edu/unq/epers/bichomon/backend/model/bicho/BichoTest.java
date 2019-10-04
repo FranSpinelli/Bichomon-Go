@@ -4,11 +4,10 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import org.junit.Before;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import java.time.LocalDate;
 
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.*;
 
 public class BichoTest {
 
@@ -57,5 +56,12 @@ public class BichoTest {
         assertEquals(bicho.getExDuenhos().size(),0);
         bicho.agregarEx(entrenador);
         assertEquals(bicho.getExDuenhos().size(),1);
+    }
+
+    @Test
+    public void getEdad(){
+        bicho.setFechaDeNacimiento(LocalDate.of(2019,9,4));
+
+        assertEquals(30,bicho.getEdad());
     }
 }

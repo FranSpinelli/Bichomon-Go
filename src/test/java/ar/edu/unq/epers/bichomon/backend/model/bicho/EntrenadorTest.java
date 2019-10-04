@@ -2,6 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
+import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichosInsuficientes;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
@@ -35,7 +36,7 @@ public class EntrenadorTest {
         assertEquals(entrenador.getXp(), 10);
     }
 
-    @Test
+    @Test (expected = BichosInsuficientes.class)
     public void abandonar() {
 
         assertEquals(ubicacion, entrenador.getUbicacionActual());

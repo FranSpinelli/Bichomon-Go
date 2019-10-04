@@ -19,6 +19,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -86,7 +87,6 @@ public class BichoServiceImplTest {
         this.especieDAO = new HibernateEspecieDAO();
         this.busquedaHelperDAO = new HibernateBusquedaHelperDAO();
         this.condicionDAO = new HibernateDAO<CondicionDeEvolucion>(CondicionDeEvolucion.class);
-        //this.campeonDAO = new HibernateCampeonDAO();
         this.busquedaHelper = new BusquedaHelperMock(true,true,true,true,this.picachu);
         this.bichoService = new BichoServiceImpl(entrenadorDAO, bichoDAO);
     }
@@ -297,7 +297,7 @@ public class BichoServiceImplTest {
     public void testPuedeEvolucionar(){
         this.guardarParaTestsEvolucionar();
         Entrenador ashe = run(()->this.entrenadorDAO.recuperar("Ash"));
-        bichoPicachu.setEdad(5);
+        bichoPicachu.setFechaDeNacimiento(LocalDate.of(2019,10,2));
         run(()->this.bichoDAO.guardar(bichoPicachu));
         assertTrue(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
     }

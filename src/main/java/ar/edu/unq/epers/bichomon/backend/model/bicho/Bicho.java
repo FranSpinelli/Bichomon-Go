@@ -3,6 +3,8 @@ package ar.edu.unq.epers.bichomon.backend.model.bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
 import javax.persistence.*;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,7 +27,7 @@ public class Bicho {
 	private Especie especie;
 
 	private int energia;
-	private int edad;
+	private LocalDate fechaDeNacimiento;
 	private int cantidadDeVictorias;
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Entrenador entrenador;
@@ -34,9 +36,9 @@ public class Bicho {
 
 	public Bicho(Especie especie) {
 		this.especie = especie;
-		this.edad = 0;
 		this.cantidadDeVictorias = 0;
 		this.energia = especie.getEnergiaInicial();
+		this.fechaDeNacimiento = LocalDate.now();
 	}
 
 	/**
@@ -61,11 +63,16 @@ public class Bicho {
 		this.energia = energia;
 	}
 
-	public int getEdad() {
-		return this.edad;
+	public int getEdad(){
+		Long edadEnDias = ChronoUnit.DAYS.between(fechaDeNacimiento, LocalDate.now());
+		return edadEnDias.intValue();
 	}
 
-	public void setEdad(int edad) {this.edad = edad;}
+	public LocalDate getFechaDeNacimiento() {
+		return this.fechaDeNacimiento;
+	}
+
+	public void setFechaDeNacimiento(LocalDate fechaDeNacimiento) {this.fechaDeNacimiento = fechaDeNacimiento;}
 
 	public int getVictorias() {
 		return this.cantidadDeVictorias;
