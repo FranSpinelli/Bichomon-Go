@@ -40,3 +40,4 @@ public class Guarderia extends Ubicacion{
         return this.bichosAbandonados;
     }
 }
+

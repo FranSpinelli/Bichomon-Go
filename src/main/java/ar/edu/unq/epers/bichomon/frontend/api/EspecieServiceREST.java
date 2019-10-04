@@ -63,4 +63,14 @@ public class EspecieServiceREST implements EspecieService {
 		return this.decorado.crearBicho(nombreEspecie, nombreBicho);
 	}
 
+	@Override
+	public List<Especie> populares() {
+		return this.decorado.populares();
+	}
+
+	@Override
+	public List<Especie> impopulares() {
+		return this.decorado.impopulares();
+	}
+
 }

@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
+
 /**
  * Un {@link Bicho} existente en el sistema, el mismo tiene un nombre
  * y pertenece a una {@link Especie} en particular.
@@ -60,16 +61,13 @@ public class Bicho {
 		this.energia = energia;
 	}
 
-	public void evolucionar() {
-		this.especie.evolucionar(this);
-	}
-
 	public int getEdad() {
 		return this.edad;
 	}
 
+	public void setEdad(int edad) {this.edad = edad;}
+
 	public int getVictorias() {
-		// TODO Auto-generated method stub
 		return this.cantidadDeVictorias;
 	}
 
@@ -90,7 +88,6 @@ public class Bicho {
 	}
 
 	public int getNivelDelEntrenador() {
-		// TODO Auto-generated method stub
 		return this.entrenador.getNivel();
 	}
 
@@ -98,16 +95,24 @@ public class Bicho {
 		return this.id;
 	}
 
+	public Set<Entrenador> getExEntrenadores() {
+		return this.exDuenhos;
+	}
+
 	public void agregarEx(Entrenador nuevoExDuenho){
 		this.entrenador = null;
 		this.exDuenhos.add(nuevoExDuenho);
 	}
 
-	@Override
-	public boolean equals(Object o){
-
-		return o instanceof Bicho && ((Bicho) o).getId() == this.id;
+	public void evolucionar() {
+		this.especie.evolucionar(this);
 	}
+
+	public boolean puedeEvolucionar() {
+		return this.especie.puedeEvolucionar(this);
+	}
+
+	public void serCapturadoPor(Entrenador entrenador) {this.entrenador = entrenador;}
 
 	@Override
 	public int hashCode(){
@@ -115,4 +120,10 @@ public class Bicho {
 		result = 31 * result + this.id;
 		return result;
 	}
+
+	@Override
+	public boolean equals(Object o){
+		return o instanceof Bicho && ((Bicho) o).getId() == this.id;
+	}
+
 }

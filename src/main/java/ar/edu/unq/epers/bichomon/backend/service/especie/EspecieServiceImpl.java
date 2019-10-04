@@ -7,7 +7,7 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
 
-public class EspecieServiceImpl implements EspecieService {
+    public class EspecieServiceImpl implements EspecieService {
 
 	private EspecieDAO especieDAO;
 
@@ -44,6 +44,20 @@ public class EspecieServiceImpl implements EspecieService {
 		Bicho bicho = especie.crearBicho();
 		especieDAO.actualizar(especie);
 		return bicho;
+	}
+
+
+	@Override
+	public List<Especie> populares() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public List<Especie> impopulares() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -24,9 +24,4 @@ public class HibernateEspecieDAO extends HibernateDAO<Especie> implements Especi
     public List<Especie> recuperarTodos() {
         return null;
     }
-
-    @Override
-    public void eliminarTodos() {
-
-    }
 }

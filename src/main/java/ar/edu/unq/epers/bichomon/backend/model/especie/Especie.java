@@ -2,12 +2,11 @@ package ar.edu.unq.epers.bichomon.backend.model.especie;
 
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.*;
 import java.util.Objects;
-
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion;
 
-import javax.persistence.*;
 
 /**
  * Representa una {@link Especie} de bicho.
@@ -137,14 +136,14 @@ public class Especie {
 	}
 
 	public void evolucionar(Bicho bicho) {
-		if (this.especieAEvolucionar != null && this.puedeEvolucionar(bicho)) {
+		/*if (this.especieAEvolucionar != null && this.puedeEvolucionar(bicho)) {
 			bicho.setEspecie(this.especieAEvolucionar);
-		}
-		
+		}*/
+		bicho.setEspecie(this.especieAEvolucionar);
 	}
 
-	private boolean puedeEvolucionar(Bicho bicho) {
-		return this.condicion.stream().allMatch(condition ->condition.puedeEvolucionar(bicho));
+	public boolean puedeEvolucionar(Bicho bicho) {
+		return (this.especieAEvolucionar != null) && (this.condicion.stream().allMatch(condition ->condition.puedeEvolucionar(bicho)));
 	}
 
 	public void setCondicion(ArrayList<CondicionDeEvolucion> condicion) {

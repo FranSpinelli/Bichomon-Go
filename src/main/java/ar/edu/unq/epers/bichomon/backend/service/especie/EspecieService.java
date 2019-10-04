@@ -48,4 +48,10 @@ public interface EspecieService {
      * @return un objeto {@link Bicho} instanciado
      */
     Bicho crearBicho(String nombreEspecie, String nombreBicho);
+
+    List<Especie> populares();
+    
+    List<Especie> impopulares();
+    
+    
 }

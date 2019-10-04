@@ -12,7 +12,6 @@ import java.util.List;
 
 @Entity
 public class Dojo extends Ubicacion {
-
     @OneToOne(cascade = CascadeType.ALL)
     private Campeon campeonActual;
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
