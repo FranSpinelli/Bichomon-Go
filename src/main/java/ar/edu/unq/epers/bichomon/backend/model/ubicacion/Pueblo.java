@@ -34,6 +34,10 @@ public class Pueblo extends Ubicacion{
 
     public Pueblo(){}
 
+    public Pueblo(BusquedaHelper busquedaHelper){
+        super(busquedaHelper);
+    }
+
     @Override
     protected Especie elegirEspecie() {
         Integer random = (new Aleatorio()).nextInt(100);

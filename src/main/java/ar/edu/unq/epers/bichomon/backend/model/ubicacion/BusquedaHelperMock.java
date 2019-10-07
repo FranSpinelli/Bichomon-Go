@@ -8,9 +8,6 @@ import javax.persistence.*;
 
 @Entity
 public class BusquedaHelperMock extends BusquedaHelper {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
     private Boolean factorTiempo;
     private Boolean factorNivel;
     private Boolean factorPoblacion;
@@ -81,4 +78,5 @@ public class BusquedaHelperMock extends BusquedaHelper {
     public void setFactorRandom(Boolean factorRandom) {
         this.factorRandom = factorRandom;
     }
+
 }

@@ -24,6 +24,10 @@ public class Dojo extends Ubicacion {
         this.campeonActual = null;
     }
 
+    public Dojo(BusquedaHelper busquedaHelper){
+        super(busquedaHelper);
+    }
+
     public Campeon getCampeonActual() {
         return campeonActual;
     }

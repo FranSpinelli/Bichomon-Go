@@ -91,7 +91,7 @@ public class Entrenador {
 
     public void abandonar(Bicho bicho) {
         if(! this.tieneBicho(bicho)){ throw new BichoAjeno("No se pueden abandonar bichos ajenos"); }
-        if(this.getCantidadDeBichos() <= 1){ throw new BichosInsuficientes("El entrenador debe tener al menos un bicho luego de abandonar"); }
+        if(!(this.getCantidadDeBichos() > 1)){ throw new BichosInsuficientes("El entrenador debe tener al menos un bicho luego de abandonar"); }
         this.ubicacionActual.recibirBicho(bicho);
         bicho.agregarEx(this);
 		this.inventarioDeBichos.remove(bicho);

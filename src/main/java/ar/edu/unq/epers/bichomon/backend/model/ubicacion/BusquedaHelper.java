@@ -11,7 +11,7 @@ public abstract class BusquedaHelper {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    protected int id;
 
     public abstract Boolean factorTiempo(Entrenador entrenador);
 
