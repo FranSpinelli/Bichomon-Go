@@ -47,7 +47,21 @@ public class BichoServiceImpl {
         });
     }
 
+    public boolean puedeEvolucionar(String entrenadorNombre, int idDeBicho) {
+        return run(() -> {
+            Bicho bicho = this.getBicho(idDeBicho);
+            Entrenador entrenador = this.getEntrenador(entrenadorNombre);
+            return entrenador.tieneBicho(bicho) && bicho.puedeEvolucionar();
+        });
+    }
 
+    public Bicho evolucionar(String entrenadorNombre, int idDeBicho) {
+        return run(() -> {
+            Bicho bicho = this.getBicho(idDeBicho);
+            Entrenador entrenador = this.getEntrenador(entrenadorNombre);
+            return entrenador.hacerEvolucionar(bicho);
+        });
+    }
 
 
 
@@ -66,33 +80,5 @@ public class BichoServiceImpl {
                 throw new BichoInexistente();
             }
             return bicho;
-    }
-
-    private Boolean esBichoDeEntrenador(Entrenador entrenador, Bicho bicho){
-        return entrenador.tieneBicho(bicho);
-    }
-
-    public boolean puedeEvolucionar(String entrenadorNombre, int idDeBicho) {
-        return run(() -> {
-            Bicho bicho = this.bichoDAO.recuperar(idDeBicho);
-            Entrenador entrenador = this.entrenadorDAO.recuperar(entrenadorNombre);
-            if(bicho == null){
-                throw new BichoInexistente();
-            }
-            return bicho.puedeEvolucionar();
-        });
-
-    }
-
-    public Bicho evolucionar(String entrenadorNombre, int idDeBicho) {
-        return run(() -> {
-            Bicho bicho = this.bichoDAO.recuperar(idDeBicho);
-            Entrenador entrenador = this.entrenadorDAO.recuperar(entrenadorNombre);
-            if (bicho == null) {
-                throw new BichoInexistente();
-            }
-            bicho.evolucionar();
-            return bicho;
-        });
     }
 }

@@ -99,9 +99,7 @@ public class Entrenador {
 
     public Bicho buscar(){
 	    Bicho bicho = this.ubicacionActual.buscar(this);
-        if(bicho != null){
-            this.addBicho(bicho);
-        }
+        this.addBicho(bicho);
         return bicho;
 	}
 
@@ -128,6 +126,11 @@ public class Entrenador {
 		return this.ubicacionActual.realizarDuelo(bicho,dueloHelper);
 	}
 
+	public Bicho hacerEvolucionar(Bicho bicho) {
+		if (!this.tieneBicho(bicho)) { throw new BichoAjeno("No se puede hacer evolucionar a un bicho ajeno"); }
+		return bicho.evolucionar();
+	}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -140,4 +143,5 @@ public class Entrenador {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

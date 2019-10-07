@@ -6,6 +6,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.*;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
+import ar.edu.unq.epers.bichomon.backend.model.especie.EvolucionNoPermitida;
 import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEdad;
 import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.*;
@@ -266,14 +267,30 @@ public class BichoServiceImplTest {
         assertEquals(this.bichoPicachu, this.dojoRecuperado.getCampeonActual().getBicho());
     }
 
+    @Test(expected = EntrenadorInexistente.class)
+    public void testPuedeEvolucionarNoEncuentraEntrenador(){
+        this.bichoService.puedeEvolucionar("Ashe", bichoPicachu.getId());
+    }
+
+    @Test(expected = BichoInexistente.class)
+    public void testPuedeEvolucionarNoEncuentraBicho(){
+        this.bichoService.puedeEvolucionar("Ash", 0);
+    }
+
+
     @Test
-    public void testNoPuedeEvolucionar(){
+    public void testPuedeEvolucionarNoCumpleCondiciones(){
         run(() -> {
             this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.addBicho(this.bichoPicachuRecuperado);
             this.bichoPicachuRecuperado.setFechaDeNacimiento(LocalDate.now());
         });
+        assertFalse(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
+    }
+
+    @Test
+    public void testPuedeEvolucionarElBichoNoEsDelEntrenador(){
         assertFalse(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
     }
 
@@ -288,15 +305,40 @@ public class BichoServiceImplTest {
 
     @Test
     public void testEvolucionar(){
-        // TODO: Tirar excepcion si no evoluciona
-        // TODO: Revisar metodos de Duglas
-        // TODO: Borrar prints
+        // TODO: Hacer casos de tests con varias condiciones de evolucion
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.addBicho(this.bichoPicachu);
         });
         Bicho bichoEvolucionado = this.bichoService.evolucionar("Ash", this.bichoPicachu.getId());
         assertEquals(bichoEvolucionado.getEspecie().getNombre(), this.raychu.getNombre());
+    }
+
+    @Test(expected = EntrenadorInexistente.class)
+    public void testEvolucionarNoEncuentraEntrenador(){
+        this.bichoService.evolucionar("Ashe", bichoPicachu.getId());
+    }
+
+    @Test(expected = BichoInexistente.class)
+    public void testEvolucionarNoEncuentraBicho(){
+        this.bichoService.evolucionar("Ash", 0);
+    }
+
+
+    @Test(expected = BichoAjeno.class)
+    public void testEvolucionarBichoNoEsDelEntrenador(){
+        this.bichoService.evolucionar("Ash", this.bichoPicachu.getId());
+    }
+
+    @Test(expected = EvolucionNoPermitida.class)
+    public void testEvolucionarBichoNoPuedeEvolucionar(){
+        run(() -> {
+            this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
+            this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+            this.ashRecuperado.addBicho(this.bichoPicachuRecuperado);
+            this.bichoPicachuRecuperado.setFechaDeNacimiento(LocalDate.now());
+        });
+        this.bichoService.evolucionar("Ash", this.bichoPicachu.getId());
     }
 
 //PRIVATE FUCTIONS------------------------------------------------------------------------------------

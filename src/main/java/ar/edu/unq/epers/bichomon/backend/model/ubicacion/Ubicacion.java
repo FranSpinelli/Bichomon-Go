@@ -49,13 +49,10 @@ public abstract class Ubicacion {
     }
 
     public Bicho buscar(Entrenador entrenador){
-        Bicho bicho;
-        if(this.esBusquedaExitosa(entrenador)){
-            bicho = this.generarBicho();
-        }else{
+        if(!this.esBusquedaExitosa(entrenador)) {
             throw new BusquedaNoExitosa("No se encontro ningun bicho");
         }
-        return bicho;
+        return this.generarBicho();
     }
 
     protected Boolean esBusquedaExitosa(Entrenador entrenador){

@@ -136,10 +136,12 @@ public class Especie {
 		this.id=nuevoId;
 	}
 
-	public void evolucionar(Bicho bicho) {
-		if(this.puedeEvolucionar(bicho)){
-			bicho.setEspecie(this.especieAEvolucionar);
+	public Bicho evolucionar(Bicho bicho) {
+		if(!this.puedeEvolucionar(bicho)) {
+			throw new EvolucionNoPermitida("El bicho no puede evolucionar ");
 		}
+		bicho.setEspecie(this.especieAEvolucionar);
+		return bicho;
 	}
 
 	public boolean puedeEvolucionar(Bicho bicho) {

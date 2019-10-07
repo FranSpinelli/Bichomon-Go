@@ -111,8 +111,8 @@ public class Bicho {
 		this.exDuenhos.add(nuevoExDuenho);
 	}
 
-	public void evolucionar() {
-		this.especie.evolucionar(this);
+	public Bicho evolucionar() {
+		return this.especie.evolucionar(this);
 	}
 
 	public boolean puedeEvolucionar() {
