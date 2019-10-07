@@ -2,15 +2,20 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 
+import javax.persistence.*;
+
+@Entity
 public class EspecieEncontrable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @ManyToOne
     private Especie especie;
     private Integer probabilidad;
 
     public EspecieEncontrable() {}
 
-    public EspecieEncontrable(int id, Especie especie, Integer probabilidad) {
-        this.id = id;
+    public EspecieEncontrable(Especie especie, Integer probabilidad) {
         this.especie = especie;
         this.probabilidad = probabilidad;
     }

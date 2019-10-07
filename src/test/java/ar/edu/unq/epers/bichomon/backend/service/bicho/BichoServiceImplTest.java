@@ -31,6 +31,7 @@ public class BichoServiceImplTest {
 
     private Entrenador ash;
     private Entrenador brook;
+    private Especie pichu;
     private Especie picachu;
     private Especie charizard;
     private Especie squirtle;
@@ -39,10 +40,10 @@ public class BichoServiceImplTest {
     private Bicho bichoCharizard1;
     private Bicho bichoCharizard2;
     private Bicho bichoSquirtle;
-    private Ubicacion guarderia;
+    private Guarderia guarderia;
     private DueloHelper dueloHelper;
     private Dojo dojo;
-    private Ubicacion pueblo;
+    private Pueblo pueblo;
     private EntrenadorDAO entrenadorDAO;
     private BichoDAO bichoDAO;
     private EspecieDAO especieDAO;
@@ -52,7 +53,7 @@ public class BichoServiceImplTest {
     private Bicho bichoPicachuRecuperado;
     private Guarderia guarderiaRecuperada;
     private BusquedaHelperDAO busquedaHelperDAO;
-    private BusquedaHelper busquedaHelper;
+    private BusquedaHelperMock busquedaHelper;
     private Dojo dojoRecuperado;
     private CondicionDeEvolucion condicion;
     private HibernateDAO<CondicionDeEvolucion> condicionDAO;
@@ -62,6 +63,7 @@ public class BichoServiceImplTest {
     public void crearModelo(){
         this.ash = new Entrenador("Ash");
         this.brook = new Entrenador("Brook");
+        this.pichu = new Especie("Pichu", ELECTRICIDAD);
         this.picachu = new Especie("Picachu", ELECTRICIDAD);
         this.picachu.setEnergiaInicial(1000);
         this.charizard = new Especie("Charizard", FUEGO);
@@ -178,28 +180,144 @@ public class BichoServiceImplTest {
         this.bichoService.abandonar("Ash", this.bichoPicachu.getId());
     }
 
+    // TODO: Hacer nuevos casos de error de busqueda (con busqueda no exitosa y con busqueda imposibilitada)
+    // TODO: Hacer casos de busqueda en todas las ubicaciones
+    // TODO: Mejorar forma de creacion guardado (DataService)
     @Test
-    public void testBuscar(){
+    public void testBuscarEnGuarderia(){
         run(() -> {
             this.busquedaHelperDAO.guardar(this.busquedaHelper);
             this.guarderia.setBusquedaHelper(this.busquedaHelper);
             this.especieDAO.guardar(this.picachu);
             this.ubicacionDAO.guardar(this.guarderia);
+            this.especieDAO.guardar(this.charizard);
+            this.especieDAO.guardar(this.squirtle);
+            this.bichoDAO.guardar(this.bichoCharizard1);
+            this.bichoDAO.guardar(this.bichoSquirtle);
             this.ash.setUbicacionActual(this.guarderia);
+            this.brook.setUbicacionActual(this.guarderia);
+            this.brook.addBicho(this.bichoCharizard1);
+            this.brook.addBicho(this.bichoSquirtle);
             this.entrenadorDAO.guardar(this.ash);
+            this.entrenadorDAO.guardar(this.brook);
         });
+        this.bichoService.abandonar("Brook", this.bichoCharizard1.getId());
         run(() -> {
-            ashRecuperado = this.entrenadorDAO.recuperar("Ash");
-            guarderiaRecuperada = (Guarderia) this.ubicacionDAO.recuperar(this.guarderia.getId());
+            this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
         });
         assertEquals(new Integer(0), ashRecuperado.getCantidadDeBichos());
         this.bichoService.buscar("Ash");
         run(() -> {
-            ashRecuperado = this.entrenadorDAO.recuperar("Ash");
-            guarderiaRecuperada = (Guarderia) this.ubicacionDAO.recuperar(this.guarderia.getId());
+            this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
         });
         assertEquals(new Integer(1), ashRecuperado.getCantidadDeBichos());
-        assertEquals(this.picachu, this.ashRecuperado.getInventarioDeBichos().iterator().next().getEspecie());
+        assertEquals(this.charizard, this.ashRecuperado.getInventarioDeBichos().iterator().next().getEspecie());
+    }
+
+    @Test
+    public void testBuscarEnDojo(){
+        run(() -> {
+            this.busquedaHelperDAO.guardar(this.busquedaHelper);
+            this.dojo.setBusquedaHelper(this.busquedaHelper);
+            this.dojo.setCampeonActual(this.bichoPicachu);
+            this.picachu.setEvolucionRaiz(this.pichu);
+            this.especieDAO.guardar(this.pichu);
+            this.especieDAO.guardar(this.picachu);
+            this.ubicacionDAO.guardar(this.dojo);
+            this.ash.setUbicacionActual(this.dojo);
+            this.entrenadorDAO.guardar(this.ash);
+        });
+        run(() -> {
+            this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+        });
+        assertEquals(new Integer(0), ashRecuperado.getCantidadDeBichos());
+        this.bichoService.buscar("Ash");
+        run(() -> {
+            this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+        });
+        assertEquals(new Integer(1), ashRecuperado.getCantidadDeBichos());
+        assertEquals(this.pichu, this.ashRecuperado.getInventarioDeBichos().iterator().next().getEspecie());
+    }
+
+    @Test
+    public void testBuscarEnPueblo(){
+        run(() -> {
+            this.busquedaHelperDAO.guardar(this.busquedaHelper);
+            this.pueblo.setBusquedaHelper(this.busquedaHelper);
+            this.pueblo.addEspecieHabitante(this.charizard, 100);
+            this.especieDAO.guardar(this.charizard);
+            this.ubicacionDAO.guardar(this.pueblo);
+            this.ash.setUbicacionActual(this.pueblo);
+            this.entrenadorDAO.guardar(this.ash);
+        });
+        run(() -> {
+            this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+        });
+        assertEquals(new Integer(0), ashRecuperado.getCantidadDeBichos());
+        this.bichoService.buscar("Ash");
+        run(() -> {
+            this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+        });
+        assertEquals(new Integer(1), ashRecuperado.getCantidadDeBichos());
+        assertEquals(this.charizard, this.ashRecuperado.getInventarioDeBichos().iterator().next().getEspecie());
+    }
+
+    @Test(expected = BusquedaNoExitosa.class)
+    public void testBuscarNoEncuentraBicho(){
+        run(() -> {
+            this.busquedaHelper.setFactorRandom(false);
+            this.busquedaHelperDAO.guardar(this.busquedaHelper);
+            this.pueblo.setBusquedaHelper(this.busquedaHelper);
+            this.pueblo.addEspecieHabitante(this.charizard, 100);
+            this.especieDAO.guardar(this.charizard);
+            this.ubicacionDAO.guardar(this.pueblo);
+            this.ash.setUbicacionActual(this.pueblo);
+            this.entrenadorDAO.guardar(this.ash);
+        });
+        this.bichoService.buscar("Ash");
+    }
+
+    @Test(expected = BusquedaNoExitosa.class)
+    public void testBuscarEnGuarderiaSinBichosAbandonados(){
+        run(() -> {
+            this.busquedaHelperDAO.guardar(this.busquedaHelper);
+            this.guarderia.setBusquedaHelper(this.busquedaHelper);
+            this.especieDAO.guardar(this.picachu);
+            this.ubicacionDAO.guardar(this.guarderia);
+            this.especieDAO.guardar(this.charizard);
+            this.especieDAO.guardar(this.squirtle);
+            this.ash.setUbicacionActual(this.guarderia);
+            this.brook.setUbicacionActual(this.guarderia);
+            this.brook.addBicho(this.bichoCharizard1);
+            this.brook.addBicho(this.bichoSquirtle);
+            this.entrenadorDAO.guardar(this.ash);
+            this.entrenadorDAO.guardar(this.brook);
+        });
+        this.bichoService.buscar("Ash");
+    }
+
+    @Test(expected = BusquedaNoExitosa.class)
+    public void testBuscarEnPuebloSinEspeciesHabitantes(){
+        run(() -> {
+            this.busquedaHelperDAO.guardar(this.busquedaHelper);
+            this.pueblo.setBusquedaHelper(this.busquedaHelper);
+            this.ubicacionDAO.guardar(this.pueblo);
+            this.ash.setUbicacionActual(this.pueblo);
+            this.entrenadorDAO.guardar(this.ash);
+        });
+        this.bichoService.buscar("Ash");
+    }
+
+    @Test(expected = BusquedaNoExitosa.class)
+    public void testBuscarEnPuebloSinCampeon(){
+        run(() -> {
+            this.busquedaHelperDAO.guardar(this.busquedaHelper);
+            this.dojo.setBusquedaHelper(this.busquedaHelper);
+            this.ubicacionDAO.guardar(this.dojo);
+            this.ash.setUbicacionActual(this.dojo);
+            this.entrenadorDAO.guardar(this.ash);
+        });
+        this.bichoService.buscar("Ash");
     }
 
     @Test(expected = EntrenadorInexistente.class)
@@ -289,23 +407,25 @@ public class BichoServiceImplTest {
     @Test
     public void testNoPuedeEvolucionar(){
         this.guardarParaTestsEvolucionar();
-        Entrenador ashe = run(()->this.entrenadorDAO.recuperar("Ash"));
+        run(() -> {
+            this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
+            this.bichoPicachuRecuperado.setFechaDeNacimiento(LocalDate.now());
+        });
         assertFalse(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
     }
 
     @Test
     public void testPuedeEvolucionar(){
         this.guardarParaTestsEvolucionar();
-        Entrenador ashe = run(()->this.entrenadorDAO.recuperar("Ash"));
-        bichoPicachu.setFechaDeNacimiento(LocalDate.of(2019,10,2));
-        run(()->this.bichoDAO.guardar(bichoPicachu));
+        run(() -> this.bichoDAO.guardar(bichoPicachu));
         assertTrue(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
     }
 
     @Test
     public void testEvolucionar(){
+        // TODO: Tirar excepcion si no evoluciona
+        // TODO: Borrar prints
         this.guardarParaTestsEvolucionar();
-        Entrenador ashe = run(()->this.entrenadorDAO.recuperar("Ash"));
         Bicho bichoEvolucionado = this.bichoService.evolucionar("Ash", this.bichoPicachu.getId());
         assertEquals(bichoEvolucionado.getEspecie().getNombre(), this.raychu.getNombre());
     }
@@ -315,6 +435,7 @@ public class BichoServiceImplTest {
     private void guardarParaTestsEvolucionar(){
         ArrayList<CondicionDeEvolucion> condiciones = new ArrayList<>();
         condiciones.add(this.condicion);
+        this.bichoPicachu.setFechaDeNacimiento(LocalDate.of(2019,10,2));
         this.picachu.setEspecieAEvolucionar(raychu, condiciones);
         run(() -> {
             this.especieDAO.guardar(this.picachu);
