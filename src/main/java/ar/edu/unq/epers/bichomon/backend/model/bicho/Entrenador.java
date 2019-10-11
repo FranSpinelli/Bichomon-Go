@@ -152,4 +152,5 @@ public class Entrenador {
     public int hashCode() {
         return Objects.hash(id);
     }
+
 }

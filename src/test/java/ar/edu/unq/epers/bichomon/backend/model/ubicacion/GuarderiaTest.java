@@ -14,7 +14,7 @@ public class GuarderiaTest {
 
     @Before
     public void setUp(){
-        guarderia = new Guarderia();
+        guarderia = new Guarderia("guarderia");
         bichoMock = Mockito.mock(Bicho.class);
     }
 

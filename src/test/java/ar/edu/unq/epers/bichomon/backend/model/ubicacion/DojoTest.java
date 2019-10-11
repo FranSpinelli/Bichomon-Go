@@ -22,7 +22,7 @@ public class DojoTest {
     @Before
     public void setUp(){
 
-        dojo = new Dojo();
+        dojo = new Dojo("dojo");
         dueloHelperMock = Mockito.mock(DueloHelper.class);
         bichoMock = Mockito.mock(Bicho.class);
     }

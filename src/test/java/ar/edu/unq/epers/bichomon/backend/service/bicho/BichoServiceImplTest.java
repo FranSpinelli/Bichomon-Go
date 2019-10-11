@@ -75,10 +75,10 @@ public class BichoServiceImplTest {
         this.bichoCharizard2 = new Bicho(this.charizard);
         this.bichoSquirtle = new Bicho(this.squirtle);
 
-        this.guarderia = new Guarderia();
+        this.guarderia = new Guarderia("guarderia");
         this.dueloHelper = new DueloHelper();
-        this.dojo = new Dojo();
-        this.pueblo = new Pueblo();
+        this.dojo = new Dojo("dojo");
+        this.pueblo = new Pueblo("pueblo");
 
         this.ubicacionDAO = new HibernateUbicacionDAO();
         this.entrenadorDAO = new HibernateEntrenadorDAO();

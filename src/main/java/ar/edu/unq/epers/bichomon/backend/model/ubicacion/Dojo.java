@@ -17,8 +17,8 @@ public class Dojo extends Ubicacion {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Campeon> campeonesDelPasado;
 
-    public Dojo(){
-
+    public Dojo(String nombre){
+        super(nombre);
         this.campeonesDelPasado = new ArrayList<Campeon>();
         this.campeonActual = null;
     }

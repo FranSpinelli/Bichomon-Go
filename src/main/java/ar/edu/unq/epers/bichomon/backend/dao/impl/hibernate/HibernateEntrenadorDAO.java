@@ -7,6 +7,7 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import javax.persistence.NoResultException;
+import java.util.List;
 
 public class HibernateEntrenadorDAO extends HibernateDAO<Entrenador> implements EntrenadorDAO {
     public HibernateEntrenadorDAO() {
@@ -24,6 +25,21 @@ public class HibernateEntrenadorDAO extends HibernateDAO<Entrenador> implements 
 
         try{
             return query.getSingleResult();
+        }catch (NoResultException ex){
+            return null;
+        }
+    }
+    public List<Entrenador> lideres(){
+        Session session = TransactionRunner.getCurrentSession();
+        String hql ="select entrenador from Entrenador entrenador join entrenador.inventarioDeBichos bicho "+
+                "group by entrenador "+
+                "order by sum(bicho.energia) desc";
+
+        Query<Entrenador> query = session.createQuery(hql, Entrenador.class);
+        query.setMaxResults(10);
+
+        try{
+            return query.list();
         }catch (NoResultException ex){
             return null;
         }

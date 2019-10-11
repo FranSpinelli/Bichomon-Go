@@ -14,7 +14,8 @@ public class Guarderia extends Ubicacion{
     @OneToMany(fetch = FetchType.EAGER)//TODO: ¿Como implementar lazy?
     private Set<Bicho> bichosAbandonados;
 
-    public Guarderia(){
+    public Guarderia(String nombre){
+        super(nombre);
         bichosAbandonados = new HashSet<Bicho>();
     }
 

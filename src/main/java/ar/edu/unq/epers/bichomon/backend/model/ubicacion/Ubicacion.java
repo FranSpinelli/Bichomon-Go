@@ -14,10 +14,11 @@ public abstract class Ubicacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    private String nombre;
     @OneToOne(cascade = CascadeType.ALL)
     private BusquedaHelper busquedaHelper;
 
-    public Ubicacion(){}
+    public Ubicacion(String nombre){ this.nombre=nombre;}
 
     public Ubicacion(BusquedaHelper busquedaHelper){
         this.busquedaHelper = busquedaHelper;

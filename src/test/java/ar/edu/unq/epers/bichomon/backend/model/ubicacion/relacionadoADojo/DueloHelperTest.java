@@ -24,7 +24,7 @@ public class DueloHelperTest {
     @Before
     public void setUp(){
         ///dueloHelper = new DueloHelper();
-        dojo = new Dojo();
+        dojo = new Dojo("dojo");
 
         especieMock = Mockito.mock(Especie.class);
         Mockito.when(especieMock.getEnergiaInicial()).thenReturn(10);
