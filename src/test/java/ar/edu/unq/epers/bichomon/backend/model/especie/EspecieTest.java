@@ -5,15 +5,10 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvol
 import org.junit.Before;
 import org.junit.Test;
 
-import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
-
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 import java.util.ArrayList;
 
-import static org.mockito.Mockito.verifyZeroInteractions;
+import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.AIRE;
+import static org.mockito.Mockito.*;
 
 public class EspecieTest {
 
@@ -42,13 +37,13 @@ public class EspecieTest {
     	verify(bicho).setEspecie(otraEspecie);
     }
     
-    @Test
+    @Test(expected = EvolucionNoPermitida.class)
     public void unaEspecieNoPuedeEvolucionarAOtraPorNoTenerEvolucion() {
     	especie.evolucionar(bicho);
     	verifyZeroInteractions(bicho);
     }
     
-    @Test
+    @Test(expected = EvolucionNoPermitida.class)
     public void unaEspecieNoPuedeEvolucionarAOtraPorCondicion() {
     	especie.setEspecieAEvolucionar(otraEspecie,condicion);
     	when(condicion1.puedeEvolucionar(bicho)).thenReturn(false);
@@ -57,7 +52,7 @@ public class EspecieTest {
     }
 	
     
-    @Test
+    @Test(expected = EvolucionNoPermitida.class)
     public void unaEspecieNoPuedeEvolucionarAOtraPorNoTenerEvolucionNiCondicion() {
     	especie.evolucionar(bicho);
     	verifyZeroInteractions(bicho);

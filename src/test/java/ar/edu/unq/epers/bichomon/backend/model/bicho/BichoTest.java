@@ -62,6 +62,6 @@ public class BichoTest {
     public void getEdad(){
         bicho.setFechaDeNacimiento(LocalDate.of(2019,9,4));
 
-        assertEquals(30,bicho.getEdad());
+        assertEquals(30,bicho.getEdadConRespectoAlDia(LocalDate.of(2019,10,4)));
     }
 }

@@ -63,8 +63,8 @@ public class Bicho {
 		this.energia = energia;
 	}
 
-	public int getEdad(){
-		Long edadEnDias = ChronoUnit.DAYS.between(fechaDeNacimiento, LocalDate.now());
+	public int getEdadConRespectoAlDia(LocalDate fechaActual){
+		Long edadEnDias = ChronoUnit.DAYS.between(fechaDeNacimiento, fechaActual);
 		return edadEnDias.intValue();
 	}
 
