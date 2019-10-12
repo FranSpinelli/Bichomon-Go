@@ -66,10 +66,17 @@ public class Dojo extends Ubicacion {
 
     @Override
     protected Especie elegirEspecie(){
-        if(!this.hayCampeon()){
-            throw new BusquedaNoExitosa("No hay campeon en este dojo");
-        }
         return this.campeonActual.getBicho().getEspecie().getEvolucionRaiz();
+    }
+
+    @Override
+    protected Boolean esBusquedaExitosaPosible() {
+        return this.hayCampeon();
+    }
+
+    @Override
+    protected String mensajeBusquedaExitosaNoPosible() {
+        return "No hay campeon en este dojo";
     }
 
     private Boolean hayCampeon(){

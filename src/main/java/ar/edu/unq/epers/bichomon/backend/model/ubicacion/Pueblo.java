@@ -9,24 +9,6 @@ import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
-public class Pueblo extends Ubicacion {
-	
-	private String nombre;
-	
-	public Pueblo(String nombre) {
-		this.setNombre(nombre);
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-*/
 @Entity
 public class Pueblo extends Ubicacion{
     @OneToMany(cascade = CascadeType.ALL)
@@ -48,7 +30,18 @@ public class Pueblo extends Ubicacion{
                return especieHabitante.getEspecie();
             }
         }
-        throw new BusquedaNoExitosa("No habitan especies en este pueblo");
+        //No deberia llegar hasta aca
+        return null;
+    }
+
+    @Override
+    protected Boolean esBusquedaExitosaPosible() {
+        return !this.especiesHabitantes.isEmpty();
+    }
+
+    @Override
+    protected String mensajeBusquedaExitosaNoPosible() {
+        return "No habitan especies en este pueblo";
     }
 
     public List<EspecieEncontrable> getEspeciesHabitantes() {
