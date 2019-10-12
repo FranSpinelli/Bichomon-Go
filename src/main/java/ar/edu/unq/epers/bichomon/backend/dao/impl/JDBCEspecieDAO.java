@@ -124,7 +124,7 @@ public class JDBCEspecieDAO implements EspecieDAO {
     private Connection openConnection() {
         try {
 
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_jdbc?user=root&password=42547268&serverTimezone=UTC");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_jdbc?user=root&password=root&serverTimezone=UTC");
         } catch (SQLException e) {
             throw new RuntimeException("No se puede establecer una conexion", e);
         }

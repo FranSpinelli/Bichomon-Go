@@ -21,8 +21,6 @@ public abstract class BusquedaHelper {
 
     public abstract Boolean factorRandom();
 
-    public abstract Bicho generarBicho(Ubicacion ubicacion);
-
     public void setId(int id) {
         this.id = id;
     }
