@@ -107,6 +107,16 @@ public class JDBCEspecieDAO implements EspecieDAO {
 
     }
 
+    @Override
+    public List<Especie> getMasPopulares() {
+        return null;
+    }
+
+    @Override
+    public List<Especie> getMasImpopulares() {
+        return null;
+    }
+
 
 //PRIVATE FUNCTIONS----------------------------------------------------------------------------------------------------------------------
 

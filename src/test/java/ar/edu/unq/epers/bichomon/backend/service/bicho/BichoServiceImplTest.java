@@ -59,7 +59,7 @@ public class BichoServiceImplTest {
 
     @After
     public void limpiarEscenario(){
-        SessionFactoryProvider.destroy();
+        run(SessionFactoryProvider::destroy);
     }
 
     @Test
