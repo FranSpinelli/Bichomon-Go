@@ -3,6 +3,7 @@ package ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.CampeonDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
+import ar.edu.unq.epers.bichomon.backend.service.especie.NullEspecieLeaderException;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner;
 import org.hibernate.Session;
@@ -47,7 +48,7 @@ public class HibernateCampeonDAO extends HibernateDAO<Campeon> implements Campeo
         try {
             return query.getSingleResult();
         } catch (NoResultException ex) {
-            return null;
+            throw new NullEspecieLeaderException();
         }
     }
 }

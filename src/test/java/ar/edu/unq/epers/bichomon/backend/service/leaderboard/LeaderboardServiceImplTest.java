@@ -6,6 +6,8 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
+import ar.edu.unq.epers.bichomon.backend.service.especie.EspecieNoExistente;
+import ar.edu.unq.epers.bichomon.backend.service.especie.NullEspecieLeaderException;
 import ar.edu.unq.epers.bichomon.backend.service.leaderboard.impl.LeaderboardServiceImpl;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
 import org.junit.After;
@@ -130,6 +132,13 @@ public class LeaderboardServiceImplTest {
         rtoEsperado.add(brook.getNombre());
         rtoEsperado.add(misty.getNombre());
         assertEquals(rto, rtoEsperado);
+    }
+
+    @Test(expected = NullEspecieLeaderException.class)
+    public void testEspecieLiderFails(){
+        run(() -> {
+            leaderboardService.especieLider();
+        });
     }
 
     @Test
