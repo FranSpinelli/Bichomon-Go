@@ -31,7 +31,7 @@ public class Especie {
 	private int cantidadBichos;
 	@OneToOne
 	private Especie especieAEvolucionar;
-	@OneToMany(fetch = FetchType.EAGER) //TODO: Suponiendo que la misma condicion(con mismo id) no puede ser compartida entre distintas especies
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<CondicionDeEvolucion> condicion;
 	@ManyToOne
 	private Especie evolucionRaiz;

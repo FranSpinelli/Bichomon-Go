@@ -49,13 +49,13 @@ import java.util.List;
 
 	@Override
 	public List<Especie> populares() {
-		especieDAO.getMasPopulares();
+		return especieDAO.getMasPopulares();
 	}
 
 
 	@Override
 	public List<Especie> impopulares() {
-		especieDAO.getMasImpopulares()
+		return especieDAO.getMasImpopulares();
 	}
 
 }

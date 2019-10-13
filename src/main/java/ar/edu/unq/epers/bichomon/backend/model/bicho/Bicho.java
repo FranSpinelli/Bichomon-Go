@@ -6,6 +6,7 @@ import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 
@@ -119,18 +120,16 @@ public class Bicho {
 		return this.especie.puedeEvolucionar(this);
 	}
 
-	public void serCapturadoPor(Entrenador entrenador) {this.entrenador = entrenador;}
-
 	@Override
-	public int hashCode(){
-		int result = 145;
-		result = 31 * result + this.id;
-		return result;
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Bicho bicho = (Bicho) o;
+		return id == bicho.id;
 	}
 
 	@Override
-	public boolean equals(Object o){
-		return o instanceof Bicho && ((Bicho) o).getId() == this.id;
+	public int hashCode() {
+		return Objects.hash(id);
 	}
-
 }

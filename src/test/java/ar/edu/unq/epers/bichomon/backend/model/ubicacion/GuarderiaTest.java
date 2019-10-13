@@ -6,23 +6,38 @@ import org.junit.Test;
 import org.mockito.Mockito;
 
 import static org.junit.Assert.assertEquals;
+import static org.mockito.Mockito.when;
 
-public class GuarderiaTest {
+public class GuarderiaTest extends UbicacionTest {
 
     Guarderia guarderia;
     Bicho bichoMock;
 
+    @Override
     @Before
-    public void setUp(){
+    public void crearEscenario(){
         guarderia = new Guarderia();
+        super.crearEscenario();
         bichoMock = Mockito.mock(Bicho.class);
     }
 
+    @Override
     @Test
-    public void recibirBicho() {
+    public void testRecibirBicho() {
 
         assertEquals(guarderia.getBichosEnGuarderia().size(), 0);
         guarderia.recibirBicho(bichoMock);
         assertEquals(guarderia.getBichosEnGuarderia().size(),1);
+    }
+
+    @Override
+    protected Ubicacion ubicacion() {
+        return this.guarderia;
+    }
+
+    @Override
+    protected void definirGeneracionDeBicho() {
+        when(this.bichoMock.getEspecie()).thenReturn(this.especieEncontrada);
+        this.guarderia.recibirBicho(this.bichoMock);
     }
 }
