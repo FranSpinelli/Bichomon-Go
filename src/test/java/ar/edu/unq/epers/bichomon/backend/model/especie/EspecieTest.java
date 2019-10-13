@@ -42,13 +42,12 @@ public class EspecieTest {
     	verify(bicho).setEspecie(otraEspecie);
     }
     
-    @Test
+    @Test(expected = EvolucionNoPermitida.class)
     public void unaEspecieNoPuedeEvolucionarAOtraPorNoTenerEvolucion() {
     	especie.evolucionar(bicho);
-    	verifyZeroInteractions(bicho);
     }
     
-    @Test
+    @Test(expected = EvolucionNoPermitida.class)
     public void unaEspecieNoPuedeEvolucionarAOtraPorCondicion() {
     	especie.setEspecieAEvolucionar(otraEspecie,condicion);
     	when(condicion1.puedeEvolucionar(bicho)).thenReturn(false);
@@ -57,7 +56,7 @@ public class EspecieTest {
     }
 	
     
-    @Test
+    @Test(expected = EvolucionNoPermitida.class)
     public void unaEspecieNoPuedeEvolucionarAOtraPorNoTenerEvolucionNiCondicion() {
     	especie.evolucionar(bicho);
     	verifyZeroInteractions(bicho);

@@ -60,8 +60,7 @@ public class BichoTest {
 
     @Test
     public void getEdad(){
-        bicho.setFechaDeNacimiento(LocalDate.of(2019,9,4));
-
+        bicho.setFechaDeNacimiento(LocalDate.now().minusDays(30));
         assertEquals(30,bicho.getEdad());
     }
 }
