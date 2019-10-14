@@ -18,6 +18,10 @@ public class Guarderia extends Ubicacion{
         bichosAbandonados = new HashSet<Bicho>();
     }
 
+    public Guarderia(String nombre) {
+        super(nombre);
+    }
+
     public Guarderia(BusquedaHelper busquedaHelper){
         super(busquedaHelper);
     }

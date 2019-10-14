@@ -119,16 +119,20 @@ public class Entrenador {
 	public Ubicacion getUbicacionActual() {
 		return this.ubicacionActual;
 	}
-	// TODO: Testear
+
 	public ResultadoCombate desafiarCampeonActualCon(Bicho bicho){
         if (!this.tieneBicho(bicho)) { throw new BichoAjeno("No se puede retar a duelo con un bicho ajeno"); }
 		Estrategia dueloHelper = new DueloHelper();
 		return this.ubicacionActual.realizarDuelo(bicho,dueloHelper);
 	}
-	// TODO: Testear
+
 	public Bicho hacerEvolucionar(Bicho bicho) {
 		if (!this.tieneBicho(bicho)) { throw new BichoAjeno("No se puede hacer evolucionar a un bicho ajeno"); }
 		return bicho.evolucionar();
+	}
+
+	public Boolean estaEn(Ubicacion ubicacion) {
+		return ubicacion.equals(this.ubicacionActual);
 	}
 
     @Override
@@ -143,5 +147,4 @@ public class Entrenador {
     public int hashCode() {
         return Objects.hash(id);
     }
-
 }

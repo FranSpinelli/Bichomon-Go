@@ -16,6 +16,10 @@ public class Pueblo extends Ubicacion{
 
     public Pueblo(){}
 
+    public Pueblo(String nombre) {
+        super(nombre);
+    }
+
     public Pueblo(BusquedaHelper busquedaHelper){
         super(busquedaHelper);
     }

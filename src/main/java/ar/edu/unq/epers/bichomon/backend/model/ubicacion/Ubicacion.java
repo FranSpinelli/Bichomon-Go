@@ -7,6 +7,7 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrat
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -15,13 +16,27 @@ public abstract class Ubicacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(unique = true)
+    private String nombre;
     @OneToOne(cascade = CascadeType.ALL)
     private BusquedaHelper busquedaHelper;
 
     public Ubicacion(){}
 
+    public Ubicacion(String nombre) {
+        this.nombre = nombre;
+    }
+
     public Ubicacion(BusquedaHelper busquedaHelper){
         this.busquedaHelper = busquedaHelper;
+    }
+
+    public String getNombre() {
+        return this.nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public BusquedaHelper getBusquedaHelper() {
@@ -74,4 +89,16 @@ public abstract class Ubicacion {
 
     protected abstract String mensajeBusquedaExitosaNoPosible();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ubicacion ubicacion = (Ubicacion) o;
+        return id == ubicacion.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
