@@ -58,7 +58,14 @@ public class HibernateEspecieDAO extends HibernateDAO<Especie> implements Especi
 
     @Override
     public List<Especie> getMasImpopulares() {
-        return null;
+        Session session = TransactionRunner.getCurrentSession();
+
+        String hql = "select especie from Guarderia guarderia join guarderia.bichosAbandonados bicho join " +
+                "bicho.especie especie group by especie order by count(bicho)";
+
+        Query<Especie> query = session.createQuery(hql,  Especie.class);
+        query.setMaxResults(10);
+        return query.getResultList();
     }
 }
 

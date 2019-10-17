@@ -39,7 +39,7 @@ import java.util.List;
 
 
 	@Override
-	public Bicho crearBicho(String nombreEspecie, String nombreBicho){
+	public Bicho crearBicho(String nombreEspecie){
 		Especie especie = especieDAO.recuperar(nombreEspecie);
 		Bicho bicho = especie.crearBicho();
 		especieDAO.actualizar(especie);
@@ -49,13 +49,13 @@ import java.util.List;
 
 	@Override
 	public List<Especie> populares() {
-		especieDAO.getMasPopulares();
+		return especieDAO.getMasPopulares();
 	}
 
 
 	@Override
 	public List<Especie> impopulares() {
-		especieDAO.getMasImpopulares()
+		return especieDAO.getMasImpopulares();
 	}
 
 }

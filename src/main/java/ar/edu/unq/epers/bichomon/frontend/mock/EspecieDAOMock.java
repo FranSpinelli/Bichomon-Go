@@ -99,6 +99,16 @@ public class EspecieDAOMock implements EspecieDAO {
 	}
 
 	@Override
+	public List<Especie> getMasPopulares() {
+		return null;
+	}
+
+	@Override
+	public List<Especie> getMasImpopulares() {
+		return null;
+	}
+
+	@Override
 	public void actualizar(Especie especie) {
 	}
 

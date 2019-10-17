@@ -47,7 +47,7 @@ public interface EspecieService {
      * @param nombreBicho - el nombre del bicho a ser creado
      * @return un objeto {@link Bicho} instanciado
      */
-    Bicho crearBicho(String nombreEspecie, String nombreBicho);
+    Bicho crearBicho(String nombreEspecie);
 
     List<Especie> populares();
     
