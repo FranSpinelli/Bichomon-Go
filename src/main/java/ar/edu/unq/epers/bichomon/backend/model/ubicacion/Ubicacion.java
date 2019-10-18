@@ -49,9 +49,8 @@ public abstract class Ubicacion {
     }
 
     public Bicho buscar(Entrenador entrenador){
-        if(!this.esBusquedaExitosa(entrenador)) {
-            throw new BusquedaNoExitosa("No se encontro ningun bicho");
-        }
+        this.arrojarBusquedaNoExitosaSi(!this.esBusquedaExitosa(entrenador), "No se encontro ningun bicho");
+        this.arrojarBusquedaNoExitosaSi(!this.esBusquedaExitosaPosible(), this.mensajeBusquedaExitosaNoPosible());
         return this.generarBicho();
     }
 
@@ -65,5 +64,14 @@ public abstract class Ubicacion {
 
     protected Especie elegirEspecie(){ throw new MetodoRestringido("No se puede usar este metodo"); }
 
+    private void arrojarBusquedaNoExitosaSi(Boolean condicion, String mensajeDeError){
+        if(condicion){
+            throw new BusquedaNoExitosa(mensajeDeError);
+        }
+    }
+
+    protected abstract Boolean esBusquedaExitosaPosible();
+
+    protected abstract String mensajeBusquedaExitosaNoPosible();
 
 }

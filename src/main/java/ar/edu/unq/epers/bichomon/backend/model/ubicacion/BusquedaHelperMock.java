@@ -41,12 +41,6 @@ public class BusquedaHelperMock extends BusquedaHelper {
         return this.factorRandom;
     }
 
-    public Bicho generarBicho(Ubicacion ubicacion) {
-        Bicho bicho = new Bicho();
-        bicho.setEspecie(this.especie);
-        return bicho;
-    }
-
     public Boolean getFactorTiempo() {
         return factorTiempo;
     }

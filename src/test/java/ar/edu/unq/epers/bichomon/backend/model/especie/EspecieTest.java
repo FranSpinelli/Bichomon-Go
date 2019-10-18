@@ -40,7 +40,6 @@ public class EspecieTest {
     @Test(expected = EvolucionNoPermitida.class)
     public void unaEspecieNoPuedeEvolucionarAOtraPorNoTenerEvolucion() {
     	especie.evolucionar(bicho);
-    	verifyZeroInteractions(bicho);
     }
     
     @Test(expected = EvolucionNoPermitida.class)
