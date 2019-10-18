@@ -54,7 +54,7 @@ public class HibernateEspecieDAO extends HibernateDAO<Especie> implements Especi
         Query<Especie> query = session.createQuery(hql,  Especie.class);
         query.setMaxResults(10);
         return query.getResultList();
-
+    }
 
     @Override
     public List<Especie> getMasImpopulares() {
