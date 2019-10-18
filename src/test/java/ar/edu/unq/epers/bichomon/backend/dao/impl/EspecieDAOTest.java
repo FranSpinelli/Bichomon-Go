@@ -1,8 +1,14 @@
 package ar.edu.unq.epers.bichomon.backend.dao.impl;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateBichoDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateEntrenadorDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateUbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -177,6 +183,88 @@ public abstract class EspecieDAOTest {
         assertEquals(new ArrayList<Especie>(), this.especiesRecuperadas);
 
     }
+
+    @Test
+    public void getMasPopulares(){
+        /*CORRE BIEN SOLO LA PRIMERA VEZ Y NO SE PORQUE*/
+
+        this.correr(() -> {
+            //Guardo especies
+            this.dao.guardar(this.pacacho);
+            this.dao.guardar(this.charmandar);
+            this.dao.guardar(this.charmilian);
+            this.dao.guardar(this.chorizard);
+        });
+
+        Bicho bichoTipoPacacho = new Bicho(pacacho);
+        Bicho bichoTipoCharmandar = new Bicho(charmandar);
+
+        HibernateBichoDAO bichoDAO = new HibernateBichoDAO();
+
+        this.correr(() -> {
+            bichoDAO.guardar(bichoTipoPacacho);
+            bichoDAO.guardar(bichoTipoCharmandar);
+        });
+
+        Entrenador entrenadorAsh = new Entrenador("Ash");
+
+        entrenadorAsh.addBicho(bichoTipoPacacho);
+        entrenadorAsh.addBicho(bichoTipoCharmandar);
+
+        HibernateEntrenadorDAO entrenadorDAO = new HibernateEntrenadorDAO();
+
+        this.correr(() -> {
+            entrenadorDAO.guardar(entrenadorAsh);
+        });
+
+        this.correr(() -> {
+           especiesRecuperadas = this.dao.getMasPopulares();
+        });
+
+        assertEquals(especiesRecuperadas.size(),2);
+    }
+
+    @Test
+    public void getMasImpopulares(){
+        /*CORRE BIEN SOLO LA PRIMERA VEZ Y NO SE PORQUE*/
+
+        this.correr(() -> {
+            //Guardo especies
+            this.dao.guardar(this.pacacho);
+            this.dao.guardar(this.charmandar);
+            this.dao.guardar(this.charmilian);
+            this.dao.guardar(this.chorizard);
+        });
+
+        Bicho bichoTipoCharmilian = new Bicho(charmilian);
+        Bicho bichoTipoPacacho = new Bicho(pacacho);
+        Bicho bichoTipoCharmandar = new Bicho(charmandar);
+
+        HibernateBichoDAO bichoDAO = new HibernateBichoDAO();
+
+        this.correr(() -> {
+            bichoDAO.guardar(bichoTipoPacacho);
+            bichoDAO.guardar(bichoTipoCharmandar);
+            bichoDAO.guardar(bichoTipoCharmilian);
+        });
+
+        Guarderia guarderia = new Guarderia();
+
+        guarderia.recibirBicho(bichoTipoPacacho);
+        guarderia.recibirBicho(bichoTipoCharmandar);
+
+        HibernateUbicacionDAO guarderiaDAO = new HibernateUbicacionDAO();
+        this.correr(() -> {
+            guarderiaDAO.guardar(guarderia);
+        });
+
+        this.correr(() -> {
+            especiesRecuperadas = this.dao.getMasImpopulares();
+        });
+
+        assertEquals(especiesRecuperadas.size(),2);
+    }
+
 //PRIVATE FUNCTION---------------------------------------------------------------------------------------------
 
     private void comprobarListasSimilares(List<Especie> especies, List<Especie> otrasEspecies) {

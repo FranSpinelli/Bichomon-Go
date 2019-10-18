@@ -1,7 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.dao.impl.EspecieDAOTest;
-import org.junit.Test;
+import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
 
 import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
 
@@ -16,6 +16,11 @@ public class HibernateEspecieDAOTest extends EspecieDAOTest {
     protected void correr(Runnable bloque) {
         run(bloque);
     }
+
+    @Override
+    public void limpiarEscenario(){run(SessionFactoryProvider::destroy);}
+
+
 
     /*private EspecieDAO dao = new JDBCEspecieDAO();
     private Especie pacacho;
@@ -40,7 +45,4 @@ public class HibernateEspecieDAOTest extends EspecieDAOTest {
     @Test
     public void recuperarTodos() {
     }*/
-
-
-
 }
