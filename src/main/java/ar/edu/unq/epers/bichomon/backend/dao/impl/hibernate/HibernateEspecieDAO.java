@@ -48,7 +48,7 @@ public class HibernateEspecieDAO extends HibernateDAO<Especie> implements Especi
     public List<Especie> getMasPopulares() {
         Session session = TransactionRunner.getCurrentSession();
 
-        String hql = "select especie from Entrenador entrenador join entrenador.bichos bicho join " +
+        String hql = "select especie from Entrenador entrenador join entrenador.inventarioDeBichos bicho join " +
                 "bicho.especie especie group by especie order by count(bicho)";
 
         Query<Especie> query = session.createQuery(hql,  Especie.class);

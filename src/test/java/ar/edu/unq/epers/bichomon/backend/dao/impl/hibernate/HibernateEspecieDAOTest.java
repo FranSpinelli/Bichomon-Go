@@ -1,7 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.dao.impl.EspecieDAOTest;
-import org.junit.Test;
 
 import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
 
@@ -16,6 +15,7 @@ public class HibernateEspecieDAOTest extends EspecieDAOTest {
     protected void correr(Runnable bloque) {
         run(bloque);
     }
+
 
     /*private EspecieDAO dao = new JDBCEspecieDAO();
     private Especie pacacho;
@@ -40,7 +40,4 @@ public class HibernateEspecieDAOTest extends EspecieDAOTest {
     @Test
     public void recuperarTodos() {
     }*/
-
-
-
 }
