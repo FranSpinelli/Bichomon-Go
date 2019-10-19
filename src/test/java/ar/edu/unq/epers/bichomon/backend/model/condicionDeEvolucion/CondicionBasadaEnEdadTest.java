@@ -6,6 +6,8 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasada
 import org.junit.Before;
 import org.junit.Test;
 
+import java.time.LocalDate;
+
 import static org.junit.Assert.*;
 
 import static org.mockito.Mockito.mock;
@@ -24,13 +26,13 @@ public class CondicionBasadaEnEdadTest{
 	
 	@Test
 	public void recibeUnBichoQuePuedeEvolucionar() {
-		when(bicho.getEdad()).thenReturn(5);
+		when(bicho.getEdadConRespectoAlDia(LocalDate.now())).thenReturn(5);
 		assertTrue(condicion.puedeEvolucionar(bicho));
 		}
 	
 	@Test
 	public void recibeUnBichoQueNoPuedeEvolucionar() {
-		when(bicho.getEdad()).thenReturn(0);
+		when(bicho.getEdadConRespectoAlDia(LocalDate.now())).thenReturn(0);
 		assertFalse(condicion.puedeEvolucionar(bicho));
 		}
 

@@ -1,14 +1,13 @@
 package ar.edu.unq.epers.bichomon.backend.dao.impl;
 
 
-import java.sql.*;
-
-import java.util.ArrayList;
-
-import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
-import connection.ConnectionBlock;
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
+import connection.ConnectionBlock;
+
+import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class JDBCEspecieDAO implements EspecieDAO {
@@ -106,6 +105,16 @@ public class JDBCEspecieDAO implements EspecieDAO {
     @Override
     public void guardarTodos(List<Especie> especies) {
 
+    }
+
+    @Override
+    public List<Especie> getMasPopulares() {
+        return null;
+    }
+
+    @Override
+    public List<Especie> getMasImpopulares() {
+        return null;
     }
 
 

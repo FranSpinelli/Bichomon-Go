@@ -6,8 +6,9 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrat
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.UbicacionIncorrectaException;
+
+import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoAjeno;
+import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichosInsuficientes;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -88,28 +89,17 @@ public class Entrenador {
 		this.ubicacionActual = ubicacionActual;
 	}
 
-//TODO
-    /*public void abandonar(Bicho bicho) throws UbicacionIncorrectaException {
-		try {
-			ubicacionActual.recibirBicho(bicho);
-			this.inventarioDeBichos.remove(bicho);
-			bicho.agregarEx(this);
-		} catch (UbicacionIncorrectaException e) {
-			e.printStackTrace();
-		}*/
-
-
     public void abandonar(Bicho bicho) {
-		this.ubicacionActual.recibirBicho(bicho);
+        if(! this.tieneBicho(bicho)){ throw new BichoAjeno("No se pueden abandonar bichos ajenos"); }
+        if(!(this.getCantidadDeBichos() > 1)){ throw new BichosInsuficientes("El entrenador debe tener al menos un bicho luego de abandonar"); }
+        this.ubicacionActual.recibirBicho(bicho);
         bicho.agregarEx(this);
 		this.inventarioDeBichos.remove(bicho);
     }
 
     public Bicho buscar(){
 	    Bicho bicho = this.ubicacionActual.buscar(this);
-        if(bicho != null){
-            this.addBicho(bicho);
-        }
+        this.addBicho(bicho);
         return bicho;
 	}
 
@@ -120,11 +110,7 @@ public class Entrenador {
 	public Boolean tieneBicho(Bicho bicho) {
 		return inventarioDeBichos.contains(bicho);
 	}
-	
-	public void capturarBicho(Bicho bicho) {
-		bicho.serCapturadoPor(this);
-		this.inventarioDeBichos.add(bicho);
-	}
+
 	public void addBicho(Bicho bicho) {
 		this.inventarioDeBichos.add(bicho);
 		bicho.setEntrenador(this);
@@ -135,9 +121,18 @@ public class Entrenador {
 	}
 
 	public ResultadoCombate desafiarCampeonActualCon(Bicho bicho){
-
+        if (!this.tieneBicho(bicho)) { throw new BichoAjeno("No se puede retar a duelo con un bicho ajeno"); }
 		Estrategia dueloHelper = new DueloHelper();
 		return this.ubicacionActual.realizarDuelo(bicho,dueloHelper);
+	}
+
+	public Bicho hacerEvolucionar(Bicho bicho) {
+		if (!this.tieneBicho(bicho)) { throw new BichoAjeno("No se puede hacer evolucionar a un bicho ajeno"); }
+		return bicho.evolucionar();
+	}
+
+	public Boolean estaEn(Ubicacion ubicacion) {
+		return ubicacion.equals(this.ubicacionActual);
 	}
 
     @Override

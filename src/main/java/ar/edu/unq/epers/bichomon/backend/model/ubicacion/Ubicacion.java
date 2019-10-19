@@ -2,10 +2,12 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
@@ -14,14 +16,29 @@ public abstract class Ubicacion {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(unique = true)
     private String nombre;
     @OneToOne(cascade = CascadeType.ALL)
     private BusquedaHelper busquedaHelper;
 
-    public Ubicacion(String nombre){ this.nombre=nombre;}
+    public Ubicacion(String nombre) {
+        this.nombre = nombre;
+    }
 
     public Ubicacion(BusquedaHelper busquedaHelper){
         this.busquedaHelper = busquedaHelper;
+    }
+
+    public Ubicacion() {
+
+    }
+
+    public String getNombre() {
+        return this.nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
     }
 
     public BusquedaHelper getBusquedaHelper() {
@@ -49,18 +66,41 @@ public abstract class Ubicacion {
     }
 
     public Bicho buscar(Entrenador entrenador){
-        Bicho bicho = null;
-        if(this.esBusquedaExitosa(entrenador)){
-            bicho = this.generarBicho();
-        }
-        return bicho;
+        this.arrojarBusquedaNoExitosaSi(!this.esBusquedaExitosa(entrenador), "No se encontro ningun bicho");
+        this.arrojarBusquedaNoExitosaSi(!this.esBusquedaExitosaPosible(), this.mensajeBusquedaExitosaNoPosible());
+        return this.generarBicho();
     }
 
     protected Boolean esBusquedaExitosa(Entrenador entrenador){
         return this.busquedaHelper.factorTiempo(entrenador) && this.busquedaHelper.factorNivel(entrenador) && this.busquedaHelper.factorPoblacion(this) && this.busquedaHelper.factorRandom();
     }
 
-    protected Bicho generarBicho(){
-        return this.busquedaHelper.generarBicho(this);
+    protected Bicho generarBicho() {
+        return new Bicho(this.elegirEspecie());
+    }
+
+    protected Especie elegirEspecie(){ throw new MetodoRestringido("No se puede usar este metodo"); }
+
+    private void arrojarBusquedaNoExitosaSi(Boolean condicion, String mensajeDeError){
+        if(condicion){
+            throw new BusquedaNoExitosa(mensajeDeError);
+        }
+    }
+
+    protected abstract Boolean esBusquedaExitosaPosible();
+
+    protected abstract String mensajeBusquedaExitosaNoPosible();
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Ubicacion ubicacion = (Ubicacion) o;
+        return id == ubicacion.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

@@ -26,11 +26,13 @@ public class HibernateDAO<T> {
     }
 
     public void eliminarTodos() {
-        String myTable = entityType.toString();
+        String myTable = entityType.getName();
         String hql = String.format("delete from %s", myTable);
         Session session = TransactionRunner.getCurrentSession();
+        session.createNativeQuery("SET FOREIGN_KEY_CHECKS=0;").executeUpdate();
         Query query = session.createQuery(hql);
         query.executeUpdate();
+        session.createNativeQuery("SET FOREIGN_KEY_CHECKS=1;").executeUpdate();
     }
 
     public void guardarTodos(List<T> items){

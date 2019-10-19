@@ -20,11 +20,21 @@ public class SessionFactoryProvider {
     }
 
     public static void destroy() {
-        if (INSTANCE != null && INSTANCE.sessionFactory != null) {
+        Session session = TransactionRunner.getCurrentSession();
+        List tablas = session.createNativeQuery("show tables").getResultList();
+        session.createNativeQuery("SET FOREIGN_KEY_CHECKS=0;").executeUpdate();
+        tablas.forEach(tabla ->{
+            if(tabla != "hibernate_secuence"){
+                session.createNativeQuery("TRUNCATE TABLE "+tabla).executeUpdate();
+            }
+        });
+        session.createNativeQuery("SET FOREIGN_KEY_CHECKS=1;").executeUpdate();
+    }
+
+    /*if (INSTANCE != null && INSTANCE.sessionFactory != null) {
             INSTANCE.sessionFactory.close();
         }
-        INSTANCE = null;
-    }
+        INSTANCE = null;*/
 
     private SessionFactoryProvider() {
         Configuration configuration = new Configuration();

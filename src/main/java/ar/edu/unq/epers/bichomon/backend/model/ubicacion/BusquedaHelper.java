@@ -11,7 +11,7 @@ public abstract class BusquedaHelper {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    protected int id;
 
     public abstract Boolean factorTiempo(Entrenador entrenador);
 
@@ -20,8 +20,6 @@ public abstract class BusquedaHelper {
     public abstract Boolean factorPoblacion(Ubicacion ubicacion);
 
     public abstract Boolean factorRandom();
-
-    public abstract Bicho generarBicho(Ubicacion ubicacion);
 
     public void setId(int id) {
         this.id = id;

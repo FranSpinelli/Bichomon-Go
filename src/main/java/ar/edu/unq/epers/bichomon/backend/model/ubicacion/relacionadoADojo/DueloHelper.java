@@ -3,7 +3,6 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 
-import javax.persistence.Entity;
 import java.util.List;
 
 public class DueloHelper implements Estrategia{
@@ -25,7 +24,7 @@ public class DueloHelper implements Estrategia{
         return datosDeLaBatalla;
     }
 
-    public Double getRandom(Double valorMinimoPosible, Double valorMaximoPosible){
+    public Double getRandomDouble(Double valorMinimoPosible, Double valorMaximoPosible){
         //es publico para poder ser mockeado y testeado, lo ideal es que no lo sea.
         //Retorna un numero random entre valorMinimoPosible y valorMaximoPosible (inclusives)
 
@@ -33,8 +32,8 @@ public class DueloHelper implements Estrategia{
         Double resultado =valorMinimoPosible + random * ((valorMaximoPosible-valorMinimoPosible)+0.1);
 
         //hago esto por que en algunos casos muy aislados me retornaba un numero levemente mayor/menor a 1.0/0.5
-        if(resultado > 1.00000){resultado = 0.99;}
-        if(resultado < 0.5){resultado = 0.52;}
+        if(resultado > valorMaximoPosible){resultado = valorMaximoPosible;}
+        if(resultado < valorMinimoPosible){resultado = valorMinimoPosible;}
 
         return resultado;
     }
@@ -79,12 +78,12 @@ public class DueloHelper implements Estrategia{
     }
 
     private void realizarAtaque(Bicho bichoAtacante, List<Double> listaConDanhoRecibidoDeBichoAtacado){
-        Double danhoGeneradoPorBichoAtacante = bichoAtacante.getEnergia() * this.getRandom(0.5, 1.0);
+        Double danhoGeneradoPorBichoAtacante = bichoAtacante.getEnergia() * this.getRandomDouble(0.5, 1.0);
         listaConDanhoRecibidoDeBichoAtacado.add(danhoGeneradoPorBichoAtacante);
     }
 
     private void setearEnergiaYXPDeEntrenadorDe(Bicho bicho){
-        bicho.setEnergia(bicho.getEnergia() + this.getRandom(1.0,5.0).intValue());
+        bicho.setEnergia(bicho.getEnergia() + this.getRandomDouble(1.0,5.0).intValue());
         bicho.getEntrenador().addXp(10);
     }
 

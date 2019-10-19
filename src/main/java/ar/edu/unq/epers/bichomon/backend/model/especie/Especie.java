@@ -1,11 +1,12 @@
 package ar.edu.unq.epers.bichomon.backend.model.especie;
 
-import java.util.ArrayList;
-import java.util.List;
-import javax.persistence.*;
-import java.util.Objects;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionDeEvolucion;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 
 /**
@@ -30,7 +31,7 @@ public class Especie {
 	private int cantidadBichos;
 	@OneToOne
 	private Especie especieAEvolucionar;
-	@OneToMany(fetch = FetchType.EAGER) //TODO: Suponiendo que la misma condicion(con mismo id) no puede ser compartida entre distintas especies
+	@OneToMany(fetch = FetchType.EAGER)
 	private List<CondicionDeEvolucion> condicion;
 	@ManyToOne
 	private Especie evolucionRaiz;
@@ -135,11 +136,12 @@ public class Especie {
 		this.id=nuevoId;
 	}
 
-	public void evolucionar(Bicho bicho) {
-		/*if (this.especieAEvolucionar != null && this.puedeEvolucionar(bicho)) {
-			bicho.setEspecie(this.especieAEvolucionar);
-		}*/
+	public Bicho evolucionar(Bicho bicho) {
+		if(!this.puedeEvolucionar(bicho)) {
+			throw new EvolucionNoPermitida("El bicho no puede evolucionar ");
+		}
 		bicho.setEspecie(this.especieAEvolucionar);
+		return bicho;
 	}
 
 	public boolean puedeEvolucionar(Bicho bicho) {

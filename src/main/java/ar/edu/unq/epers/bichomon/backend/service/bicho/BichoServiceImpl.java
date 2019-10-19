@@ -32,13 +32,7 @@ public class BichoServiceImpl {
     public void abandonar(String nombreEntrenador, int idBicho){
         run(() -> {
                Entrenador entrenador = this.getEntrenador(nombreEntrenador);
-
                Bicho bicho = this.getBicho(idBicho);
-
-               if(! this.esBichoDeEntrenador(entrenador,bicho)){ throw new BichoAjeno("No se pueden abandonar bichos ajenos"); }
-
-               if(entrenador.getCantidadDeBichos() <= 1){ throw new BichosInsuficientes("El entrenador debe tener al menos un bicho luego de abandonar"); }
-
                entrenador.abandonar(bicho);
         });
     }
@@ -49,16 +43,25 @@ public class BichoServiceImpl {
         return run(() -> {
             Entrenador entrenador = this.getEntrenador(nombreEntrenador);
             Bicho bicho = this.getBicho(idBicho);
-
-            if (!this.esBichoDeEntrenador(entrenador, bicho)) {
-                throw new BichoAjeno("No se puede retar a duelo con un bicho ajeno");
-            }
-
             return entrenador.desafiarCampeonActualCon(bicho);
         });
     }
 
+    public boolean puedeEvolucionar(String entrenadorNombre, int idDeBicho) {
+        return run(() -> {
+            Bicho bicho = this.getBicho(idDeBicho);
+            Entrenador entrenador = this.getEntrenador(entrenadorNombre);
+            return entrenador.tieneBicho(bicho) && bicho.puedeEvolucionar();
+        });
+    }
 
+    public Bicho evolucionar(String entrenadorNombre, int idDeBicho) {
+        return run(() -> {
+            Bicho bicho = this.getBicho(idDeBicho);
+            Entrenador entrenador = this.getEntrenador(entrenadorNombre);
+            return entrenador.hacerEvolucionar(bicho);
+        });
+    }
 
 
 
@@ -77,33 +80,5 @@ public class BichoServiceImpl {
                 throw new BichoInexistente();
             }
             return bicho;
-    }
-
-    private Boolean esBichoDeEntrenador(Entrenador entrenador, Bicho bicho){
-        return entrenador.tieneBicho(bicho);
-    }
-
-    public boolean puedeEvolucionar(String entrenadorNombre, int idDeBicho) {
-        return run(() -> {
-            Bicho bicho = this.bichoDAO.recuperar(idDeBicho);
-            Entrenador entrenador = this.entrenadorDAO.recuperar(entrenadorNombre);
-            if(bicho == null){
-                throw new BichoInexistente();
-            }
-            return bicho.puedeEvolucionar();
-        });
-
-    }
-
-    public Bicho evolucionar(String entrenadorNombre, int idDeBicho) {
-        return run(() -> {
-            Bicho bicho = this.bichoDAO.recuperar(idDeBicho);
-            Entrenador entrenador = this.entrenadorDAO.recuperar(entrenadorNombre);
-            if (bicho == null) {
-                throw new BichoInexistente();
-            }
-            bicho.evolucionar();
-            return bicho;
-        });
     }
 }

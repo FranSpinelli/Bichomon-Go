@@ -4,6 +4,7 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 @Entity
 public class Campeon {
@@ -45,5 +46,13 @@ public class Campeon {
 
     public void setFechaDeFin(LocalDate fechaDeFin) {
         this.fechaDeFin = fechaDeFin;
+    }
+
+    public Integer cantidadDiasDeCampeonato(){
+        if(this.fechaDeFin == null){
+            return (new Long(ChronoUnit.DAYS.between(this.fechaDeInicio, LocalDate.now()))).intValue();
+        }else{
+            return (new Long(ChronoUnit.DAYS.between(this.fechaDeInicio, this.fechaDeFin))).intValue();
+        }
     }
 }

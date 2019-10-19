@@ -18,4 +18,7 @@ public interface EspecieDAO {
 
 	void guardarTodos(List<Especie> especies);
 
+	List<Especie>getMasPopulares();
+
+	List<Especie>getMasImpopulares();
 }

@@ -2,7 +2,6 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 
-import java.util.Set;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.OneToMany;
@@ -19,10 +18,14 @@ public class Guarderia extends Ubicacion{
         bichosAbandonados = new HashSet<Bicho>();
     }
 
-    /*public Guarderia(BusquedaHelper busquedaHelper){
+    public Guarderia(BusquedaHelper busquedaHelper){
         super(busquedaHelper);
     }
-*/
+
+    public Guarderia() {
+        bichosAbandonados = new HashSet<Bicho>();
+    }
+
     public Set<Bicho> getBichosAbandonados() {
         return bichosAbandonados;
     }
@@ -39,6 +42,21 @@ public class Guarderia extends Ubicacion{
 
     public Set<Bicho> getBichosEnGuarderia(){
         return this.bichosAbandonados;
+    }
+
+    @Override
+    public Bicho generarBicho(){
+        return this.bichosAbandonados.iterator().next();
+    }
+
+    @Override
+    protected Boolean esBusquedaExitosaPosible() {
+        return !this.bichosAbandonados.isEmpty();
+    }
+
+    @Override
+    protected String mensajeBusquedaExitosaNoPosible() {
+        return "No hay bichos que puedas adoptar en esta guarderia";
     }
 }
 

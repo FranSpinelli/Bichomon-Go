@@ -3,6 +3,7 @@ package ar.edu.unq.epers.bichomon.backend.model.especie.condicion;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 
 import javax.persistence.Entity;
+import java.time.LocalDate;
 
 @Entity
 public class CondicionBasadaEnEdad extends CondicionDeEvolucion{
@@ -15,10 +16,7 @@ public class CondicionBasadaEnEdad extends CondicionDeEvolucion{
 	
 	@Override
 	public boolean puedeEvolucionar(Bicho bicho) {
-		System.out.println(this.cantidad);
-		System.out.println(bicho.getEdad());
-		System.out.println(bicho.getEdad() > this.cantidad);
-		return bicho.getEdad() > this.cantidad;
+		return bicho.getEdadConRespectoAlDia(LocalDate.now()) > this.cantidad;
 	}
 
 }

@@ -6,23 +6,21 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
-import ar.edu.unq.epers.bichomon.backend.service.especie.EspecieNoExistente;
 import ar.edu.unq.epers.bichomon.backend.service.especie.NullEspecieLeaderException;
 import ar.edu.unq.epers.bichomon.backend.service.leaderboard.impl.LeaderboardServiceImpl;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
 import org.junit.After;
-import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
-import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
 import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.ELECTRICIDAD;
+import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.FUEGO;
 import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
+import static org.junit.Assert.assertEquals;
 
 public class LeaderboardServiceImplTest {
 
@@ -86,7 +84,7 @@ public class LeaderboardServiceImplTest {
 
     @After
     public void limpiarEscenario(){
-        SessionFactoryProvider.destroy();
+        run(SessionFactoryProvider::destroy);
     }
 
     @Test
