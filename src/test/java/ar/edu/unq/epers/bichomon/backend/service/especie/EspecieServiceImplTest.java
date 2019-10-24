@@ -1,102 +1,155 @@
 package ar.edu.unq.epers.bichomon.backend.service.especie;
 
+import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateBichoDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateEntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateEspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateUbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
+import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
+import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 import java.util.List;
 
+import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 public class EspecieServiceImplTest {
 
     EspecieServiceImpl especieService;
-    EspecieDAO especieDAOMock;
-    Especie especieMock;
+    EspecieDAO especieDAO;
+    Especie especie1;
+    Especie especieRecuperada;
+    List<Especie> especies;
+    Bicho bichoCreado;
 
     @Before
     public void SetUp(){
 
-        especieDAOMock = Mockito.mock(HibernateEspecieDAO.class);
-        especieService = new EspecieServiceImpl(especieDAOMock);
+        especieDAO = Mockito.spy(HibernateEspecieDAO.class);
+        especieService = new EspecieServiceImpl(especieDAO);
 
-        especieMock = Mockito.mock(Especie.class);
+        especie1 = new Especie("especie1", TipoBicho.FUEGO);
+        especie1.setEnergiaInicial(1000);
+        especie1.setAltura(100);
+        especie1.setPeso(10);
+        especie1.setUrlFoto("foto");
+    }
 
-        /*
-        * mockeo el especie dao, ya que en esta test suite solo chequeo que el service delegue
-        * correctamente la tarea al dao (que ese es su comportamiento) las queries a la BD se realizan
-        * en la test suite del HibernateEspecieDao (que esa es su tarea, realizar las queries a la bd)
-        */
+    @After
+    public void limpiarEscenario(){
+        run(SessionFactoryProvider::destroy);
     }
 
     @Test
-    public void crearEspecie() {
+    public void crearEspecieYRecuperarla() {
 
-        especieService.crearEspecie(especieMock);
-        Mockito.verify(especieDAOMock).guardar(especieMock);
-    }
+        run(() -> {
+                especieService.crearEspecie(especie1);
+                especieRecuperada = especieService.getEspecie("especie1");
+        });
 
-    @Test
-    public void getEspecie() {
-
-        Mockito.doReturn(especieMock).when(especieDAOMock).recuperar("pikachu");
-
-        Especie especie = especieService.getEspecie("pikachu");
-
-        Mockito.verify(especieDAOMock).recuperar("pikachu");
-        assertEquals(especieMock, especie);
+        assertEquals(especie1.getNombre(),especieRecuperada.getNombre());
+        assertEquals(especie1.getEnergiaInicial(), especieRecuperada.getEnergiaInicial());
+        assertEquals(especie1.getAltura(), especieRecuperada.getAltura());
+        assertEquals(especie1.getPeso(), especieRecuperada.getPeso());
+        assertEquals(especie1.getUrlFoto(), especieRecuperada.getUrlFoto());
     }
 
     @Test(expected = EspecieNoExistente.class)
     public void getEspecieCasoNoFeliz() {
 
-        Mockito.doReturn(null).when(especieDAOMock).recuperar("pikachu");
+        run(() -> {
+            especieRecuperada = especieService.getEspecie("especie1");
+        });
 
-        Especie especie = especieService.getEspecie("pikachu");
-
-        /*se espera que se lanze una exception*/
     }
 
     @Test
     public void getAllEspecies() {
 
-        List<Especie> especies = especieService.getAllEspecies();
+        assertNull(especies);
 
-        Mockito.verify(especieDAOMock).recuperarTodos();
+        run(() -> {
+            especieService.crearEspecie(especie1);
+            especies = especieService.getAllEspecies();
+        });
+
+        assertEquals(especies.size(),1);
+
     }
 
     @Test
     public void crearBicho() {
 
-        Bicho bichoMock = Mockito.mock(Bicho.class);
+        run(() -> {
+            especieService.crearEspecie(especie1);
+            especieRecuperada = especieService.getEspecie("especie1");
+        });
 
-        Mockito.when(especieDAOMock.recuperar("pikachu")).thenReturn(especieMock);
-        Mockito.when(especieMock.crearBicho()).thenReturn(bichoMock);
+        assertEquals(especieRecuperada.getCantidadBichos(),0);
 
-        especieService.crearBicho("pikachu");
+        run(() -> {
+           bichoCreado = especieService.crearBicho("especie1");
+           especieRecuperada = especieService.getEspecie("especie1");
+        });
 
-        Mockito.verify(especieDAOMock).recuperar("pikachu");
-        Mockito.verify(especieMock).crearBicho();
+        assertEquals(especieRecuperada.getCantidadBichos(),1);
+        assertEquals(bichoCreado.getEspecie().getNombre(), "especie1");
     }
 
     @Test
     public void populares() {
 
-        List<Especie> especies = especieService.populares();
+        HibernateBichoDAO bichoDAO = new HibernateBichoDAO();
+        HibernateEntrenadorDAO entrenadorDAO = new HibernateEntrenadorDAO();
+        Entrenador entrenador1 = new Entrenador("Ash");
+        Bicho bicho1 = new Bicho(especie1);
+        entrenador1.addBicho(bicho1);
 
-        Mockito.verify(especieDAOMock).getMasPopulares();
+        run(() -> {
+            especieService.crearEspecie(especie1);
+            bichoDAO.guardar(bicho1);
+            entrenadorDAO.guardar(entrenador1);
+        });
 
+        run(() -> {
+            especies = especieService.populares();
+        });
+
+        assertEquals(especies.size(),1);
+        assertEquals(especies.get(0),especie1);
     }
 
     @Test
     public void impopulares() {
 
-        List<Especie> especies = especieService.impopulares();
+        HibernateUbicacionDAO guarderiaDAO= new HibernateUbicacionDAO();
+        HibernateBichoDAO bichoDAO = new HibernateBichoDAO();
+        Bicho bicho1 = new Bicho(especie1);
+        Guarderia guarderia1 = new Guarderia();
+        guarderia1.recibirBicho(bicho1);
 
-        Mockito.verify(especieDAOMock).getMasImpopulares();
+        run(() -> {
+            especieService.crearEspecie(especie1);
+            bichoDAO.guardar(bicho1);
+            guarderiaDAO.guardar(guarderia1);
+        });
+
+        run(() -> {
+            especies = especieService.impopulares();
+        });
+
+        assertEquals(especies.size(),1);
+        assertEquals(especies.get(0),especie1);
     }
 }
