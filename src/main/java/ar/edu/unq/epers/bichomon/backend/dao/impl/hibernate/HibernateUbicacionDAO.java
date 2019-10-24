@@ -52,25 +52,6 @@ public class HibernateUbicacionDAO extends HibernateDAO<Ubicacion> implements Ub
     }
 
     @Override
-    public Bicho getCampeon(String dojo) {
-        if(this.recuperar(dojo) == null){
-            throw new UbicacionInexistente("La ubicacion no existe");
-        }
-        Session session = TransactionRunner.getCurrentSession();
-
-        String hql = "select bicho from Ubicacion ubicacion join ubicacion.campeonActual campeon join campeon.bicho bicho where ubicacion.nombre = :nombre";
-
-        Query<Bicho> query = session.createQuery(hql);
-        query.setParameter("nombre", dojo);
-        query.setMaxResults(1);
-        try{
-            return query.getSingleResult();
-        }catch (NoResultException ex){
-            throw new DojoSinCampeon("El dojo no tiene campeon actualmente");
-        }
-    }
-
-    @Override
     public Bicho getCampeonHistorico(String dojo) {
         Ubicacion dojoActual = this.recuperar(dojo);
         if(dojoActual == null){

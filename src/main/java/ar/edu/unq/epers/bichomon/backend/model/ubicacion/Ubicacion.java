@@ -3,6 +3,7 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 
@@ -90,6 +91,10 @@ public abstract class Ubicacion {
     protected abstract Boolean esBusquedaExitosaPosible();
 
     protected abstract String mensajeBusquedaExitosaNoPosible();
+
+    public Campeon getCampeonActual(){
+        throw new UbicacionIncorrectaException("Esta ubicacion no tiene campeon");
+    }
 
     @Override
     public boolean equals(Object o) {

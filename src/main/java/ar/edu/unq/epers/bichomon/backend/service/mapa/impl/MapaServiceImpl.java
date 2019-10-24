@@ -2,10 +2,12 @@ package ar.edu.unq.epers.bichomon.backend.service.mapa.impl;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.exceptions.DojoSinCampeon;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoInexistente;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.EntrenadorInexistente;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaService;
@@ -41,8 +43,14 @@ public class MapaServiceImpl implements MapaService {
 	}
 
 	@Override
-	public Bicho campeon(String dojo) {
-		return run(() -> this.ubicacionDAO.getCampeon(dojo));
+	public Bicho campeon(String nombreDelDojo) {
+		Ubicacion dojoRecuperado = run(() -> this.ubicacionDAO.recuperar(nombreDelDojo));
+		if(dojoRecuperado == null){throw new UbicacionInexistente("La ubicacion no existe");}
+
+		Campeon campeonActual = dojoRecuperado.getCampeonActual();
+		if(campeonActual == null){throw new DojoSinCampeon("El dojo no tiene campeon actualmente");}
+
+		return campeonActual.getBicho();
 	}
 
 	@Override

@@ -17,7 +17,5 @@ public interface UbicacionDAO {
 
     int cantidadEntrenadoresEn(String ubicacion);
 
-    Bicho getCampeon(String dojo);
-
     Bicho getCampeonHistorico(String dojo);
 }
