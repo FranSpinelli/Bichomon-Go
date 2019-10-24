@@ -19,30 +19,4 @@ public class HibernateEspecieDAOTest extends EspecieDAOTest {
 
     @Override
     public void limpiarEscenario(){run(SessionFactoryProvider::destroy);}
-
-
-
-    /*private EspecieDAO dao = new JDBCEspecieDAO();
-    private Especie pacacho;
-    private Especie charmandar;
-    private Especie charmilian;
-    private Especie chorizard;
-
-    @After
-    public void limpiarEscenario(){
-        run(SessionFactoryProvider::destroy);
-    }
-
-    @Test
-    public void actualizar() {
-
-    }
-
-    @Test
-    public void recuperar() {
-    }
-
-    @Test
-    public void recuperarTodos() {
-    }*/
 }

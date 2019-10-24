@@ -68,11 +68,6 @@ public abstract class EspecieDAOTest {
 
     }
 
-//    @Rule
-//    public ExpectedException thrown= ExpectedException.none();
-
-
-
     @Test
     public void testActualizarCasoFeliz() {
         this.correr(() -> this.dao.guardar(this.pacacho));

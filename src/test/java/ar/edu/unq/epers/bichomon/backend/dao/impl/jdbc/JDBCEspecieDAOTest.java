@@ -11,8 +11,6 @@ public class JDBCEspecieDAOTest extends EspecieDAOTest {
     @Test(expected = RuntimeException.class)
     public void testActualizarCasoNoFeliz(){
         this.correr(() -> {
-            //        thrown.expect(RuntimeException.class);
-//        thrown.expectMessage("No existe el personaje " + pacacho);
             this.dao.actualizar(this.pacacho);
         });
 
