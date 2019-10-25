@@ -7,16 +7,18 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrat
 import org.junit.Before;
 import org.junit.Test;
 
-import javax.swing.plaf.basic.BasicDesktopIconUI;
+import java.util.ArrayList;
+import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public abstract class UbicacionTest {
     private Bicho bicho;
-    private Entrenador entrenador;
-    protected Especie especieEncontrada;
+    protected Entrenador entrenador;
+    protected Especie especieEncontrada1;
+    protected Especie especieEncontrada2;
     private Estrategia estrategia;
     private BusquedaHelper busquedaHelper;
 
@@ -24,7 +26,8 @@ public abstract class UbicacionTest {
     public void crearEscenario(){
         this.bicho = mock(Bicho.class);
         this.entrenador = mock(Entrenador.class);
-        this.especieEncontrada = mock(Especie.class);
+        this.especieEncontrada1 = mock(Especie.class);
+        this.especieEncontrada2 = mock(Especie.class);
         this.estrategia = mock(Estrategia.class);
         this.busquedaHelper = mock(BusquedaHelper.class);
         when(this.busquedaHelper.factorNivel(this.entrenador)).thenReturn(true);
@@ -56,7 +59,17 @@ public abstract class UbicacionTest {
     public void testBuscar(){
         this.definirGeneracionDeBicho();
         Bicho bichoEncontrado = this.ubicacion().buscar(this.entrenador);
-        assertEquals(this.especieEncontrada, bichoEncontrado.getEspecie());
+        this.assertAlgunaEspecieEncontrada(this.posiblesEspeciesEncontradas(), bichoEncontrado);
+    }
+
+    protected List<Especie> posiblesEspeciesEncontradas(){
+        List<Especie> especies = new ArrayList<>();
+        especies.add(this.especieEncontrada1);
+        return especies;
+    }
+
+    public void assertAlgunaEspecieEncontrada(List<Especie> posiblesEspeciesEncontradas, Bicho bichoEncontrado){
+        assertTrue(posiblesEspeciesEncontradas.contains(bichoEncontrado.getEspecie()));
     }
     
     @Test(expected = BusquedaNoExitosa.class)

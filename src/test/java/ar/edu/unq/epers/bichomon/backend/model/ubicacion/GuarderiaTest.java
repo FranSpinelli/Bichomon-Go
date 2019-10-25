@@ -11,14 +11,16 @@ import static org.mockito.Mockito.when;
 public class GuarderiaTest extends UbicacionTest {
 
     Guarderia guarderia;
-    Bicho bichoMock;
+    Bicho bichoMock1;
+    Bicho bichoMock2;
 
     @Override
     @Before
     public void crearEscenario(){
         guarderia = new Guarderia();
         super.crearEscenario();
-        bichoMock = Mockito.mock(Bicho.class);
+        bichoMock1 = Mockito.mock(Bicho.class);
+        bichoMock2 = Mockito.mock(Bicho.class);
     }
 
     @Override
@@ -26,7 +28,7 @@ public class GuarderiaTest extends UbicacionTest {
     public void testRecibirBicho() {
 
         assertEquals(guarderia.getBichosEnGuarderia().size(), 0);
-        guarderia.recibirBicho(bichoMock);
+        guarderia.recibirBicho(bichoMock1);
         assertEquals(guarderia.getBichosEnGuarderia().size(),1);
     }
 
@@ -37,7 +39,20 @@ public class GuarderiaTest extends UbicacionTest {
 
     @Override
     protected void definirGeneracionDeBicho() {
-        when(this.bichoMock.getEspecie()).thenReturn(this.especieEncontrada);
-        this.guarderia.recibirBicho(this.bichoMock);
+        when(this.bichoMock1.getEspecie()).thenReturn(this.especieEncontrada1);
+        when(this.bichoMock1.tieneExDuenio(this.entrenador)).thenReturn(false);
+        when(this.bichoMock2.getEspecie()).thenReturn(this.especieEncontrada2);
+        when(this.bichoMock2.tieneExDuenio(this.entrenador)).thenReturn(true);
+        this.guarderia.recibirBicho(this.bichoMock1);
+        this.guarderia.recibirBicho(this.bichoMock2);
     }
+
+    @Override
+    protected void definirGeneracionDeBichoImposibilitada(){
+        when(this.bichoMock1.getEspecie()).thenReturn(this.especieEncontrada1);
+        when(this.bichoMock1.tieneExDuenio(this.entrenador)).thenReturn(true);
+        this.guarderia.recibirBicho(this.bichoMock1);
+    }
+
+
 }

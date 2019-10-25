@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -45,13 +46,17 @@ public class Guarderia extends Ubicacion{
     }
 
     @Override
-    public Bicho generarBicho(){
-        return this.bichosAbandonados.iterator().next();
+    public Bicho generarBicho(Entrenador entrenador){
+        return this.bichosAbandonados.stream().filter(bicho -> !bicho.tieneExDuenio(entrenador)).findFirst().get();
     }
 
     @Override
-    protected Boolean esBusquedaExitosaPosible() {
-        return !this.bichosAbandonados.isEmpty();
+    protected Boolean esBusquedaExitosaPosible(Entrenador entrenador) {
+        return this.hayBichoAbandonadoPorOtro(entrenador);
+    }
+
+    private Boolean hayBichoAbandonadoPorOtro(Entrenador entrenador){
+        return this.bichosAbandonados.stream().filter(bicho -> !bicho.tieneExDuenio(entrenador)).count() > 0;
     }
 
     @Override

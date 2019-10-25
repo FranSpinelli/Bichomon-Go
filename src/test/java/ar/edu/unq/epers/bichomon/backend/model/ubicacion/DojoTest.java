@@ -95,7 +95,7 @@ public class DojoTest extends UbicacionTest {
     @Override
     protected void definirGeneracionDeBicho() {
         when(this.bichoMock.getEspecie()).thenReturn(this.especie);
-        when(this.especie.getEvolucionRaiz()).thenReturn(this.especieEncontrada);
+        when(this.especie.getEvolucionRaiz()).thenReturn(this.especieEncontrada1);
         this.dojo.setCampeonActual(this.bichoMock);
     }
 }

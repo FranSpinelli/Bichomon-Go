@@ -158,11 +158,15 @@ public class BichoServiceImplTest {
     public void testBuscarEnPueblo(){
         run(() -> {
             this.puebloRecuperado = (Pueblo) this.ubicacionDAO.recuperar(this.pueblo.getId());
-            this.puebloRecuperado.addEspecieHabitante(this.charizard, 100);
+            this.puebloRecuperado.addEspecieHabitante(this.charizard, 55);
+            this.puebloRecuperado.addEspecieHabitante(this.picachu, 45);
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.setUbicacionActual(this.puebloRecuperado);
         });
-        this.comprobacionBusquedaEncuentraBichoDeEspecie(this.charizard);
+        List<Especie> especies = new ArrayList<>();
+        especies.add(this.charizard);
+        especies.add(this.picachu);
+        this.comprobacionBusquedaEncuentraBichoDeAlgunaEspecie(especies);
     }
 
     @Test(expected = BusquedaNoExitosa.class)
@@ -192,6 +196,18 @@ public class BichoServiceImplTest {
     }
 
     @Test(expected = BusquedaNoExitosa.class)
+    public void testBuscarEnGuarderiaConBichosAbandonadosDelEntrenador(){
+        run(() -> {
+            this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+            this.ashRecuperado.setUbicacionActual(this.guarderia);
+            this.ashRecuperado.addBicho(this.bichoCharizard1);
+            this.ashRecuperado.addBicho(this.bichoSquirtle);
+        });
+        this.bichoService.abandonar("Ash", this.bichoCharizard1.getId());
+        this.bichoService.buscar("Ash");
+    }
+
+    @Test(expected = BusquedaNoExitosa.class)
     public void testBuscarEnPuebloSinEspeciesHabitantes(){
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
@@ -201,7 +217,7 @@ public class BichoServiceImplTest {
     }
 
     @Test(expected = BusquedaNoExitosa.class)
-    public void testBuscarEnPuebloSinCampeon(){
+    public void testBuscarEnDojoSinCampeon(){
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.setUbicacionActual(this.dojo);
@@ -343,7 +359,7 @@ public class BichoServiceImplTest {
 
 //PRIVATE FUCTIONS------------------------------------------------------------------------------------
 
-    private void comprobacionBusquedaEncuentraBichoDeEspecie(Especie especie){
+    private void comprobacionBusquedaEncuentraBicho(){
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
         });
@@ -353,7 +369,16 @@ public class BichoServiceImplTest {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
         });
         assertEquals(new Integer(1), ashRecuperado.getCantidadDeBichos());
+    }
+
+    private void comprobacionBusquedaEncuentraBichoDeEspecie(Especie especie){
+        this.comprobacionBusquedaEncuentraBicho();
         assertEquals(especie, this.ashRecuperado.getInventarioDeBichos().iterator().next().getEspecie());
+    }
+
+    private void comprobacionBusquedaEncuentraBichoDeAlgunaEspecie(List<Especie> especies){
+        this.comprobacionBusquedaEncuentraBicho();
+        assertTrue(especies.contains(this.ashRecuperado.getInventarioDeBichos().iterator().next().getEspecie()));
     }
 
     private List<Bicho> listaDeBichos() {
