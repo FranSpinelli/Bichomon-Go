@@ -9,6 +9,8 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoAjeno;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichosInsuficientes;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 
 import java.util.HashSet;
 import java.util.Objects;
@@ -23,21 +25,22 @@ public class Entrenador {
 	private int id;
 	@Column(unique = true)
 	private String nombre;
-	private int nivel;
 	private int xp;
 	@OneToMany(mappedBy = "entrenador", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Fetch(FetchMode.SUBSELECT)
 	private Set<Bicho> inventarioDeBichos = new HashSet<>();
 	@ManyToOne
 	private Ubicacion ubicacionActual;
+	@ManyToOne
+	private AbstractNivel nivel;
 
 	public Entrenador(){}
 
-	public Entrenador(String nombre){
+	public Entrenador(String nombre, AbstractNivel nivel){
 		this.nombre = nombre;
 		this.inventarioDeBichos = new HashSet();
 		this.xp = 0;
-		this.nivel = 0;
-
+		this.nivel = nivel;
 		/* todo: falta ver como setear la ubicacion */
 	}
 
@@ -58,10 +61,10 @@ public class Entrenador {
 	}
 
 	public int getNivel() {
-		return this.nivel;
+		return this.nivel.getNivel();
 	}
 
-	public void setNivel(int nivel) {
+	public void setNivel(AbstractNivel nivel) {
 		this.nivel = nivel;
 	}
 
@@ -71,10 +74,6 @@ public class Entrenador {
 
 	public void setXp(int xp) {
 		this.xp = xp;
-	}
-
-	public void addXp(int xpAAgregar){
-		this.xp = xp + xpAAgregar;
 	}
 
 	public Set<Bicho> getInventarioDeBichos() {
@@ -97,13 +96,24 @@ public class Entrenador {
 		this.inventarioDeBichos.remove(bicho);
     }
 
+    public void addXp(int experienciaGanada){
+		this.setXp(this.getXp() + experienciaGanada);
+		this.setNivel(this.nivel.eval(this.getXp()));
+	}
+
     public Bicho buscar(){
-	    Bicho bicho = this.ubicacionActual.buscar(this);
+		if (this.inventarioDeBichos.size() >= this.maximoNumeroDeBichos()){
+			throw new InventarioCompleto("Tu inventario de bichos esta al maximo");}
+		Bicho bicho = this.ubicacionActual.buscar(this);
         this.addBicho(bicho);
         return bicho;
 	}
 
-    public Integer getCantidadDeBichos(){
+	private int maximoNumeroDeBichos() {
+		return this.nivel.getNroBichos();
+	}
+
+	public Integer getCantidadDeBichos(){
 		return this.inventarioDeBichos.size();
 	}
 

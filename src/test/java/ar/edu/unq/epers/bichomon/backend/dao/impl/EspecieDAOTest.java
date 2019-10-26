@@ -1,11 +1,15 @@
 package ar.edu.unq.epers.bichomon.backend.dao.impl;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.NivelDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateBichoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateEntrenadorDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateNivelDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateUbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.AbstractNivel;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.UltimoNivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
@@ -33,9 +37,13 @@ public abstract class EspecieDAOTest {
     private Especie charmandarRecuperado;
     private Especie charmilianRecuperado;
     private Especie chorizardRecuperado;
+    private AbstractNivel nivel;
+    private NivelDAO nivelDAO;
 
     @Before
     public void crearModelo() {
+        this.nivelDAO = new HibernateNivelDAO();
+        this.nivel = new UltimoNivel(10,0, 100);
         this.definirDAO();
         this.pacacho = crearEspecie("Pacachu", ELECTRICIDAD, 400, 5, "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png", 10);
         this.charmandar = crearEspecie( "Charmandar", FUEGO, 400, 5, "https://assets.pokemon.com/assets/cms2/img/pokedex/full/025.png", 10);
@@ -201,7 +209,7 @@ public abstract class EspecieDAOTest {
             bichoDAO.guardar(bichoTipoCharmandar);
         });
 
-        Entrenador entrenadorAsh = new Entrenador("Ash");
+        Entrenador entrenadorAsh = new Entrenador("Ash", nivel);
 
         entrenadorAsh.addBicho(bichoTipoPacacho);
         entrenadorAsh.addBicho(bichoTipoCharmandar);
@@ -209,6 +217,7 @@ public abstract class EspecieDAOTest {
         HibernateEntrenadorDAO entrenadorDAO = new HibernateEntrenadorDAO();
 
         this.correr(() -> {
+            this.nivelDAO.guardar(nivel);
             entrenadorDAO.guardar(entrenadorAsh);
         });
 

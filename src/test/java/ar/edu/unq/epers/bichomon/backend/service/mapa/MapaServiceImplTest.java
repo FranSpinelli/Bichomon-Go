@@ -6,8 +6,9 @@ import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.exceptions.DojoNoUti
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.exceptions.DojoSinCampeon;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.AbstractNivel;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.UltimoNivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
-import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Pueblo;
@@ -19,7 +20,6 @@ import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.params.aggregator.AggregateWith;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -43,6 +43,8 @@ public class MapaServiceImplTest {
     private MapaService mapaService;
     private Bicho bichoPicachu, bichoCharizard, bichoSquirtle;
     private Especie picachu, charizard, squirtle;
+    private AbstractNivel nivel;
+    private NivelDAO nivelDAO;
 
     @Before
     public void crearModelo(){
@@ -166,6 +168,7 @@ public class MapaServiceImplTest {
     }
 
     private void crearDAOs() {
+        this.nivelDAO = new HibernateNivelDAO();
         this.entrenadorDAO = new HibernateEntrenadorDAO();
         this.ubicacionDAO = new HibernateUbicacionDAO();
         this.especieDAO = new HibernateEspecieDAO();
@@ -195,9 +198,11 @@ public class MapaServiceImplTest {
     }
 
     private void crearEntrenadores() {
-        this.ash = new Entrenador("Ash");
-        this.brook = new Entrenador("Brook");
-        this.misty = new Entrenador("Misty");
+        this.nivel = new UltimoNivel(10,0, 100);
+        this.nivelDAO.guardar(nivel);
+        this.ash = new Entrenador("Ash", nivel);
+        this.brook = new Entrenador("Brook", nivel);
+        this.misty = new Entrenador("Misty", nivel);
         this.entrenadorDAO.guardarTodos(this.listaDeEntrenadores());
     }
 

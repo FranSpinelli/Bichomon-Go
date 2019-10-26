@@ -2,7 +2,6 @@ package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.UbicacionIncorrectaException;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoAjeno;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichosInsuficientes;
@@ -20,16 +19,18 @@ public class EntrenadorTest {
     Bicho bichoMock2;
     Entrenador entrenador;
     Ubicacion ubicacion1;
+    AbstractNivel nivel;
     private Dojo dojo;
 
     @Before
     public void setUp(){
+        nivel = Mockito.mock(AbstractNivel.class);
 
         estrategiaMock = Mockito.mock(Estrategia.class);
         ubicacion1 = Mockito.mock(Ubicacion.class);
         dojo = Mockito.spy(Dojo.class);
 
-        entrenador = new Entrenador("pepe");
+        entrenador = new Entrenador("pepe", nivel);
         entrenador.setUbicacionActual(ubicacion1);
 
         bichoMock1 = Mockito.mock(Bicho.class);
@@ -38,10 +39,28 @@ public class EntrenadorTest {
 
     @Test
     public void testAddXp() {
-
+        when(nivel.eval(10)).thenReturn(nivel);
         assertEquals(0, entrenador.getXp());
         entrenador.addXp(10);
         assertEquals(10, entrenador.getXp());
+    }
+    @Test
+    public void testAddXpYNoSubeDeNivel() {
+        when(nivel.eval(10)).thenReturn(nivel);
+        when(nivel.getNivel()).thenReturn(1);
+        assertEquals(0, entrenador.getXp());
+        entrenador.addXp(10);
+        assertEquals(1, entrenador.getNivel());
+    }
+
+    @Test
+    public void testAddXpYSubeDeNivel() {
+        AbstractNivel nivel2 = Mockito.mock(AbstractNivel.class);
+        when(nivel.eval(100)).thenReturn(nivel2);
+        when(nivel2.getNivel()).thenReturn(2);
+        assertEquals(0, entrenador.getXp());
+        entrenador.addXp(100);
+        assertEquals(2, entrenador.getNivel());
     }
 
     @Test
