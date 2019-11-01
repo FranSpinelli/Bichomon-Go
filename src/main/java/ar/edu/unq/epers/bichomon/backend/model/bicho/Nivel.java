@@ -14,6 +14,13 @@ public class Nivel extends AbstractNivel {
 
     public Nivel(){}
 
+    public Nivel(int nivel, int limite, int maximoDeBichos){
+        setSiguiente(null);
+        setNivel(nivel);
+        setLimite(limite);
+        setmaximoDeBichos(maximoDeBichos);
+    }
+
     public Nivel(int nivel, int limite, AbstractNivel siguiente, int maximoDeBichos){
         setSiguiente(siguiente);
         setNivel(nivel);
@@ -47,14 +54,17 @@ public class Nivel extends AbstractNivel {
 
     public AbstractNivel eval(int xp) {
         AbstractNivel retorno;
-        if(xp < this.siguiente.getLimite()){
+        if (this.siguiente == null){
+            throw new UndefinedNivelError("Proximo nivel no seteado");
+        }
+        if(xp >= this.getSiguiente().getLimite()){
             retorno = this.getSiguiente();
         }else{
             retorno = this;
         }
         return retorno;
     }
-    public AbstractNivel getSiguiente(){
+    private AbstractNivel getSiguiente(){
         return this.siguiente;
     }
     public void setSiguiente(AbstractNivel siguiente){
