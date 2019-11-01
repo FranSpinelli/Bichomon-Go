@@ -8,7 +8,7 @@
         <property name="connection.driver_class">com.mysql.cj.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost:3306/epers_persistiendoConEstilo_hibernate</property>
         <property name="connection.username">root</property>
-        <property name="connection.password">42547268</property>
+        <property name="connection.password">root</property>
         <property name="connection.serverTimezone">UTC</property>
 
         <!-- SQL dialect -->
@@ -24,6 +24,9 @@
 
 
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.AbstractNivel" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.UltimoNivel" />
+        <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Nivel" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.especie.Especie" />
         <mapping class="ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion" />

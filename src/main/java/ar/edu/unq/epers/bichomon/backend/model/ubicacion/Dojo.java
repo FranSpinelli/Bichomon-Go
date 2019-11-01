@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.model.ubicacion;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
@@ -71,7 +72,7 @@ public class Dojo extends Ubicacion {
     }
 
     @Override
-    protected Boolean esBusquedaExitosaPosible() {
+    protected Boolean esBusquedaExitosaPosible(Entrenador entrenador) {
         return this.hayCampeon();
     }
 

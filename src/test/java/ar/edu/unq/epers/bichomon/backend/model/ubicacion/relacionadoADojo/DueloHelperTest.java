@@ -2,6 +2,8 @@ package ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.AbstractNivel;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.UltimoNivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import org.junit.Before;
@@ -20,9 +22,11 @@ public class DueloHelperTest {
     DueloHelper dueloHelperSpy;
     Entrenador entrenador1;
     Entrenador entrenador2;
+    AbstractNivel nivel;
 
     @Before
     public void setUp(){
+        this.nivel = new UltimoNivel(10,0, 100);
         ///dueloHelper = new DueloHelper();
         dojo = new Dojo("dojo");
 
@@ -32,8 +36,8 @@ public class DueloHelperTest {
         especieMock2 = Mockito.mock(Especie.class);
         Mockito.when(especieMock2.getEnergiaInicial()).thenReturn(1000);
 
-        entrenador1 = new Entrenador("pepe");
-        entrenador2 = new Entrenador("roco");
+        entrenador1 = new Entrenador("pepe", nivel);
+        entrenador2 = new Entrenador("roco", nivel);
 
 
         bicho1 = new Bicho(especieMock);

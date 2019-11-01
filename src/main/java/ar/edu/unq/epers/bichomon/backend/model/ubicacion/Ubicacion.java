@@ -68,15 +68,15 @@ public abstract class Ubicacion {
 
     public Bicho buscar(Entrenador entrenador){
         this.arrojarBusquedaNoExitosaSi(!this.esBusquedaExitosa(entrenador), "No se encontro ningun bicho");
-        this.arrojarBusquedaNoExitosaSi(!this.esBusquedaExitosaPosible(), this.mensajeBusquedaExitosaNoPosible());
-        return this.generarBicho();
+        this.arrojarBusquedaNoExitosaSi(!this.esBusquedaExitosaPosible(entrenador), this.mensajeBusquedaExitosaNoPosible());
+        return this.generarBicho(entrenador);
     }
 
     protected Boolean esBusquedaExitosa(Entrenador entrenador){
         return this.busquedaHelper.factorTiempo(entrenador) && this.busquedaHelper.factorNivel(entrenador) && this.busquedaHelper.factorPoblacion(this) && this.busquedaHelper.factorRandom();
     }
 
-    protected Bicho generarBicho() {
+    protected Bicho generarBicho(Entrenador entrenador) {
         return new Bicho(this.elegirEspecie());
     }
 
@@ -88,7 +88,7 @@ public abstract class Ubicacion {
         }
     }
 
-    protected abstract Boolean esBusquedaExitosaPosible();
+    protected abstract Boolean esBusquedaExitosaPosible(Entrenador entrenador);
 
     protected abstract String mensajeBusquedaExitosaNoPosible();
 

@@ -2,12 +2,12 @@ package ar.edu.unq.epers.bichomon.backend.service.especie;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateBichoDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateEntrenadorDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateEspecieDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.HibernateUbicacionDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.NivelDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.*;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.AbstractNivel;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.UltimoNivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
@@ -34,7 +34,6 @@ public class EspecieServiceImplTest {
 
     @Before
     public void SetUp(){
-
         especieDAO = Mockito.spy(HibernateEspecieDAO.class);
         especieService = new EspecieServiceImpl(especieDAO);
 
@@ -109,15 +108,17 @@ public class EspecieServiceImplTest {
 
     @Test
     public void populares() {
-
+        NivelDAO nivelDAO = new HibernateNivelDAO();
+        AbstractNivel nivel = new UltimoNivel(10,10,10);
         HibernateBichoDAO bichoDAO = new HibernateBichoDAO();
         HibernateEntrenadorDAO entrenadorDAO = new HibernateEntrenadorDAO();
-        Entrenador entrenador1 = new Entrenador("Ash");
+        Entrenador entrenador1 = new Entrenador("Ash", nivel);
         Bicho bicho1 = new Bicho(especie1);
         entrenador1.addBicho(bicho1);
 
         run(() -> {
             especieService.crearEspecie(especie1);
+            nivelDAO.guardar(nivel);
             bichoDAO.guardar(bicho1);
             entrenadorDAO.guardar(entrenador1);
         });

@@ -2,8 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.service.leaderboard;
 
 import ar.edu.unq.epers.bichomon.backend.dao.*;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.*;
-import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
-import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.*;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.service.especie.NullEspecieLeaderException;
@@ -45,6 +44,7 @@ public class LeaderboardServiceImplTest {
     private EspecieDAO especieDAO;
     private UbicacionDAO ubicacionDAO;
     private CampeonDAO campeonDAO;
+    private NivelDAO nivelDAO;
 
     private Entrenador ashRecuperado;
     private Bicho bichoPicachuRecuperado;
@@ -54,11 +54,15 @@ public class LeaderboardServiceImplTest {
 
     private LeaderboardService leaderboardService;
 
+    private AbstractNivel nivel;
+
     @Before
     public void crearModelo() {
-        this.ash = new Entrenador("Ash");
-        this.misty = new Entrenador("Misty");
-        this.brook = new Entrenador("Brook");
+        this.nivel = new UltimoNivel(10,10, 100);
+
+        this.ash = new Entrenador("Ash", nivel);
+        this.misty = new Entrenador("Misty", nivel);
+        this.brook = new Entrenador("Brook", nivel);
 
         this.picachu = new Especie("Picachu", ELECTRICIDAD);
         this.picachu.setEnergiaInicial(1000);
@@ -79,6 +83,8 @@ public class LeaderboardServiceImplTest {
         this.ubicacionDAO = new HibernateUbicacionDAO();
         this.campeonDAO = new HibernateCampeonDAO();
 
+        this.nivelDAO = new HibernateNivelDAO();
+
         this.leaderboardService = new LeaderboardServiceImpl(entrenadorDAO, campeonDAO);
     }
 
@@ -92,30 +98,35 @@ public class LeaderboardServiceImplTest {
         run(() -> {
             this.entrenadores = leaderboardService.campeones();
         });
-        assertEquals(entrenadores, new ArrayList<Entrenador>());
+
+
     }
 
     @Test
     public void campeonesEstanOrdenadosCorrectamente(){
         run(() -> {
-        this.ash.addBicho(bichoCharizard1);
-        this.brook.addBicho(bichoCharizard2);
-        this.misty.addBicho(bichoPicachu);
-
-        this.dojo.setCampeonActual(bichoCharizard1);
+       this.dojo.setCampeonActual(bichoCharizard1);
         this.dojo1.setCampeonActual(bichoCharizard2);
         this.dojo2.setCampeonActual(bichoPicachu);
 
         this.especieDAO.guardar(this.charizard);
         this.especieDAO.guardar(this.picachu);
 
-        this.bichoDAO.guardar(bichoCharizard1);
-        this.bichoDAO.guardar(bichoCharizard2);
-        this.bichoDAO.guardar(bichoPicachu);
+        this.nivelDAO.guardar(nivel);
 
         this.entrenadorDAO.guardar(this.ash);
         this.entrenadorDAO.guardar(this.brook);
         this.entrenadorDAO.guardar(this.misty);
+
+        this.ash.addBicho(bichoCharizard1);
+        this.brook.addBicho(bichoCharizard2);
+        this.misty.addBicho(bichoPicachu);
+
+        this.bichoDAO.guardar(bichoCharizard1);
+        this.bichoDAO.guardar(bichoCharizard2);
+        this.bichoDAO.guardar(bichoPicachu);
+
+
 
         this.ubicacionDAO.guardar(this.dojo);
         this.ubicacionDAO.guardar(this.dojo1);
@@ -142,6 +153,8 @@ public class LeaderboardServiceImplTest {
     @Test
     public void testEspecieLider(){
         run(() -> {
+            this.nivelDAO.guardar(nivel);
+
             this.ash.addBicho(bichoCharizard1);
             this.ash.addBicho(bichoCharizard2);
             this.ash.addBicho(bichoPicachu);
@@ -189,6 +202,8 @@ public class LeaderboardServiceImplTest {
             this.dojo.setCampeonActual(bichoCharizard1);
             this.dojo1.setCampeonActual(bichoCharizard2);
             this.dojo2.setCampeonActual(bichoPicachu);
+
+            this.nivelDAO.guardar(nivel);
 
             this.especieDAO.guardar(this.charizard);
             this.especieDAO.guardar(this.picachu);

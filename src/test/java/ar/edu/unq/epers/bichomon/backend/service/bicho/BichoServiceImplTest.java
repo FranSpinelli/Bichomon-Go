@@ -5,6 +5,8 @@ import ar.edu.unq.epers.bichomon.backend.dao.*;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.*;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.AbstractNivel;
+import ar.edu.unq.epers.bichomon.backend.model.bicho.UltimoNivel;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.EvolucionNoPermitida;
 import ar.edu.unq.epers.bichomon.backend.model.especie.condicion.CondicionBasadaEnEdad;
@@ -38,10 +40,12 @@ public class BichoServiceImplTest {
     private EntrenadorDAO entrenadorDAO; private BichoDAO bichoDAO;
     private EspecieDAO especieDAO; private UbicacionDAO ubicacionDAO;
     private BusquedaHelperDAO busquedaHelperDAO;
+    private NivelDAO nivelDAO;
     private CondicionDAO condicionDAO;
 
     private BichoServiceImpl bichoService;
     private CondicionDeEvolucion condicion;
+    private AbstractNivel nivel;
 
     @Before
     public void crearModelo(){
@@ -158,11 +162,15 @@ public class BichoServiceImplTest {
     public void testBuscarEnPueblo(){
         run(() -> {
             this.puebloRecuperado = (Pueblo) this.ubicacionDAO.recuperar(this.pueblo.getId());
-            this.puebloRecuperado.addEspecieHabitante(this.charizard, 100);
+            this.puebloRecuperado.addEspecieHabitante(this.charizard, 55);
+            this.puebloRecuperado.addEspecieHabitante(this.picachu, 45);
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.setUbicacionActual(this.puebloRecuperado);
         });
-        this.comprobacionBusquedaEncuentraBichoDeEspecie(this.charizard);
+        List<Especie> especies = new ArrayList<>();
+        especies.add(this.charizard);
+        especies.add(this.picachu);
+        this.comprobacionBusquedaEncuentraBichoDeAlgunaEspecie(especies);
     }
 
     @Test(expected = BusquedaNoExitosa.class)
@@ -192,6 +200,18 @@ public class BichoServiceImplTest {
     }
 
     @Test(expected = BusquedaNoExitosa.class)
+    public void testBuscarEnGuarderiaConBichosAbandonadosDelEntrenador(){
+        run(() -> {
+            this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
+            this.ashRecuperado.setUbicacionActual(this.guarderia);
+            this.ashRecuperado.addBicho(this.bichoCharizard1);
+            this.ashRecuperado.addBicho(this.bichoSquirtle);
+        });
+        this.bichoService.abandonar("Ash", this.bichoCharizard1.getId());
+        this.bichoService.buscar("Ash");
+    }
+
+    @Test(expected = BusquedaNoExitosa.class)
     public void testBuscarEnPuebloSinEspeciesHabitantes(){
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
@@ -201,7 +221,7 @@ public class BichoServiceImplTest {
     }
 
     @Test(expected = BusquedaNoExitosa.class)
-    public void testBuscarEnPuebloSinCampeon(){
+    public void testBuscarEnDojoSinCampeon(){
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.setUbicacionActual(this.dojo);
@@ -343,7 +363,7 @@ public class BichoServiceImplTest {
 
 //PRIVATE FUCTIONS------------------------------------------------------------------------------------
 
-    private void comprobacionBusquedaEncuentraBichoDeEspecie(Especie especie){
+    private void comprobacionBusquedaEncuentraBicho(){
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
         });
@@ -353,7 +373,16 @@ public class BichoServiceImplTest {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
         });
         assertEquals(new Integer(1), ashRecuperado.getCantidadDeBichos());
+    }
+
+    private void comprobacionBusquedaEncuentraBichoDeEspecie(Especie especie){
+        this.comprobacionBusquedaEncuentraBicho();
         assertEquals(especie, this.ashRecuperado.getInventarioDeBichos().iterator().next().getEspecie());
+    }
+
+    private void comprobacionBusquedaEncuentraBichoDeAlgunaEspecie(List<Especie> especies){
+        this.comprobacionBusquedaEncuentraBicho();
+        assertTrue(especies.contains(this.ashRecuperado.getInventarioDeBichos().iterator().next().getEspecie()));
     }
 
     private List<Bicho> listaDeBichos() {
@@ -397,6 +426,7 @@ public class BichoServiceImplTest {
     }
 
     private void crearDAOs(){
+        this.nivelDAO = new HibernateNivelDAO();
         this.ubicacionDAO = new HibernateUbicacionDAO();
         this.entrenadorDAO = new HibernateEntrenadorDAO();
         this.bichoDAO = new HibernateBichoDAO();
@@ -406,8 +436,10 @@ public class BichoServiceImplTest {
     }
 
     private void crearEntrenadores(){
-        this.ash = new Entrenador("Ash");
-        this.brook = new Entrenador("Brook");
+        this.nivel = new UltimoNivel(10,0, 100);
+        this.nivelDAO.guardar(nivel);
+        this.ash = new Entrenador("Ash", nivel);
+        this.brook = new Entrenador("Brook", nivel);
         this.entrenadorDAO.guardarTodos(this.listaDeEntrenadores());
     }
 

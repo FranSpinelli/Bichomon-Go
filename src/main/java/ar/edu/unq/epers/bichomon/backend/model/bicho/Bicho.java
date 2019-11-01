@@ -132,4 +132,8 @@ public class Bicho {
 	public int hashCode() {
 		return Objects.hash(id);
 	}
+
+	public Boolean tieneExDuenio(Entrenador entrenador){
+		return this.exDuenhos.contains(entrenador);
+	}
 }
