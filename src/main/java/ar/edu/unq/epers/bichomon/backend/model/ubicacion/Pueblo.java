@@ -62,7 +62,5 @@ public class Pueblo extends Ubicacion{
     public void addEspecieHabitante(Especie especie, Integer probabilidad){
         this.especiesHabitantes.add(new EspecieEncontrable(especie, probabilidad));
     }
-/*public Pueblo(BusquedaHelper busquedaHelper){
-        super(busquedaHelper);
-    }*/
+
 }

@@ -64,10 +64,6 @@ public class Dojo extends Ubicacion {
     public ResultadoCombate realizarDuelo(Bicho bichoRetador, Estrategia estrategiaAUtilizar) {
 
         return estrategiaAUtilizar.calcularDuelo(bichoRetador, this);
-
-    /*public Dojo(BusquedaHelper busquedaHelper) {
-        super(busquedaHelper);
-    }*/
     }
 
     @Override
