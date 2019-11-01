@@ -33,6 +33,12 @@
 		</dependency>
 
 		<dependency>
+			<groupId>org.neo4j.driver</groupId>
+			<artifactId>neo4j-java-driver</artifactId>
+			<version>1.7.2</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.junit.jupiter</groupId>
 			<artifactId>junit-jupiter</artifactId>
 			<version>5.5.2</version>
@@ -154,11 +160,11 @@
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
 					 <connectors>
-					<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
-						<port>8080</port>
-						<maxIdleTime>60000</maxIdleTime>
-					</connector>
-				</connectors>
+						<connector implementation="org.mortbay.jetty.nio.SelectChannelConnector">
+							<port>8080</port>
+							<maxIdleTime>60000</maxIdleTime>
+						</connector>
+					</connectors>
 				</configuration>
 			</plugin>
 		</plugins>
