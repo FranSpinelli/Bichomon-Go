@@ -73,4 +73,6 @@ public class HibernateUbicacionDAO extends HibernateDAO<Ubicacion> implements Ub
             throw new DojoNoUtilizado("El dojo no tuvo campeones");
         }
     }
+
+    //TODO: metodo public List<Ubicacion> recuperarTodos(List<String>)
 }
