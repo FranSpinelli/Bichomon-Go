@@ -132,4 +132,20 @@ public class EntrenadorTest {
     public void testhacerEvolucionarBichoAjeno() {
         this.entrenador.hacerEvolucionar(this.bichoMock1);
     }
+
+    @Test
+    public void testAgregarYQuitarMonedasCasoFeliz(){
+        assertEquals(0, entrenador.getCantidadDeMonedas());
+
+        entrenador.addMonedas(10);
+        assertEquals(10, entrenador.getCantidadDeMonedas());
+
+        entrenador.gastarMonedas(5);
+        assertEquals(5, entrenador.getCantidadDeMonedas());
+    }
+
+    @Test(expected = MonedasInsuficientesException.class)
+    public void testQuitarCasoNoFeliz(){
+        entrenador.gastarMonedas(10);
+    }
 }
