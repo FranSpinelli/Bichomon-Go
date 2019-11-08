@@ -26,6 +26,7 @@ public class Entrenador {
 	@Column(unique = true)
 	private String nombre;
 	private int xp;
+	private  int cantidadDeMonedas;
 	@OneToMany(mappedBy = "entrenador", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<Bicho> inventarioDeBichos = new HashSet<>();
@@ -41,7 +42,7 @@ public class Entrenador {
 		this.inventarioDeBichos = new HashSet();
 		this.xp = 0;
 		this.nivel = nivel;
-		/* todo: falta ver como setear la ubicacion */
+		this.cantidadDeMonedas = 0;
 	}
 
 	public int getId() {
@@ -143,6 +144,22 @@ public class Entrenador {
 
 	public Boolean estaEn(Ubicacion ubicacion) {
 		return ubicacion.equals(this.ubicacionActual);
+	}
+
+	public int getCantidadDeMonedas(){
+		return this.cantidadDeMonedas;
+	}
+
+	public void addMonedas(int cantDeMonedas){
+		this.cantidadDeMonedas += cantDeMonedas;
+	}
+
+	public void gastarMonedas(int cantDeMonedasAGastar){
+		if(this.cantidadDeMonedas - cantDeMonedasAGastar < 0){
+			throw new MonedasInsuficientesException("Monedas actuales Insuficientes");
+		}else{
+			cantidadDeMonedas -= cantDeMonedasAGastar;
+		}
 	}
 
     @Override

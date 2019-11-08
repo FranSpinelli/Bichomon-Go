@@ -14,13 +14,12 @@ import static org.mockito.Mockito.when;
 
 public class EntrenadorTest {
 
-    Estrategia estrategiaMock;
-    Bicho bichoMock1;
-    Bicho bichoMock2;
-    Entrenador entrenador;
-    Ubicacion ubicacion1;
-    AbstractNivel nivel;
-    private Dojo dojo;
+    private Estrategia estrategiaMock;
+    private Bicho bichoMock1;
+    private Bicho bichoMock2;
+    private Entrenador entrenador;
+    private Ubicacion ubicacion1;
+    private AbstractNivel nivel;
 
     @Before
     public void setUp(){
@@ -28,7 +27,7 @@ public class EntrenadorTest {
 
         estrategiaMock = Mockito.mock(Estrategia.class);
         ubicacion1 = Mockito.mock(Ubicacion.class);
-        dojo = Mockito.spy(Dojo.class);
+        Dojo dojo = Mockito.spy(Dojo.class);
 
         entrenador = new Entrenador("pepe", nivel);
         entrenador.setUbicacionActual(ubicacion1);
@@ -131,5 +130,21 @@ public class EntrenadorTest {
     @Test(expected = BichoAjeno.class)
     public void testhacerEvolucionarBichoAjeno() {
         this.entrenador.hacerEvolucionar(this.bichoMock1);
+    }
+
+    @Test
+    public void testAgregarYQuitarMonedasCasoFeliz(){
+        assertEquals(0, entrenador.getCantidadDeMonedas());
+
+        entrenador.addMonedas(10);
+        assertEquals(10, entrenador.getCantidadDeMonedas());
+
+        entrenador.gastarMonedas(5);
+        assertEquals(5, entrenador.getCantidadDeMonedas());
+    }
+
+    @Test(expected = MonedasInsuficientesException.class)
+    public void testQuitarCasoNoFeliz(){
+        entrenador.gastarMonedas(10);
     }
 }
