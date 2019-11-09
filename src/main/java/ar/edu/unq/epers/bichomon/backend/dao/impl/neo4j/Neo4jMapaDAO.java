@@ -45,28 +45,51 @@ public class Neo4jMapaDAO {
         }
     }
 
-    public List<int> conectados(String ubicacionNombre, String origenNombre) {
+
+    public int caminoMasCorto(String origenNombre, String destinoNombre) {
         Session session = this.driver.session();
 
         try {
-            String query = "MATCH p=shortestPath((origen:Ubicacion {name:nombreOrigen})-[*]->(destino:Ubicacion {name:nombreDestino}) " +
-            "RETURN p";
-            StatementResult result = session.run(query, Values.parameters("nombreOrigen", ubicacionNombre,
-                    "nombreOrigen", origenNombre
-            ));
+            String query = "MATCH p=(a:Ubicacion {name: nombreOrigen})-[r:CONNECTS*..10]->(b:Ubicacion {name:nombreDestino}) " +
+                    "WITH p, reduce( " +
+                    "cost=0, x IN rels(p) | cost + (x.precio)) as cost " +
+                    "RETURN cost " +
+                    "ORDER BY cost ASC " +
+                    "LIMIT 1 ";
+            StatementResult result = session.run(query, Values.parameters("nombreDestino", destinoNombre,
+                    "nombreOrigen", origenNombre));
             //Similar a list.stream().map(...)
-            return result.list(ubication -> {
-                Value algo = ubication.get(0);
-                int costo = algo.get("precio").asInt();
-                return costo;
-            });
+            return result.next().get("cost").asInt();
         } finally {
             session.close();
         }
-    /*MATCH p=shortestPath(
-(bacon:Ubicacion {name:"Johto"})-[*]->(meg:Ubicacion {name:"Pokecenter"})
-)
-RETURN p*/
-
-
+    }
+    public List<String> conectados(String origenNombre, String tipoCamino) {
+        Session session = this.driver.session();
+        try {
+            String query = "MATCH (origen:Ubicacion {name: nombreOrigen}) " +
+                    "MATCH (origen)-[:CONECTADA_CON {tipoDeConeccion: tipoConeccion]->(destino) " +
+                    "RETURN destino";
+            StatementResult result = session.run(query, Values.parameters("nombreDestino", origenNombre,
+                    "nombreOrigen", tipoCamino));
+            //Similar a list.stream().map(...)
+            return result.list(ubication -> ubication.get(0).get("name").asString());
+        } finally {
+            session.close();
+        }
+    }
+    public int caminoDeUno(String origenNombre, String destinoNombre) {
+        Session session = this.driver.session();
+        try {
+            String query = "MATCH (origen:Ubicacion {name: nombreOrigen}) " +
+                    "MATCH (destino:Ubicacion {name: nombreDestino}) " +
+                    "MATCH (origen)-[r]->(destino) " +
+                    "RETURN r.precio";
+            StatementResult result = session.run(query, Values.parameters("nombreOrigen", origenNombre,
+                    "nombreDestino", destinoNombre));
+            return result.next().get(0).get("precio").asInt();
+        } finally {
+            session.close();
+        }
+    }
 }
