@@ -17,6 +17,8 @@ import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoIne
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichosInsuficientes;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.EntrenadorInexistente;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.Transaction;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.HibernateTransaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,6 +45,8 @@ public class BichoServiceImplTest {
     private NivelDAO nivelDAO;
     private CondicionDAO condicionDAO;
 
+    private Transaction hibernateTransaction = new HibernateTransaction();
+
     private BichoServiceImpl bichoService;
     private CondicionDeEvolucion condicion;
     private AbstractNivel nivel;
@@ -57,13 +61,13 @@ public class BichoServiceImplTest {
             this.crearBichos();
             this.crearHelpers();
             this.crearUbicaciones();
-        });
+        }, this.hibernateTransaction);
         this.bichoService = new BichoServiceImpl(entrenadorDAO, bichoDAO);
     }
 
     @After
     public void limpiarEscenario(){
-        run(SessionFactoryProvider::destroy);
+        run(SessionFactoryProvider::destroy, this.hibernateTransaction);
     }
 
     @Test
@@ -75,12 +79,12 @@ public class BichoServiceImplTest {
             this.ashRecuperado.addBicho(this.bichoCharizard1);
             this.ashRecuperado.addBicho(this.bichoCharizard2);
             this.ashRecuperado.addBicho(this.bichoSquirtle);
-        });
+        }, this.hibernateTransaction);
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.guarderiaRecuperada = (Guarderia) this.ubicacionDAO.recuperar(this.guarderia.getId());
             this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
-        });
+        }, this.hibernateTransaction);
         assertTrue(this.ashRecuperado.tieneBicho(this.bichoPicachuRecuperado));
         assertEquals(new Integer(4), this.ashRecuperado.getCantidadDeBichos());
         assertEquals(this.ashRecuperado, this.bichoPicachuRecuperado.getEntrenador());
@@ -90,7 +94,7 @@ public class BichoServiceImplTest {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.guarderiaRecuperada = (Guarderia) this.ubicacionDAO.recuperar(this.guarderia.getId());
             this.bichoPicachuRecuperado = this.bichoDAO.recuperar(this.bichoPicachu.getId());
-        });
+        }, this.hibernateTransaction);
         assertFalse(this.ashRecuperado.tieneBicho(this.bichoPicachuRecuperado));
         assertEquals(new Integer(3), this.ashRecuperado.getCantidadDeBichos());
         assertNull(this.bichoPicachuRecuperado.getEntrenador());
@@ -118,7 +122,7 @@ public class BichoServiceImplTest {
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.addBicho(this.bichoPicachu);
-        });
+        }, this.hibernateTransaction);
         this.bichoService.abandonar("Ash", this.bichoPicachu.getId());
     }
 
@@ -129,7 +133,7 @@ public class BichoServiceImplTest {
             this.ashRecuperado.setUbicacionActual(this.pueblo);
             this.ashRecuperado.addBicho(this.bichoPicachu);
             this.ashRecuperado.addBicho(this.bichoSquirtle);
-        });
+        }, this.hibernateTransaction);
         this.bichoService.abandonar("Ash", this.bichoPicachu.getId());
     }
 
@@ -142,7 +146,7 @@ public class BichoServiceImplTest {
             this.brookRecuperado.setUbicacionActual(this.guarderia);
             this.brookRecuperado.addBicho(this.bichoCharizard1);
             this.brookRecuperado.addBicho(this.bichoSquirtle);
-        });
+        }, this.hibernateTransaction);
         this.bichoService.abandonar("Brook", this.bichoCharizard1.getId());
         this.comprobacionBusquedaEncuentraBichoDeEspecie(this.charizard);
     }
@@ -154,7 +158,7 @@ public class BichoServiceImplTest {
             this.dojoRecuperado.setCampeonActual(this.bichoPicachu);
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.setUbicacionActual(this.dojoRecuperado);
-        });
+        }, this.hibernateTransaction);
         this.comprobacionBusquedaEncuentraBichoDeEspecie(this.pichu);
     }
 
@@ -166,7 +170,7 @@ public class BichoServiceImplTest {
             this.puebloRecuperado.addEspecieHabitante(this.picachu, 45);
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.setUbicacionActual(this.puebloRecuperado);
-        });
+        }, this.hibernateTransaction);
         List<Especie> especies = new ArrayList<>();
         especies.add(this.charizard);
         especies.add(this.picachu);
@@ -182,7 +186,7 @@ public class BichoServiceImplTest {
             this.puebloRecuperado.addEspecieHabitante(this.charizard, 100);
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.setUbicacionActual(this.puebloRecuperado);
-        });
+        }, this.hibernateTransaction);
         this.bichoService.buscar("Ash");
     }
 
@@ -195,7 +199,7 @@ public class BichoServiceImplTest {
             this.brookRecuperado.setUbicacionActual(this.guarderia);
             this.brookRecuperado.addBicho(this.bichoCharizard1);
             this.brookRecuperado.addBicho(this.bichoSquirtle);
-        });
+        }, this.hibernateTransaction);
         this.bichoService.buscar("Ash");
     }
 
@@ -206,7 +210,7 @@ public class BichoServiceImplTest {
             this.ashRecuperado.setUbicacionActual(this.guarderia);
             this.ashRecuperado.addBicho(this.bichoCharizard1);
             this.ashRecuperado.addBicho(this.bichoSquirtle);
-        });
+        }, this.hibernateTransaction);
         this.bichoService.abandonar("Ash", this.bichoCharizard1.getId());
         this.bichoService.buscar("Ash");
     }
@@ -216,7 +220,7 @@ public class BichoServiceImplTest {
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.setUbicacionActual(this.pueblo);
-        });
+        }, this.hibernateTransaction);
         this.bichoService.buscar("Ash");
     }
 
@@ -225,7 +229,7 @@ public class BichoServiceImplTest {
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.setUbicacionActual(this.dojo);
-        });
+        }, this.hibernateTransaction);
         this.bichoService.buscar("Ash");
     }
 
@@ -255,7 +259,7 @@ public class BichoServiceImplTest {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.setUbicacionActual(this.pueblo);
             this.ashRecuperado.addBicho(this.bichoPicachu);
-        });
+        }, this.hibernateTransaction);
         this.bichoService.duelo("Ash", this.bichoPicachu.getId());
     }
 
@@ -270,19 +274,19 @@ public class BichoServiceImplTest {
             this.ashRecuperado.addBicho(this.bichoCharizard2);
             this.ashRecuperado.addBicho(this.bichoSquirtle);
             this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar(this.dojo.getId());
-        });
+        }, this.hibernateTransaction);
         assertEquals(0, this.dojoRecuperado.getListaDeCampeones().size());
         assertNull(this.dojoRecuperado.getCampeonActual());
         run(() -> {
             this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar(this.dojo.getId());
             this.dojoRecuperado.setCampeonActual(this.bichoCharizard1);
-        });
+        }, this.hibernateTransaction);
         assertEquals(1, this.dojoRecuperado.getListaDeCampeones().size());
         assertEquals(this.bichoCharizard1, this.dojoRecuperado.getCampeonActual().getBicho());
         this.bichoService.duelo("Ash", this.bichoPicachu.getId());
         run(() -> {
             this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar(this.dojo.getId());
-        });
+        }, this.hibernateTransaction);
         assertEquals(2, this.dojoRecuperado.getListaDeCampeones().size());
         assertEquals(this.bichoPicachu, this.dojoRecuperado.getCampeonActual().getBicho());
     }
@@ -305,7 +309,7 @@ public class BichoServiceImplTest {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.addBicho(this.bichoPicachuRecuperado);
             this.bichoPicachuRecuperado.setFechaDeNacimiento(LocalDate.now());
-        });
+        }, this.hibernateTransaction);
         assertFalse(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
     }
 
@@ -319,7 +323,7 @@ public class BichoServiceImplTest {
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.addBicho(this.bichoPicachu);
-        });
+        }, this.hibernateTransaction);
         assertTrue(this.bichoService.puedeEvolucionar("Ash", this.bichoPicachu.getId()));
     }
 
@@ -329,7 +333,7 @@ public class BichoServiceImplTest {
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.addBicho(this.bichoPicachu);
-        });
+        }, this.hibernateTransaction);
         Bicho bichoEvolucionado = this.bichoService.evolucionar("Ash", this.bichoPicachu.getId());
         assertEquals(bichoEvolucionado.getEspecie().getNombre(), this.raychu.getNombre());
     }
@@ -357,7 +361,7 @@ public class BichoServiceImplTest {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
             this.ashRecuperado.addBicho(this.bichoPicachuRecuperado);
             this.bichoPicachuRecuperado.setFechaDeNacimiento(LocalDate.now());
-        });
+        }, this.hibernateTransaction);
         this.bichoService.evolucionar("Ash", this.bichoPicachu.getId());
     }
 
@@ -366,12 +370,12 @@ public class BichoServiceImplTest {
     private void comprobacionBusquedaEncuentraBicho(){
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
-        });
+        }, this.hibernateTransaction);
         assertEquals(new Integer(0), ashRecuperado.getCantidadDeBichos());
         this.bichoService.buscar("Ash");
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar("Ash");
-        });
+        }, this.hibernateTransaction);
         assertEquals(new Integer(1), ashRecuperado.getCantidadDeBichos());
     }
 

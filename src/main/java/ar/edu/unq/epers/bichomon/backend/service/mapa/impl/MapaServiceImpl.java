@@ -5,20 +5,21 @@ import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.exceptions.DojoSinCampeon;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
-import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoInexistente;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.EntrenadorInexistente;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaService;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.UbicacionActualException;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.UbicacionInexistente;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.Transaction;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.HibernateTransaction;
 
 import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
 
 public class MapaServiceImpl implements MapaService {
 	private EntrenadorDAO entrenadorDAO;
 	private UbicacionDAO ubicacionDAO;
+	private Transaction hibernateTransaction = new HibernateTransaction();
 
 	public MapaServiceImpl(EntrenadorDAO entrenadorDAO, UbicacionDAO ubicacionDAO) {
 		this.entrenadorDAO = entrenadorDAO;
@@ -34,17 +35,17 @@ public class MapaServiceImpl implements MapaService {
 				throw new UbicacionActualException("El entrenador no se puede mover a la ubicacion pues ya se encuentra alli");
 			}
 			entrenadorActual.setUbicacionActual(ubicacionActual);
-		});
+		}, this.hibernateTransaction);
 	}
 
 	@Override
 	public int cantidadEntrenadores(String ubicacion) {
-		return run(() -> this.ubicacionDAO.cantidadEntrenadoresEn(ubicacion));
+		return run(() -> this.ubicacionDAO.cantidadEntrenadoresEn(ubicacion), this.hibernateTransaction);
 	}
 
 	@Override
 	public Bicho campeon(String nombreDelDojo) {
-		Ubicacion dojoRecuperado = run(() -> this.ubicacionDAO.recuperar(nombreDelDojo));
+		Ubicacion dojoRecuperado = run(() -> this.ubicacionDAO.recuperar(nombreDelDojo), this.hibernateTransaction);
 		if(dojoRecuperado == null){throw new UbicacionInexistente("La ubicacion no existe");}
 
 		Campeon campeonActual = dojoRecuperado.getCampeonActual();
@@ -55,7 +56,7 @@ public class MapaServiceImpl implements MapaService {
 
 	@Override
 	public Bicho campeonHistorico(String dojo) {
-		return run(() -> this.ubicacionDAO.getCampeonHistorico(dojo));
+		return run(() -> this.ubicacionDAO.getCampeonHistorico(dojo), this.hibernateTransaction);
 	}
 
 	//PRIVATE FUNCTIONS---------------------------------------------------------------------------------------------------------------------

@@ -1,6 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate;
 
 import ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.SessionatorType;
 import org.hibernate.Session;
 
 
@@ -16,19 +17,19 @@ public class HibernateDAO<T> {
     }
 
     public void guardar(T item) {
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.HIBERNATE);
         session.save(item);
     }
 
     public T recuperar(Integer id) {
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.HIBERNATE);
         return session.get(entityType, id);
     }
 
     public void eliminarTodos() {
         String myTable = entityType.getName();
         String hql = String.format("delete from %s", myTable);
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.HIBERNATE);
         session.createNativeQuery("SET FOREIGN_KEY_CHECKS=0;").executeUpdate();
         Query query = session.createQuery(hql);
         query.executeUpdate();

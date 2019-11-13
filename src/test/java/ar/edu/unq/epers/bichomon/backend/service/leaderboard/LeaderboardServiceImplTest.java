@@ -8,6 +8,8 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import ar.edu.unq.epers.bichomon.backend.service.especie.NullEspecieLeaderException;
 import ar.edu.unq.epers.bichomon.backend.service.leaderboard.impl.LeaderboardServiceImpl;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.Transaction;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.HibernateTransaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,6 +58,8 @@ public class LeaderboardServiceImplTest {
 
     private AbstractNivel nivel;
 
+    Transaction hibernateTransaction = new HibernateTransaction();
+
     @Before
     public void crearModelo() {
         this.nivel = new UltimoNivel(10,10, 100);
@@ -90,14 +94,14 @@ public class LeaderboardServiceImplTest {
 
     @After
     public void limpiarEscenario(){
-        run(SessionFactoryProvider::destroy);
+        run(SessionFactoryProvider::destroy, this.hibernateTransaction);
     }
 
     @Test
     public void campeonesDeUnModeloNuevoEsUnaListaVacia(){
         run(() -> {
             this.entrenadores = leaderboardService.campeones();
-        });
+        }, this.hibernateTransaction);
 
 
     }
@@ -131,10 +135,10 @@ public class LeaderboardServiceImplTest {
         this.ubicacionDAO.guardar(this.dojo);
         this.ubicacionDAO.guardar(this.dojo1);
         this.ubicacionDAO.guardar(this.dojo2);
-    });
+    }, this.hibernateTransaction);
         run(() -> {
             this.entrenadores = leaderboardService.campeones();
-            });
+            }, this.hibernateTransaction);
         List<String> rto = entrenadores.stream().map(Entrenador::getNombre).collect(Collectors.toList());
         List<String> rtoEsperado =  new ArrayList<String>();
         rtoEsperado.add(ash.getNombre());
@@ -147,7 +151,7 @@ public class LeaderboardServiceImplTest {
     public void testEspecieLiderFails(){
         run(() -> {
             leaderboardService.especieLider();
-        });
+        }, this.hibernateTransaction);
     }
 
     @Test
@@ -175,10 +179,10 @@ public class LeaderboardServiceImplTest {
             this.ubicacionDAO.guardar(this.dojo);
             this.ubicacionDAO.guardar(this.dojo1);
             this.ubicacionDAO.guardar(this.dojo2);
-        });
+        }, this.hibernateTransaction);
         run(() -> {
             especieLider = leaderboardService.especieLider();
-        });
+        }, this.hibernateTransaction);
         assertEquals(this.charizard.getNombre(), especieLider.getNombre());
     }
 
@@ -188,7 +192,7 @@ public class LeaderboardServiceImplTest {
     public void testLideresDeUnModeloVacioEsUnaListaVacia(){
         run(() -> {
             entrenadores = leaderboardService.lideres();
-        });
+        }, this.hibernateTransaction);
         assertEquals(entrenadores, new ArrayList<Entrenador>());
     }
 
@@ -219,10 +223,10 @@ public class LeaderboardServiceImplTest {
             this.ubicacionDAO.guardar(this.dojo);
             this.ubicacionDAO.guardar(this.dojo1);
             this.ubicacionDAO.guardar(this.dojo2);
-        });
+        }, this.hibernateTransaction);
         run(() -> {
             entrenadores = leaderboardService.lideres();
-        });
+        }, this.hibernateTransaction);
         List<String> rto = entrenadores.stream().map(Entrenador::getNombre).collect(Collectors.toList());
         List<String> rtoEsperado =  new ArrayList<String>();
         rtoEsperado.add(misty.getNombre());

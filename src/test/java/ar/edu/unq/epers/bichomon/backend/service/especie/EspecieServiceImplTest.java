@@ -1,6 +1,5 @@
 package ar.edu.unq.epers.bichomon.backend.service.especie;
 
-import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.NivelDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.*;
@@ -12,6 +11,8 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.Transaction;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.HibernateTransaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -31,6 +32,7 @@ public class EspecieServiceImplTest {
     Especie especieRecuperada;
     List<Especie> especies;
     Bicho bichoCreado;
+    Transaction hibernateTransaction = new HibernateTransaction();
 
     @Before
     public void SetUp(){
@@ -46,7 +48,7 @@ public class EspecieServiceImplTest {
 
     @After
     public void limpiarEscenario(){
-        run(SessionFactoryProvider::destroy);
+        run(SessionFactoryProvider::destroy, this.hibernateTransaction);
     }
 
     @Test
@@ -55,7 +57,7 @@ public class EspecieServiceImplTest {
         run(() -> {
                 especieService.crearEspecie(especie1);
                 especieRecuperada = especieService.getEspecie("especie1");
-        });
+        }, this.hibernateTransaction);
 
         assertEquals(especie1.getNombre(),especieRecuperada.getNombre());
         assertEquals(especie1.getEnergiaInicial(), especieRecuperada.getEnergiaInicial());
@@ -69,7 +71,7 @@ public class EspecieServiceImplTest {
 
         run(() -> {
             especieRecuperada = especieService.getEspecie("especie1");
-        });
+        }, this.hibernateTransaction);
 
     }
 
@@ -81,7 +83,7 @@ public class EspecieServiceImplTest {
         run(() -> {
             especieService.crearEspecie(especie1);
             especies = especieService.getAllEspecies();
-        });
+        }, this.hibernateTransaction);
 
         assertEquals(especies.size(),1);
 
@@ -93,14 +95,14 @@ public class EspecieServiceImplTest {
         run(() -> {
             especieService.crearEspecie(especie1);
             especieRecuperada = especieService.getEspecie("especie1");
-        });
+        }, this.hibernateTransaction);
 
         assertEquals(especieRecuperada.getCantidadBichos(),0);
 
         run(() -> {
            bichoCreado = especieService.crearBicho("especie1");
            especieRecuperada = especieService.getEspecie("especie1");
-        });
+        }, this.hibernateTransaction);
 
         assertEquals(especieRecuperada.getCantidadBichos(),1);
         assertEquals(bichoCreado.getEspecie().getNombre(), "especie1");
@@ -121,11 +123,11 @@ public class EspecieServiceImplTest {
             nivelDAO.guardar(nivel);
             bichoDAO.guardar(bicho1);
             entrenadorDAO.guardar(entrenador1);
-        });
+        }, this.hibernateTransaction);
 
         run(() -> {
             especies = especieService.populares();
-        });
+        }, this.hibernateTransaction);
 
         assertEquals(especies.size(),1);
         assertEquals(especies.get(0),especie1);
@@ -144,11 +146,11 @@ public class EspecieServiceImplTest {
             especieService.crearEspecie(especie1);
             bichoDAO.guardar(bicho1);
             guarderiaDAO.guardar(guarderia1);
-        });
+        }, this.hibernateTransaction);
 
         run(() -> {
             especies = especieService.impopulares();
-        });
+        }, this.hibernateTransaction);
 
         assertEquals(especies.size(),1);
         assertEquals(especies.get(0),especie1);

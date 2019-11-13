@@ -3,6 +3,7 @@ package ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate;
 import ar.edu.unq.epers.bichomon.backend.dao.EspecieDAO;
 import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.SessionatorType;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -20,7 +21,7 @@ public class HibernateEspecieDAO extends HibernateDAO<Especie> implements Especi
     }
 
     public Especie recuperar(String nombreEspecie) {
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.HIBERNATE);
         String hql = "from Especie e where e.nombre = :nombre";
 
         Query<Especie> query = session.createQuery(hql, Especie.class);
@@ -35,7 +36,7 @@ public class HibernateEspecieDAO extends HibernateDAO<Especie> implements Especi
     }
 
     public List<Especie> recuperarTodos() {
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.HIBERNATE);
 
         String hql = "from Especie e "
                 + "order by e.nombre asc";
@@ -46,7 +47,7 @@ public class HibernateEspecieDAO extends HibernateDAO<Especie> implements Especi
 
     @Override
     public List<Especie> getMasPopulares() {
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.HIBERNATE);
 
         String hql = "select especie from Entrenador entrenador join entrenador.inventarioDeBichos bicho join " +
                 "bicho.especie especie group by especie order by count(bicho)";
@@ -58,7 +59,7 @@ public class HibernateEspecieDAO extends HibernateDAO<Especie> implements Especi
 
     @Override
     public List<Especie> getMasImpopulares() {
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.HIBERNATE);
 
         String hql = "select especie from Guarderia guarderia join guarderia.bichosAbandonados bicho join " +
                 "bicho.especie especie group by especie order by count(bicho)";

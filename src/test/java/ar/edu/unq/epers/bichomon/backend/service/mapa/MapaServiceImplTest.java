@@ -17,6 +17,8 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeo
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.EntrenadorInexistente;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.impl.MapaServiceImpl;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.Transaction;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.HibernateTransaction;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,6 +47,7 @@ public class MapaServiceImplTest {
     private Especie picachu, charizard, squirtle;
     private AbstractNivel nivel;
     private NivelDAO nivelDAO;
+    private Transaction hibernateTransaction = new HibernateTransaction();
 
     @Before
     public void crearModelo(){
@@ -54,13 +57,13 @@ public class MapaServiceImplTest {
             this.crearEspecies();
             this.crearBichos();
             this.crearUbicaciones();
-        });
+        }, this.hibernateTransaction);
         this.mapaService = new MapaServiceImpl(entrenadorDAO, ubicacionDAO);
     }
 
     @After
     public void limpiarEscenario(){
-        run(SessionFactoryProvider::destroy);
+        run(SessionFactoryProvider::destroy, this.hibernateTransaction);
     }
 
     @Test(expected = EntrenadorInexistente.class)
@@ -84,11 +87,11 @@ public class MapaServiceImplTest {
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar(this.ash.getNombre());
             this.ashRecuperado.setUbicacionActual(this.dojo);
-        });
+        }, this.hibernateTransaction);
         this.mapaService.mover(this.ash.getNombre(), this.guarderia.getNombre());
         run(() -> {
             this.ashRecuperado = this.entrenadorDAO.recuperar(this.ash.getNombre());
-        });
+        }, this.hibernateTransaction);
         assertEquals(this.guarderia, this.ashRecuperado.getUbicacionActual());
     }
 
@@ -127,12 +130,12 @@ public class MapaServiceImplTest {
         run(() -> {
             this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar(this.dojo.getNombre());
             this.dojoRecuperado.setCampeonActual(this.bichoPicachu);
-        });
+        }, this.hibernateTransaction);
         assertEquals(this.bichoPicachu, this.mapaService.campeon(this.dojo.getNombre()));
         run(() -> {
             this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar(this.dojo.getNombre());
             this.dojoRecuperado.setCampeonActual(this.bichoCharizard);
-        });
+        }, this.hibernateTransaction);
         assertEquals(this.bichoCharizard, this.mapaService.campeon(this.dojo.getNombre()));
     }
 
@@ -160,11 +163,11 @@ public class MapaServiceImplTest {
         run(() -> {
             this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar(this.dojo.getId());
             this.dojoRecuperado.setCampeonActual(bicho);
-        });
+        }, this.hibernateTransaction);
         Campeon campeonActual = this.dojoRecuperado.getCampeonActual();
         campeonActual.setFechaDeInicio(fechaInicio);
         campeonActual.setFechaDeFin(fechaFin);
-        run(() -> this.campeonDAO.guardar(campeonActual));
+        run(() -> this.campeonDAO.guardar(campeonActual), this.hibernateTransaction);
     }
 
     private void crearDAOs() {

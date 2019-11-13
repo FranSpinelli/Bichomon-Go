@@ -9,6 +9,7 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.UbicacionInexistente;
 import ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.SessionatorType;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -22,7 +23,7 @@ public class HibernateUbicacionDAO extends HibernateDAO<Ubicacion> implements Ub
 
     @Override
     public Ubicacion recuperar(String ubicacion) {
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.HIBERNATE);
         String hql = "from Ubicacion u where u.nombre = :nombre";
 
         Query<Ubicacion> query = session.createQuery(hql, Ubicacion.class);
@@ -41,7 +42,7 @@ public class HibernateUbicacionDAO extends HibernateDAO<Ubicacion> implements Ub
         if(this.recuperar(ubicacion) == null){
             throw new UbicacionInexistente("La ubicacion no existe");
         }
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.HIBERNATE);
 
         String hql = "select count(entrenador) from Entrenador entrenador join entrenador.ubicacionActual ubicacion where ubicacion.nombre = :nombre";
 
@@ -57,7 +58,7 @@ public class HibernateUbicacionDAO extends HibernateDAO<Ubicacion> implements Ub
         if(dojoActual == null){
             throw new UbicacionInexistente("La ubicacion no existe");
         }
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.HIBERNATE);
 
        String hql = "select bicho from Campeon campeon join campeon.bicho bicho " +
                "where campeon.id in (select campeon.id from Dojo ubicacion join ubicacion.campeonesDelPasado campeon where ubicacion.nombre = :nombre) " +

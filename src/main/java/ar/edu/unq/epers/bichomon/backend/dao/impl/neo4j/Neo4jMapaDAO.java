@@ -2,21 +2,22 @@ package ar.edu.unq.epers.bichomon.backend.dao.impl.neo4j;
 
 import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
+import ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.SessionatorType;
 import org.neo4j.driver.v1.*;
 
-import java.lang.reflect.Array;
 import java.util.List;
 
 public class Neo4jMapaDAO {
 
-    private Driver driver;
+    //private Driver driver;
 
-    public Neo4jMapaDAO(){
+    /*public Neo4jMapaDAO(){
         this.driver = GraphDatabase.driver( "bolt://localhost:7687", AuthTokens.basic( "neo4j", "root" ) );
     }
-
+*/
     public void create(Ubicacion ubicacion) {
-        Session session = this.driver.session();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.NEO4J); //this.driver.session();
 
         try {
             //CREATE (n:Ubicacion {name: {elNombre}})
@@ -28,7 +29,7 @@ public class Neo4jMapaDAO {
     }
 
     public void crearRelacionEstaConectadaPor(Ubicacion origen, Ubicacion destino, TipoCamino ruta) {
-        Session session = this.driver.session();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.NEO4J);
 
         try {
             String query = "MATCH (origen:Ubicacion  {name: {nombreOrigen}}) " +
@@ -47,7 +48,7 @@ public class Neo4jMapaDAO {
 
 
     public int caminoMasCorto(String origenNombre, String destinoNombre) {
-        Session session = this.driver.session();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.NEO4J);
 
         try {
             String query = "MATCH p=(a:Ubicacion {name: nombreOrigen})-[r:CONNECTS*..10]->(b:Ubicacion {name:nombreDestino}) " +
@@ -65,7 +66,7 @@ public class Neo4jMapaDAO {
         }
     }
     public List<String> conectados(String origenNombre, String tipoCamino) {
-        Session session = this.driver.session();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.NEO4J);
         try {
             String query = "MATCH (origen:Ubicacion {name: nombreOrigen}) " +
                     "MATCH (origen)-[:CONECTADA_CON {tipoDeConeccion: tipoConeccion]->(destino) " +
@@ -79,7 +80,7 @@ public class Neo4jMapaDAO {
         }
     }
     public int caminoDeUno(String origenNombre, String destinoNombre) {
-        Session session = this.driver.session();
+        Session session = (Session) TransactionRunner.getCurrentSession(SessionatorType.NEO4J);
         try {
             String query = "MATCH (origen:Ubicacion {name: nombreOrigen}) " +
                     "MATCH (destino:Ubicacion {name: nombreDestino}) " +
