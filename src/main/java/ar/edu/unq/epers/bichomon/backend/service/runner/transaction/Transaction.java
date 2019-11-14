@@ -10,7 +10,7 @@ public interface Transaction {
 
     void close();
 
-    Object getCurrentSession(SessionatorType sessionatorType);
+    Object getCurrentSession(TransactionType transactionType);
 
-    SessionatorType getSessionatorType();
+    TransactionType getTransactionType();
 }

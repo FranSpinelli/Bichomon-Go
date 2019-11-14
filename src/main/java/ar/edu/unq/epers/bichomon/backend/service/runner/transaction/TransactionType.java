@@ -1,6 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.service.runner.transaction;
 
-public enum SessionatorType {
+public enum TransactionType {
     HIBERNATE,
     NEO4J
 }

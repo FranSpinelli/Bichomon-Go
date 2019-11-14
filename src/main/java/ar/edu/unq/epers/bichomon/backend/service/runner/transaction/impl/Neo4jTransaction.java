@@ -1,7 +1,7 @@
 package ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl;
 
 import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.Transaction;
-import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.SessionatorType;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.TransactionType;
 import org.neo4j.driver.v1.AuthTokens;
 import org.neo4j.driver.v1.Driver;
 import org.neo4j.driver.v1.GraphDatabase;
@@ -42,8 +42,8 @@ public class Neo4jTransaction extends Sessionator implements Transaction {
     }
 
     @Override
-    public SessionatorType getSessionatorType() {
-        return SessionatorType.NEO4J;
+    public TransactionType getTransactionType() {
+        return TransactionType.NEO4J;
     }
 
     @Override

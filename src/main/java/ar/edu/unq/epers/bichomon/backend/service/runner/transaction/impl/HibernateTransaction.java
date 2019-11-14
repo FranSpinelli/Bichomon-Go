@@ -2,7 +2,7 @@ package ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl;
 
 import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.Transaction;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
-import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.SessionatorType;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.TransactionType;
 import org.hibernate.Session;
 
 public class HibernateTransaction extends Sessionator implements Transaction {
@@ -36,8 +36,8 @@ public class HibernateTransaction extends Sessionator implements Transaction {
     }
 
     @Override
-    public SessionatorType getSessionatorType() {
-        return SessionatorType.HIBERNATE;
+    public TransactionType getTransactionType() {
+        return TransactionType.HIBERNATE;
     }
 
     @Override

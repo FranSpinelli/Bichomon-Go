@@ -1,21 +1,19 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.DueloHelper;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
-
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
-
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoAjeno;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichosInsuficientes;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.*;
 
 @Entity
 public class Entrenador {
@@ -175,4 +173,8 @@ public class Entrenador {
         return Objects.hash(id);
     }
 
+    public void mover(Ubicacion destino, Integer costo) {
+		this.gastarMonedas(costo);
+		this.setUbicacionActual(destino);
+    }
 }
