@@ -68,7 +68,7 @@ public class MapaServiceImplTest {
             this.crearEntrenadores();//Los entrenadores estan por defecto en 'PuebloPorDefecto'
             this.crearEspecies();
             this.crearBichos();
-        }, this.hibernateTransaction);
+        }, this.transactionManager.addTransaction(HIBERNATE).addTransaction(NEO4J));
         this.mapaService = new MapaServiceImpl(entrenadorDAO, ubicacionDAO, neo4jMapaDAO);
     }
 
