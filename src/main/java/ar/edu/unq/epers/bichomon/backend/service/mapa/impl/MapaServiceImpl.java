@@ -60,9 +60,12 @@ public class MapaServiceImpl implements MapaService {
 	}
 
 	@Override
-	public List<Ubicacion> conectados(String ubicacion, String tipoCamino) {
-		//TODO
-		return null;
+	public List<Ubicacion> conectados(String ubicacionOrigen, String tipoCamino) {
+		List<Ubicacion> ubicaciones = run(() -> {
+			List<String> nombreUbicaciones = this.neo4jMapaDAO.conectados(ubicacionOrigen, tipoCamino);
+			return this.getUbicaciones(nombreUbicaciones);
+		}, this.transactionManager.addTransaction(HIBERNATE).addTransaction(NEO4J));
+		return ubicaciones;
 	}
 
 	@Override
@@ -113,6 +116,11 @@ public class MapaServiceImpl implements MapaService {
 			throw new UbicacionInexistente("La ubicacion no existe");
 		}
 		return ubicacion;
+	}
+
+	private List<Ubicacion> getUbicaciones(List<String> nombreUbicaciones){
+
+		return this.ubicacionDAO.recuperarTodos(nombreUbicaciones);
 	}
 
 	private Integer getCosto(Supplier<Integer> calcularCosto) {

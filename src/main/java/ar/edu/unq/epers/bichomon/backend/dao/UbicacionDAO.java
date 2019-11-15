@@ -18,4 +18,6 @@ public interface UbicacionDAO {
     int cantidadEntrenadoresEn(String ubicacion);
 
     Bicho getCampeonHistorico(String dojo);
+
+    List<Ubicacion> recuperarTodos(List<String> nombreUbicaciones);
 }
