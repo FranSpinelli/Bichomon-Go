@@ -62,15 +62,23 @@ public class MapaServiceImpl implements MapaService {
 
 	@Override
 	public List<Ubicacion> conectados(String ubicacion, String tipoCamino) {
-		//TODO
-		return null;
+		return run(() -> {
+					this.getUbicacion(ubicacion);
+					return this.ubicacionDAO.recuperarTodos(this.neo4jMapaDAO.conectados(ubicacion,tipoCamino));
+				}
+		, this.transactionManager.addTransaction(HIBERNATE).addTransaction(NEO4J));
 	}
 
 	@Override
 	public void crearUbicacion(Ubicacion ubicacion) {
 		run(() -> {
-			this.ubicacionDAO.guardar(ubicacion);
-			this.neo4jMapaDAO.create(ubicacion);
+			try{
+				this.ubicacionDAO.guardar(ubicacion);
+				this.neo4jMapaDAO.create(ubicacion);
+			}catch(RuntimeException e){
+				throw new CreacionException("No se pudo crear la ubicacion");
+			}
+
 		}, this.transactionManager.addTransaction(HIBERNATE).addTransaction(NEO4J));
 	}
 

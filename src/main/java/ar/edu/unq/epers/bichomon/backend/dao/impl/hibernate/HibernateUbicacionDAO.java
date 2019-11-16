@@ -11,6 +11,8 @@ import org.hibernate.Session;
 import org.hibernate.query.Query;
 
 import javax.persistence.NoResultException;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class HibernateUbicacionDAO extends HibernateDAO<Ubicacion> implements UbicacionDAO {
     public HibernateUbicacionDAO() {
@@ -71,5 +73,8 @@ public class HibernateUbicacionDAO extends HibernateDAO<Ubicacion> implements Ub
         }
     }
 
-    //TODO: metodo public List<Ubicacion> recuperarTodos(List<String>)
+    @Override
+    public List<Ubicacion> recuperarTodos(List<String> ubicaciones){
+        return ubicaciones.stream().map(ubicacion -> this.recuperar(ubicacion)).collect(Collectors.toList());
+    }
 }

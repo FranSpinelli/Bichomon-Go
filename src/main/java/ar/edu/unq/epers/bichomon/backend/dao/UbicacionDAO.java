@@ -2,7 +2,6 @@ package ar.edu.unq.epers.bichomon.backend.dao;
 
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 
 import java.util.List;
 
@@ -18,4 +17,6 @@ public interface UbicacionDAO {
     int cantidadEntrenadoresEn(String ubicacion);
 
     Bicho getCampeonHistorico(String dojo);
+
+    List<Ubicacion> recuperarTodos(List<String> ubicaciones);
 }
