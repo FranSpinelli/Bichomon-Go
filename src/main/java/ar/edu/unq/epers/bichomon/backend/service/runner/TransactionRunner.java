@@ -1,27 +1,47 @@
 package ar.edu.unq.epers.bichomon.backend.service.runner;
 
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.TransactionType;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.Transaction;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.HibernateTransaction;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.Neo4jTransaction;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.TransactionManager;
 
+import java.util.Arrays;
 import java.util.function.Supplier;
 
-public class TransactionRunner {
-    private static Session session;
+//import org.hibernate.Transaction;
 
-    public static void run(Runnable bloque) {
+public class TransactionRunner {
+    private final static TransactionManager tx = new TransactionManager()
+            .addPossibleTransaction(new HibernateTransaction())
+            .addPossibleTransaction(new Neo4jTransaction());
+    private static Boolean isRunning = false;
+
+    public static void run(Runnable bloque, TransactionType... tipos) {
+        run(()->{
+                    bloque.run();
+                    return null;
+                },
+                tipos);
+    }
+
+    public static void run(Runnable bloque, Transaction transaction) {
         run(()->{
             bloque.run();
             return null;
-        });
+        },
+            transaction);
     }
 
+    public  static <T> T run(Supplier<T> bloque, TransactionType... tipos) {
+        if(isRunning){
+            return  bloque.get();
+        }
 
-    public static <T> T run(Supplier<T> bloque) {
-        Transaction tx = null;
-
+        Arrays.stream(tipos).forEach(transactionType -> tx.addTransaction(transactionType));
         try {
-            session = SessionFactoryProvider.getInstance().createSession();
-            tx = session.beginTransaction();
+            isRunning = true;
+            tx.begin();
 
             //codigo de negocio
             T resultado = bloque.get();
@@ -31,24 +51,19 @@ public class TransactionRunner {
         } catch (RuntimeException e) {
             //solamente puedo cerrar la transaccion si fue abierta antes,
             //puede haberse roto el metodo ANTES de abrir una transaccion
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-            }
+            tx.rollback();
             throw e;
         } finally {
-            if (session != null) {
-                session.close();
-                session = null;
-            }
+            tx.close();
+            isRunning = false;
         }
     }
 
-    public static Session getCurrentSession() {
-        if (session == null) {
-            throw new RuntimeException("No hay ninguna session en el contexto");
-        }
-        return session;
+    public  static <T> T run(Supplier<T> bloque, Transaction transaction) {
+        return run(bloque, TransactionType.HIBERNATE, TransactionType.NEO4J);
     }
 
-
+    public static Object getCurrentSession(TransactionType transactionType) {
+        return tx.getCurrentSession(transactionType);
+    }
 }

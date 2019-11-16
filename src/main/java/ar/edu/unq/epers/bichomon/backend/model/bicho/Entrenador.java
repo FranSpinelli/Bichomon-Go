@@ -1,21 +1,19 @@
 package ar.edu.unq.epers.bichomon.backend.model.bicho;
 
 
+import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.DueloHelper;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Estrategia;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
-
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
-
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoAjeno;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichosInsuficientes;
 import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.FetchMode;
 
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
-import javax.persistence.*;
 
 @Entity
 public class Entrenador {
@@ -26,6 +24,7 @@ public class Entrenador {
 	@Column(unique = true)
 	private String nombre;
 	private int xp;
+	private  int cantidadDeMonedas;
 	@OneToMany(mappedBy = "entrenador", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@Fetch(FetchMode.SUBSELECT)
 	private Set<Bicho> inventarioDeBichos = new HashSet<>();
@@ -41,7 +40,7 @@ public class Entrenador {
 		this.inventarioDeBichos = new HashSet();
 		this.xp = 0;
 		this.nivel = nivel;
-		/* todo: falta ver como setear la ubicacion */
+		this.cantidadDeMonedas = 0;
 	}
 
 	public int getId() {
@@ -145,6 +144,22 @@ public class Entrenador {
 		return ubicacion.equals(this.ubicacionActual);
 	}
 
+	public int getCantidadDeMonedas(){
+		return this.cantidadDeMonedas;
+	}
+
+	public void addMonedas(int cantDeMonedas){
+		this.cantidadDeMonedas += cantDeMonedas;
+	}
+
+	public void gastarMonedas(int cantDeMonedasAGastar){
+		if(this.cantidadDeMonedas - cantDeMonedasAGastar < 0){
+			throw new MonedasInsuficientesException("Monedas actuales Insuficientes");
+		}else{
+			cantidadDeMonedas -= cantDeMonedasAGastar;
+		}
+	}
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -158,4 +173,8 @@ public class Entrenador {
         return Objects.hash(id);
     }
 
+    public void mover(Ubicacion destino, Integer costo) {
+		this.gastarMonedas(costo);
+		this.setUbicacionActual(destino);
+    }
 }

@@ -11,7 +11,7 @@ import java.util.Set;
 
 @Entity
 public class Guarderia extends Ubicacion{
-    @OneToMany(fetch = FetchType.EAGER)//TODO: ¿Como implementar lazy?
+    @OneToMany(fetch = FetchType.EAGER)
     private Set<Bicho> bichosAbandonados;
 
     public Guarderia(String nombre){

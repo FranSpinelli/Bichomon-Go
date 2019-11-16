@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.service.runner;
 
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.TransactionType;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -20,7 +21,7 @@ public class SessionFactoryProvider {
     }
 
     public static void destroy() {
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(TransactionType.HIBERNATE);
         List tablas = session.createNativeQuery("show tables").getResultList();
         session.createNativeQuery("SET FOREIGN_KEY_CHECKS=0;").executeUpdate();
         tablas.forEach(tabla ->{

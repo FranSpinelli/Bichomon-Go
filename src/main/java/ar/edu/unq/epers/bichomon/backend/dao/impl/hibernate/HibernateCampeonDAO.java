@@ -6,6 +6,7 @@ import ar.edu.unq.epers.bichomon.backend.model.especie.Especie;
 import ar.edu.unq.epers.bichomon.backend.service.especie.NullEspecieLeaderException;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.TransactionType;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
@@ -19,7 +20,7 @@ public class HibernateCampeonDAO extends HibernateDAO<Campeon> implements Campeo
     }
 
     public List<Entrenador> campeones(){
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(TransactionType.HIBERNATE);
         String hql = "select distinct campeon.bicho.entrenador from Campeon campeon where campeon.fechaDeFin = null " +
                 "group by campeon.bicho.entrenador " +
                 "order by campeon.fechaDeInicio desc";
@@ -36,7 +37,7 @@ public class HibernateCampeonDAO extends HibernateDAO<Campeon> implements Campeo
     }
 
     public Especie especieLider() {
-        Session session = TransactionRunner.getCurrentSession();
+        Session session = (Session) TransactionRunner.getCurrentSession(TransactionType.HIBERNATE);
         String hql = "select laEspecie from Campeon as lider join lider.bicho as pokemon join pokemon.especie as laEspecie" +
                 "        where lider.fechaDeFin = null " +
                 "        group by laEspecie" +
