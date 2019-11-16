@@ -48,6 +48,6 @@ public class Neo4jTransaction extends Sessionator implements Transaction {
 
     @Override
     protected Object getSession() {
-        return this.session;
+        return this.tx;
     }
 }

@@ -64,12 +64,12 @@ public class MapaServiceImplTest {
     public void crearModelo(){
         run(() -> {
             this.crearDAOs();
+            this.mapaService = new MapaServiceImpl(entrenadorDAO, ubicacionDAO, neo4jMapaDAO);
             this.crearUbicaciones();
             this.crearEntrenadores();//Los entrenadores estan por defecto en 'PuebloPorDefecto'
             this.crearEspecies();
             this.crearBichos();
-        }, this.transactionManager.addTransaction(HIBERNATE).addTransaction(NEO4J));
-        this.mapaService = new MapaServiceImpl(entrenadorDAO, ubicacionDAO, neo4jMapaDAO);
+        }, HIBERNATE, NEO4J);
     }
 
     @After
@@ -78,7 +78,7 @@ public class MapaServiceImplTest {
             SessionFactoryProvider.destroy();
             this.neo4jMapaDAO.deleteAll();
         }
-        , this.transactionManager.addTransaction(HIBERNATE).addTransaction(NEO4J));
+        , HIBERNATE, NEO4J);
     }
 
     @Test(expected = EntrenadorInexistente.class)
@@ -275,49 +275,49 @@ public class MapaServiceImplTest {
     }
 
     private void conectarUbicaciones(){
-        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.dojo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.pueblo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.guarderia.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.puebloOrigen.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.dojo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.pueblo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.guarderia.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.puebloOrigen.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.dojo.getNombre(), this.guarderia.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.dojo.getNombre(), this.pueblo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.guarderia.getNombre(), this.pueblo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.guarderia.getNombre(), this.dojo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.pueblo.getNombre(), this.dojo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.pueblo.getNombre(), this.guarderia.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.dojo.getNombre(), this.guarderia.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.dojo.getNombre(), this.pueblo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.guarderia.getNombre(), this.pueblo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.guarderia.getNombre(), this.dojo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.pueblo.getNombre(), this.dojo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.pueblo.getNombre(), this.guarderia.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia4.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia2.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.dojo2.getNombre(), new Aereo().getName());
-        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia1.getNombre(), new Maritimo().getName());
-        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.puebloSinSalida.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia4.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia2.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.dojo2.getNombre(), new Aereo());
+        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia1.getNombre(), new Maritimo());
+        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.puebloSinSalida.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.guarderia4.getNombre(), this.dojo4.getNombre(), new Maritimo().getName());
+        this.mapaService.conectar(this.guarderia4.getNombre(), this.dojo4.getNombre(), new Maritimo());
 
-        this.mapaService.conectar(this.dojo4.getNombre(), this.pueblo1.getNombre(), new Aereo().getName());
+        this.mapaService.conectar(this.dojo4.getNombre(), this.pueblo1.getNombre(), new Aereo());
 
-        this.mapaService.conectar(this.pueblo1.getNombre(), this.puebloDestino.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.pueblo1.getNombre(), this.puebloDestino.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.guarderia2.getNombre(), this.dojo3.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.guarderia2.getNombre(), this.dojo3.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.dojo3.getNombre(), this.guarderia3.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.dojo3.getNombre(), this.guarderia3.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.guarderia3.getNombre(), this.puebloDestino.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.guarderia3.getNombre(), this.dojo2.getNombre(), new Aereo().getName());
+        this.mapaService.conectar(this.guarderia3.getNombre(), this.puebloDestino.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.guarderia3.getNombre(), this.dojo2.getNombre(), new Aereo());
 
-        this.mapaService.conectar(this.puebloDestino.getNombre(), this.guarderia3.getNombre(), new Maritimo().getName());
-        this.mapaService.conectar(this.puebloDestino.getNombre(), this.dojo1.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloDestino.getNombre(), this.puebloSinSalida.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.puebloDestino.getNombre(), this.guarderia3.getNombre(), new Maritimo());
+        this.mapaService.conectar(this.puebloDestino.getNombre(), this.dojo1.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloDestino.getNombre(), this.puebloSinSalida.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.dojo2.getNombre(), this.puebloDestino.getNombre(), new Aereo().getName());
-        this.mapaService.conectar(this.dojo2.getNombre(), this.puebloOrigen.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.dojo2.getNombre(), this.puebloDestino.getNombre(), new Aereo());
+        this.mapaService.conectar(this.dojo2.getNombre(), this.puebloOrigen.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.guarderia1.getNombre(), this.puebloOrigen.getNombre(), new Aereo().getName());
-        this.mapaService.conectar(this.guarderia1.getNombre(), this.dojo1.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.guarderia1.getNombre(), this.puebloOrigen.getNombre(), new Aereo());
+        this.mapaService.conectar(this.guarderia1.getNombre(), this.dojo1.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.dojo1.getNombre(), this.guarderia1.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.dojo1.getNombre(), this.puebloDestino.getNombre(), new Maritimo().getName());
+        this.mapaService.conectar(this.dojo1.getNombre(), this.guarderia1.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.dojo1.getNombre(), this.puebloDestino.getNombre(), new Maritimo());
 
     }
 

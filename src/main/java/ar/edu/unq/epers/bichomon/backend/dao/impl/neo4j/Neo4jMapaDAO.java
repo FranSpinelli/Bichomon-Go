@@ -11,7 +11,7 @@ import java.util.List;
 public class Neo4jMapaDAO {
 
     public void create(Ubicacion ubicacion) {
-        Session session = (Session) TransactionRunner.getCurrentSession(TransactionType.NEO4J); //this.driver.session();
+        Transaction session = (Transaction) TransactionRunner.getCurrentSession(TransactionType.NEO4J); //this.driver.session();
 
         //CREATE (n:Ubicacion {name: {elNombre}})
         String query = "MERGE (n:Ubicacion {name: {elNombre}}) ";
@@ -19,7 +19,7 @@ public class Neo4jMapaDAO {
     }
 
     public void conectar(Ubicacion origen, Ubicacion destino, TipoCamino tipoCamino) {
-        Session session = (Session) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
+        Transaction session = (Transaction) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
 
         String query = "MATCH (origen:Ubicacion  {name: {nombreOrigen}}) " +
                 "MATCH (destino:Ubicacion {name: {nombreDestino}}) " +
@@ -33,7 +33,7 @@ public class Neo4jMapaDAO {
 
 
     public Integer costoCaminoMasCorto(String origenNombre, String destinoNombre) {
-        Session session = (Session) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
+        Transaction session = (Transaction) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
         String query = "MATCH p=shortestPath((origen:Ubicacion {nombre:{nombreOrigen}})-[*]->(destino:Ubicacion {nombre:{nombreDestino}})) " +
                 "RETURN reduce(costo=0, r in relationships(p): costo + r.precio) as costo";
                 /*"MATCH p=(a:Ubicacion {name: nombreOrigen})-[r:CONNECTS*..10]->(b:Ubicacion {name:nombreDestino}) " +
@@ -49,7 +49,7 @@ public class Neo4jMapaDAO {
     }
 
     public List<String> conectados(String nombreOrigen, String tipoCamino) {
-        Session session = (Session) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
+        Transaction session = (Transaction) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
 
         String query = "MATCH (origen:Ubicacion {name: {nombreOrigen}}) " +
                 "MATCH (origen)-[:CONECTADA_CON {tipoDeCamino: {tipoCamino}]->(destino) " +
@@ -61,7 +61,7 @@ public class Neo4jMapaDAO {
     }
 
     public int caminoDeUno(String nombreOrigen, String nombreDestino) {
-        Session session = (Session) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
+        Transaction session = (Transaction) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
 
         String query = "MATCH (origen:Ubicacion {name: {nombreOrigen}}) " +
                 "MATCH (destino:Ubicacion {name: {nombreDestino}}) " +
@@ -73,10 +73,10 @@ public class Neo4jMapaDAO {
     }
 
     public Integer costoCaminoMasBarato(Ubicacion origen, Ubicacion destino) {
-        Session session = (Session) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
+        Transaction session = (Transaction) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
 
         String query = "MATCH p=(origen:Ubicacion {nombre:{nombreOrigen}})-[*]->(destino:Ubicacion {nombre:{nombreDestino}}) " +
-                "RETURN reduce(costo=0, r in relationships(p): costo + r.precio) as costo" +
+                "RETURN reduce(costo=0, r in relationships(p): costo + r.precio) as costo " +
                 "ORDER BY costo ASC " +
                 "LIMIT 1";
         StatementResult result = session.run(query, Values.parameters("nombreOrigen", origen.getNombre(),
@@ -85,8 +85,7 @@ public class Neo4jMapaDAO {
     }
 
     public void deleteAll() {
-        Session session = (Session) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
-
+        Transaction session = (Transaction) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
         String query = "MATCH (n) DETACH DELETE n";
         session.run(query);
     }

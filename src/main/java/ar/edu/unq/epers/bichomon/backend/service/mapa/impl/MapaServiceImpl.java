@@ -7,6 +7,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.impl.neo4j.Neo4jMapaDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.MonedasInsuficientesException;
+import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.EntrenadorInexistente;
@@ -67,12 +68,20 @@ public class MapaServiceImpl implements MapaService {
 
 	@Override
 	public void crearUbicacion(Ubicacion ubicacion) {
-		//TODO
+		run(() -> {
+			this.ubicacionDAO.guardar(ubicacion);
+			this.neo4jMapaDAO.create(ubicacion);
+		}, this.transactionManager.addTransaction(HIBERNATE).addTransaction(NEO4J));
 	}
 
 	@Override
-	public void conectar(String ubicacion1, String ubicacion2, String tipoCamino) {
-		//TODO
+	public void conectar(String ubicacion1, String ubicacion2, TipoCamino tipoCamino) {
+		run(() -> {
+			Ubicacion ubicacionOrigen= this.getUbicacion(ubicacion1);
+			Ubicacion ubicacionDestino= this.getUbicacion(ubicacion2);
+
+			this.neo4jMapaDAO.conectar(ubicacionOrigen, ubicacionDestino, tipoCamino);
+		}, this.transactionManager.addTransaction(HIBERNATE).addTransaction(NEO4J));
 	}
 
 	@Override
