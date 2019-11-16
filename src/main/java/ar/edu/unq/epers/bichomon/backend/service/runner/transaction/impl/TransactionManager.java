@@ -55,6 +55,7 @@ public class TransactionManager implements Transaction {
     }
 
     public Object getCurrentSession(TransactionType transactionType){
-        return txsActuales.stream().filter(tx -> tx.getTransactionType() == transactionType).findFirst().get().getCurrentSession(transactionType);
+        Object x = txsActuales.stream().filter(tx -> tx.getTransactionType() == transactionType).findFirst().get().getCurrentSession(transactionType);
+        return  x;
     }
 }

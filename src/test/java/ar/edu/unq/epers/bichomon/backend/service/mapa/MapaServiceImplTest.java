@@ -20,6 +20,7 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.EntrenadorInexistente;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.impl.CaminoMuyCostoso;
+import ar.edu.unq.epers.bichomon.backend.service.mapa.impl.CreacionException;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.impl.MapaServiceImpl;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.impl.UbicacionMuyLejana;
 import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
@@ -33,13 +34,14 @@ import org.junit.Test;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static ar.edu.unq.epers.bichomon.backend.model.especie.TipoBicho.*;
 import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
 import static ar.edu.unq.epers.bichomon.backend.service.runner.transaction.TransactionType.HIBERNATE;
 import static ar.edu.unq.epers.bichomon.backend.service.runner.transaction.TransactionType.NEO4J;
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.*;
 
 public class MapaServiceImplTest {
     private EntrenadorDAO entrenadorDAO;
@@ -64,12 +66,12 @@ public class MapaServiceImplTest {
     public void crearModelo(){
         run(() -> {
             this.crearDAOs();
+            this.mapaService = new MapaServiceImpl(entrenadorDAO, ubicacionDAO, neo4jMapaDAO);
             this.crearUbicaciones();
             this.crearEntrenadores();//Los entrenadores estan por defecto en 'PuebloPorDefecto'
             this.crearEspecies();
             this.crearBichos();
-        }, this.transactionManager.addTransaction(HIBERNATE).addTransaction(NEO4J));
-        this.mapaService = new MapaServiceImpl(entrenadorDAO, ubicacionDAO, neo4jMapaDAO);
+        }, HIBERNATE, NEO4J);
     }
 
     @After
@@ -78,7 +80,7 @@ public class MapaServiceImplTest {
             SessionFactoryProvider.destroy();
             this.neo4jMapaDAO.deleteAll();
         }
-        , this.transactionManager.addTransaction(HIBERNATE).addTransaction(NEO4J));
+        , HIBERNATE, NEO4J);
     }
 
     @Test(expected = EntrenadorInexistente.class)
@@ -105,7 +107,10 @@ public class MapaServiceImplTest {
 
     @Test(expected = CaminoMuyCostoso.class)
     public void testMoverElEntrenadorNoPuedeCostearElCamino(){
-        this.ash.gastarMonedas(this.ash.getCantidadDeMonedas());
+        run(() -> {
+            this.ashRecuperado = this.entrenadorDAO.recuperar(this.ash.getNombre());
+            this.ashRecuperado.gastarMonedas(this.ashRecuperado.getCantidadDeMonedas());
+        }, this.hibernateTransaction);
         this.mapaService.mover(this.ash.getNombre(), this.puebloOrigen.getNombre());
     }
 
@@ -148,7 +153,10 @@ public class MapaServiceImplTest {
 
     @Test(expected = CaminoMuyCostoso.class)
     public void testMoverMasCortoElEntrenadorNoPuedeCostearElCamino(){
-        this.ash.gastarMonedas(this.ash.getCantidadDeMonedas());
+        run(() -> {
+            this.ashRecuperado = this.entrenadorDAO.recuperar(this.ash.getNombre());
+            this.ashRecuperado.gastarMonedas(this.ashRecuperado.getCantidadDeMonedas());
+        }, this.hibernateTransaction);
         this.mapaService.moverMasCorto(this.ash.getNombre(), this.puebloOrigen.getNombre());
     }
 
@@ -229,7 +237,63 @@ public class MapaServiceImplTest {
         assertEquals(this.bichoPicachu, this.mapaService.campeonHistorico(this.dojoRecuperado.getNombre()));
     }
 
+    @Test(expected = UbicacionInexistente.class)
+    public void testConectadosNoEncuentraUbicacion(){
+        this.mapaService.conectados("Pueblisho","Terrestre");
+    }
+
+    @Test
+    public void testConectados(){
+        assertListEquals(Arrays.asList(this.guarderia4, this.guarderia2, this.puebloSinSalida),
+                this.mapaService.conectados(this.puebloOrigen.getNombre(), new Terrestre().getName()));
+        assertListEquals(Arrays.asList(this.dojo2),
+                this.mapaService.conectados(this.puebloOrigen.getNombre(), new Aereo().getName()));
+        assertListEquals(Arrays.asList(this.guarderia1),
+                this.mapaService.conectados(this.puebloOrigen.getNombre(), new Maritimo().getName()));
+    }
+
+    @Test(expected = CreacionException.class)
+    public void testCrearUbicacionNoSePudoCrearLaUbicacion(){
+        Ubicacion ubicacion = new Dojo("Dojinho");
+        this.mapaService.crearUbicacion(ubicacion);
+        this.mapaService.crearUbicacion(ubicacion);
+    }
+
+    @Test
+    public void testCrearUbicacion(){
+        Dojo ubicacion = new Dojo("Dojinho");
+        this.mapaService.crearUbicacion(ubicacion);
+        String nombre = run(() -> {
+            this.dojoRecuperado = (Dojo) this.ubicacionDAO.recuperar("Dojinho");
+            return this.neo4jMapaDAO.recuperar("Dojinho");
+        }, HIBERNATE, NEO4J);
+        assertEquals(ubicacion, this.dojoRecuperado);
+        assertEquals(ubicacion.getNombre(), nombre);
+    }
+
+    @Test(expected = UbicacionInexistente.class)
+    public void testConectarLaPrimeraUbicacionNoExiste(){
+        this.mapaService.conectar("Dojinho", this.dojo.getNombre(), new Terrestre());
+    }
+
+    @Test(expected = UbicacionInexistente.class)
+    public void testConectarLaSegundaUbicacionNoExiste(){
+        this.mapaService.conectar(this.dojo.getNombre(), "Dojinho", new Terrestre());
+    }
+
+    @Test
+    public void testConectar(){
+        assertFalse(this.mapaService.conectados(this.dojo.getNombre(), new Terrestre().getName()).contains(this.puebloOrigen));
+        this.mapaService.conectar(this.dojo.getNombre(), this.puebloOrigen.getNombre(), new Terrestre());
+        assertTrue(this.mapaService.conectados(this.dojo.getNombre(), new Terrestre().getName()).contains(this.puebloOrigen));
+    }
+
 //PRIVATE FUCTIONS------------------------------------------------------------------------------------
+
+    private void assertListEquals(List<Ubicacion> ubicacionesEsperadas, List<Ubicacion> ubicacionesActuales){
+        assertTrue(ubicacionesEsperadas.containsAll(ubicacionesActuales));
+        assertTrue(ubicacionesActuales.containsAll(ubicacionesEsperadas));
+    }
 
     private void crearCampeonato(Bicho bicho, LocalDate fechaInicio, LocalDate fechaFin){
         run(() -> {
@@ -275,49 +339,49 @@ public class MapaServiceImplTest {
     }
 
     private void conectarUbicaciones(){
-        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.dojo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.pueblo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.guarderia.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.puebloOrigen.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.dojo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.pueblo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.guarderia.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloPorDefecto.getNombre(), this.puebloOrigen.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.dojo.getNombre(), this.guarderia.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.dojo.getNombre(), this.pueblo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.guarderia.getNombre(), this.pueblo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.guarderia.getNombre(), this.dojo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.pueblo.getNombre(), this.dojo.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.pueblo.getNombre(), this.guarderia.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.dojo.getNombre(), this.guarderia.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.dojo.getNombre(), this.pueblo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.guarderia.getNombre(), this.pueblo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.guarderia.getNombre(), this.dojo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.pueblo.getNombre(), this.dojo.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.pueblo.getNombre(), this.guarderia.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia4.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia2.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.dojo2.getNombre(), new Aereo().getName());
-        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia1.getNombre(), new Maritimo().getName());
-        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.puebloSinSalida.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia4.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia2.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.dojo2.getNombre(), new Aereo());
+        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.guarderia1.getNombre(), new Maritimo());
+        this.mapaService.conectar(this.puebloOrigen.getNombre(), this.puebloSinSalida.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.guarderia4.getNombre(), this.dojo4.getNombre(), new Maritimo().getName());
+        this.mapaService.conectar(this.guarderia4.getNombre(), this.dojo4.getNombre(), new Maritimo());
 
-        this.mapaService.conectar(this.dojo4.getNombre(), this.pueblo1.getNombre(), new Aereo().getName());
+        this.mapaService.conectar(this.dojo4.getNombre(), this.pueblo1.getNombre(), new Aereo());
 
-        this.mapaService.conectar(this.pueblo1.getNombre(), this.puebloDestino.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.pueblo1.getNombre(), this.puebloDestino.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.guarderia2.getNombre(), this.dojo3.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.guarderia2.getNombre(), this.dojo3.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.dojo3.getNombre(), this.guarderia3.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.dojo3.getNombre(), this.guarderia3.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.guarderia3.getNombre(), this.puebloDestino.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.guarderia3.getNombre(), this.dojo2.getNombre(), new Aereo().getName());
+        this.mapaService.conectar(this.guarderia3.getNombre(), this.puebloDestino.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.guarderia3.getNombre(), this.dojo2.getNombre(), new Aereo());
 
-        this.mapaService.conectar(this.puebloDestino.getNombre(), this.guarderia3.getNombre(), new Maritimo().getName());
-        this.mapaService.conectar(this.puebloDestino.getNombre(), this.dojo1.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.puebloDestino.getNombre(), this.puebloSinSalida.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.puebloDestino.getNombre(), this.guarderia3.getNombre(), new Maritimo());
+        this.mapaService.conectar(this.puebloDestino.getNombre(), this.dojo1.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.puebloDestino.getNombre(), this.puebloSinSalida.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.dojo2.getNombre(), this.puebloDestino.getNombre(), new Aereo().getName());
-        this.mapaService.conectar(this.dojo2.getNombre(), this.puebloOrigen.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.dojo2.getNombre(), this.puebloDestino.getNombre(), new Aereo());
+        this.mapaService.conectar(this.dojo2.getNombre(), this.puebloOrigen.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.guarderia1.getNombre(), this.puebloOrigen.getNombre(), new Aereo().getName());
-        this.mapaService.conectar(this.guarderia1.getNombre(), this.dojo1.getNombre(), new Terrestre().getName());
+        this.mapaService.conectar(this.guarderia1.getNombre(), this.puebloOrigen.getNombre(), new Aereo());
+        this.mapaService.conectar(this.guarderia1.getNombre(), this.dojo1.getNombre(), new Terrestre());
 
-        this.mapaService.conectar(this.dojo1.getNombre(), this.guarderia1.getNombre(), new Terrestre().getName());
-        this.mapaService.conectar(this.dojo1.getNombre(), this.puebloDestino.getNombre(), new Maritimo().getName());
+        this.mapaService.conectar(this.dojo1.getNombre(), this.guarderia1.getNombre(), new Terrestre());
+        this.mapaService.conectar(this.dojo1.getNombre(), this.puebloDestino.getNombre(), new Maritimo());
 
     }
 

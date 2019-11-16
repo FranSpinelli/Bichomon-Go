@@ -13,6 +13,7 @@ import org.hibernate.query.Query;
 import javax.persistence.NoResultException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class HibernateUbicacionDAO extends HibernateDAO<Ubicacion> implements UbicacionDAO {
     public HibernateUbicacionDAO() {
@@ -74,20 +75,7 @@ public class HibernateUbicacionDAO extends HibernateDAO<Ubicacion> implements Ub
     }
 
     @Override
-    public List<Ubicacion> recuperarTodos(List<String> nombreUbicaciones) {
-        Session session = (Session) TransactionRunner.getCurrentSession(TransactionType.HIBERNATE);
-        String hql = "from Ubicacion u where u.nombre = :nombre";
-        List<Ubicacion> result = new ArrayList<Ubicacion>();
-        for (String name : nombreUbicaciones){
-            result.add(session.createQuery(hql, Ubicacion.class)
-                    .setParameter("nombre", name).setMaxResults(1).getSingleResult());
-        }
-        try{
-            return result;
-        }catch (NoResultException ex){
-            return null;
-        }
+    public List<Ubicacion> recuperarTodos(List<String> ubicaciones){
+        return ubicaciones.stream().map(ubicacion -> this.recuperar(ubicacion)).collect(Collectors.toList());
     }
-
-    //TODO: metodo public List<Ubicacion> recuperarTodos(List<String>)
 }
