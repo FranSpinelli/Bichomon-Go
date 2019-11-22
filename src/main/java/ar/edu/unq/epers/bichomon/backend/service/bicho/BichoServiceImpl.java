@@ -23,6 +23,7 @@ public class BichoServiceImpl {
         this.bichoDAO = bichoDAO;
     }
 
+    //TODO persistir Captura de feedService
     public Bicho buscar(String entrenador){
        return run(() -> {
            Entrenador entrenador1 = this.getEntrenador(entrenador);
@@ -30,6 +31,7 @@ public class BichoServiceImpl {
        }, this.hibernateTransaction);
     }
 
+    //TODO persistir Abandono de feedService
     public void abandonar(String nombreEntrenador, int idBicho){
         run(() -> {
                Entrenador entrenador = this.getEntrenador(nombreEntrenador);
@@ -39,7 +41,7 @@ public class BichoServiceImpl {
     }
 
     public ResultadoCombate duelo(String nombreEntrenador, int idBicho){
-    /*todo: las primeras 3 lineas se repiten, se puede hacer refactor */
+        //TODO persistir Coronacion de feedService
 
         return run(() -> {
             Entrenador entrenador = this.getEntrenador(nombreEntrenador);

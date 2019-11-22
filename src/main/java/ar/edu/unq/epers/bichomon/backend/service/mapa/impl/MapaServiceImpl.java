@@ -39,10 +39,12 @@ public class MapaServiceImpl implements MapaService {
 		this.entrenadorDAO = entrenadorDAO;
 		this.ubicacionDAO = ubicacionDAO;
 		this.neo4jMapaDAO = neo4jMapaDAO;
+		//TODO .addPossibleTransaction(this.mongoDBTransaction)
 		this.transactionManager = new TransactionManager().addPossibleTransaction(this.hibernateTransaction).addPossibleTransaction(this.neo4jTransaction);
 	}
 
 	@Override
+	//TODO persistir arribo de feedService
 	public void mover(String entrenador, String ubicacion) {
 		run(() -> {
 			Entrenador entrenadorActual = this.getEntrenador(entrenador);
