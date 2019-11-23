@@ -1,6 +1,8 @@
 package ar.edu.unq.epers.bichomon.backend.dao.impl.mongoDB;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
+import ar.edu.unq.epers.bichomon.backend.model.evento.Evento;
+import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
@@ -9,9 +11,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MongoDBEventoDAO implements EventoDAO {
+public class MongoDBEventoDAO extends GenericMongoDAO<Evento> {
 
     protected MongoCollection mongoCollection;
+
+    public MongoDBEventoDAO() {
+        super(Evento.class);
+    }
 
     public void deleteAll() {
         this.mongoCollection.drop();
@@ -27,12 +33,13 @@ public class MongoDBEventoDAO implements EventoDAO {
 
     public Evento get(String id) {
         ObjectId objectId = new ObjectId(id);
-        return this.mongoCollection.findOne(objectId).as(Evento);
+        System.out.println(this.mongoCollection.findOne(objectId));
+        return this.mongoCollection.findOne(objectId).as(Evento.class);
     }
 
     public List<Evento> find(String query, Object... parameters) {
         try {
-            MongoCursor<Evento> all = this.mongoCollection.find(query, parameters).as(this.entityType);
+            MongoCursor<Evento> all = this.mongoCollection.find(query, parameters).as(Evento.class);
 
             List<Evento> result = this.copyToList(all);
             all.close();

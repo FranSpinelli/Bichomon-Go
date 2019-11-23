@@ -5,9 +5,11 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 
 public class Arribo extends Evento{
 
-    private final Ubicacion ubicacion;
+    private String ubicacion;
 
-    public Arribo(Entrenador entrenador, Ubicacion ubicacion) {
+    public Arribo(){}
+
+    public Arribo(String entrenador, String ubicacion) {
         super(entrenador);
         this.ubicacion = ubicacion;
     }

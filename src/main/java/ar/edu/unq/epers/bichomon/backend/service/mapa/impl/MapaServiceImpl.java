@@ -3,11 +3,13 @@ package ar.edu.unq.epers.bichomon.backend.service.mapa.impl;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.exceptions.DojoSinCampeon;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.mongoDB.MongoDBEventoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.neo4j.Neo4jMapaDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.MonedasInsuficientesException;
 import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
+import ar.edu.unq.epers.bichomon.backend.model.evento.Arribo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.EntrenadorInexistente;
@@ -44,7 +46,6 @@ public class MapaServiceImpl implements MapaService {
 	}
 
 	@Override
-	//TODO persistir arribo de feedService
 	public void mover(String entrenador, String ubicacion) {
 		run(() -> {
 			Entrenador entrenadorActual = this.getEntrenador(entrenador);
@@ -149,12 +150,16 @@ public class MapaServiceImpl implements MapaService {
 	}
 
 	private void moverse(Entrenador entrenador, Ubicacion ubicacion, Supplier<Integer> calcularCosto){
+		/*Precondicion esta dentro de una session*/
 			if(entrenador.estaEn(ubicacion)){
 				throw new UbicacionActualException("El entrenador no se puede mover a la ubicacion pues ya se encuentra alli");
 			}
 			Integer costo = this.getCosto(calcularCosto);
 			try{
 				entrenador.mover(ubicacion, costo);
+				Arribo arribo = new Arribo(entrenador.getNombre(), ubicacion.getNombre());
+				//TODO REFACTORIZA ESTO, ESTA ASQUEROSO!!
+				new MongoDBEventoDAO().save(arribo);
 			}catch(MonedasInsuficientesException e){
 				throw new CaminoMuyCostoso("El entrenador no puede pagar el costo del camino");
 			}
