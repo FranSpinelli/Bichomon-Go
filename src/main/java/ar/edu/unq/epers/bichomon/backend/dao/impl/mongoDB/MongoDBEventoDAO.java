@@ -12,8 +12,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
-public class MongoDBEventoDAO extends GenericMongoDAO<Evento> {
+public class MongoDBEventoDAO extends GenericMongoDAO<Evento> implements EventoDAO{
 
     protected MongoCollection mongoCollection;
 
@@ -23,6 +24,10 @@ public class MongoDBEventoDAO extends GenericMongoDAO<Evento> {
 
     public void deleteAll() {
         this.mongoCollection.drop();
+    }
+
+    public List<Evento> getAll() {
+        return this.find("{}");
     }
 
     public void save(Evento object) {
@@ -61,20 +66,35 @@ public class MongoDBEventoDAO extends GenericMongoDAO<Evento> {
         return result;
     }
 
-    public List<Evento> getEventForUbicactionList(List<String> ubicaciones) {
-        ArrayList<Evento> events = new ArrayList<>();
-        for (String ubicacion : ubicaciones) {
-            events.addAll(this.find());
+    public List<Evento> getEventList(String entrenador) {
+        List<Evento> respuesta;
+        try {
+            MongoCursor<Evento> all = this.mongoCollection.find("{ $or: [{ entrenador: # },{ entrenadorPerdedor: # } ] }", entrenador,entrenador)
+                    .sort("{ timestamp : -1}")
+                    .as(Evento.class);
+            List<Evento> result = this.copyToList(all);
+            all.close();
+            respuesta = result;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return events;
+        return respuesta;
     }
 
-    public List<Evento> getEventList(String entrenador) {
-        Aggregate.ResultsIterator<Evento> result = this.mongoCollection.aggregate("{ $match: {entrenador: # }}",entrenador)
-            .and("{$sort:{fechaEvento : -1 } }")
-            .as(Evento.class);
+    @Override
+    public List<Evento> getEventForUbicactionList(Set<String> ubicaciones) {
+        List<Evento> respuesta;
+        try {
+            MongoCursor<Evento> all = this.mongoCollection.find("{ ubicacion: { $in: # } }", ubicaciones)
+                    .sort("{ timestamp : -1}")
+                    .as(Evento.class);
+            List<Evento> result = this.copyToList(all);
+            all.close();
 
-        List<Evento> eventos = this.copyToList(result);
-        return eventos;
+            respuesta = result;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        return respuesta;
     }
 }

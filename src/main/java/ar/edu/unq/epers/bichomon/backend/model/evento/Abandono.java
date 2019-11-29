@@ -6,7 +6,7 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
 
 public class Abandono extends Evento{
 
-    private String guarderia;
+    private String ubicacion;
     private String especie;
     private int bichoId;
 
@@ -16,6 +16,12 @@ public class Abandono extends Evento{
         super(entrenador);
         this.especie = especie;
         this.bichoId = bicho;
-        this.guarderia = guarderia;
+        this.ubicacion = guarderia;
     }
+    String getEspecie(){return this.especie;}
+    void setEspecie(String newEspecie){this.especie = newEspecie;}
+    String getUbicacion(){return this.ubicacion;}
+    void setUbicacion(String newUbicacion){this.ubicacion = newUbicacion;}
+    int getbichoId(){return this.bichoId;}
+    void setbichoId(int newBichoId){this.bichoId = newBichoId;}
 }

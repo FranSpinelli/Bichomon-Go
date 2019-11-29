@@ -3,6 +3,7 @@ package ar.edu.unq.epers.bichomon.backend.service.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.dao.*;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.*;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.mongoDB.MongoDBEventoDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.AbstractNivel;
@@ -44,6 +45,7 @@ public class BichoServiceImplTest {
     private BusquedaHelperDAO busquedaHelperDAO;
     private NivelDAO nivelDAO;
     private CondicionDAO condicionDAO;
+    private EventoDAO eventoDAO;
 
     private Transaction hibernateTransaction = new HibernateTransaction();
 
@@ -62,7 +64,7 @@ public class BichoServiceImplTest {
             this.crearHelpers();
             this.crearUbicaciones();
         }, this.hibernateTransaction);
-        this.bichoService = new BichoServiceImpl(entrenadorDAO, bichoDAO);
+        this.bichoService = new BichoServiceImpl(entrenadorDAO, bichoDAO, eventoDAO);
     }
 
     @After
@@ -437,6 +439,7 @@ public class BichoServiceImplTest {
         this.especieDAO = new HibernateEspecieDAO();
         this.busquedaHelperDAO = new HibernateBusquedaHelperDAO();
         this.condicionDAO = new HibernateCondicionDAO();
+        this.eventoDAO = new MongoDBEventoDAO();
     }
 
     private void crearEntrenadores(){

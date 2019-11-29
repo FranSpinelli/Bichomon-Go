@@ -13,4 +13,6 @@ public class Arribo extends Evento{
         super(entrenador);
         this.ubicacion = ubicacion;
     }
+    String getUbicacion(){return this.ubicacion;}
+    void setUbicacion(String newUbicacion){this.ubicacion = newUbicacion;}
 }
