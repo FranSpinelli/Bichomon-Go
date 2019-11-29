@@ -2,13 +2,12 @@ package ar.edu.unq.epers.bichomon.backend.service.bicho;
 
 import ar.edu.unq.epers.bichomon.backend.dao.BichoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
-import ar.edu.unq.epers.bichomon.backend.dao.impl.mongoDB.MongoDBEventoDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.evento.Abandono;
 import ar.edu.unq.epers.bichomon.backend.model.evento.Captura;
 import ar.edu.unq.epers.bichomon.backend.model.evento.Coronacion;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.ResultadoCombate;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.BichoInexistente;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.EntrenadorInexistente;
@@ -21,11 +20,13 @@ public class BichoServiceImpl {
 
     private EntrenadorDAO entrenadorDAO;
     private BichoDAO bichoDAO;
+    private EventoDAO eventoDAO;
     private Transaction hibernateTransaction = new HibernateTransaction();
 
-    public BichoServiceImpl(EntrenadorDAO entrenadorDAO, BichoDAO bichoDAO){
+    public BichoServiceImpl(EntrenadorDAO entrenadorDAO, BichoDAO bichoDAO, EventoDAO eventoDAO){
         this.entrenadorDAO = entrenadorDAO;
         this.bichoDAO = bichoDAO;
+        this.eventoDAO = eventoDAO;
     }
 
     //TODO persistir Captura de feedService
@@ -33,7 +34,7 @@ public class BichoServiceImpl {
        return run(() -> {
            Entrenador entrenador1 = this.getEntrenador(entrenador);
            Bicho bichoEncontrado = entrenador1.buscar();
-           new MongoDBEventoDAO().save(new Captura(entrenador, bichoEncontrado.getId(), bichoEncontrado.getEspecie().getNombre()));
+           eventoDAO.save(new Captura(entrenador, bichoEncontrado.getId(), bichoEncontrado.getEspecie().getNombre()));
            return bichoEncontrado;
        }, this.hibernateTransaction);
     }
@@ -44,7 +45,7 @@ public class BichoServiceImpl {
                Entrenador entrenador = this.getEntrenador(nombreEntrenador);
                Bicho bicho = this.getBicho(idBicho);
                entrenador.abandonar(bicho);
-               new MongoDBEventoDAO().save(new Abandono(entrenador.getUbicacionActual().getNombre(), nombreEntrenador, bicho.getEspecie().getNombre(), idBicho));
+               eventoDAO.save(new Abandono(entrenador.getUbicacionActual().getNombre(), nombreEntrenador, bicho.getEspecie().getNombre(), idBicho));
         }, this.hibernateTransaction);
     }
 
@@ -57,7 +58,7 @@ public class BichoServiceImpl {
             Entrenador entrenadorCampeonAnterior = bichoCampeonAnterior.getEntrenador();
             ResultadoCombate resultado = entrenador.desafiarCampeonActualCon(bicho);
             if (entrenadorCampeonAnterior != resultado.getGanadorDelDuelo().getEntrenador()){
-                new MongoDBEventoDAO().save(new Coronacion(nombreEntrenador, entrenadorCampeonAnterior.getNombre(),entrenador.getUbicacionActual().getNombre(),bicho.getEspecie().getNombre(), idBicho, bichoCampeonAnterior.getEspecie().getNombre(), bichoCampeonAnterior.getId()));
+                eventoDAO.save(new Coronacion(nombreEntrenador, entrenadorCampeonAnterior.getNombre(),entrenador.getUbicacionActual().getNombre(),bicho.getEspecie().getNombre(), idBicho, bichoCampeonAnterior.getEspecie().getNombre(), bichoCampeonAnterior.getId()));
             }
             return resultado;
         }, this.hibernateTransaction);

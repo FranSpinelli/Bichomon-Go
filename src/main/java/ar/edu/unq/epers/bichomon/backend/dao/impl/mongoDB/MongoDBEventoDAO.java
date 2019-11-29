@@ -3,12 +3,14 @@ package ar.edu.unq.epers.bichomon.backend.dao.impl.mongoDB;
 import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
 import ar.edu.unq.epers.bichomon.backend.model.evento.Evento;
 import org.bson.types.ObjectId;
+import org.jongo.Aggregate;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 public class MongoDBEventoDAO extends GenericMongoDAO<Evento> {
@@ -59,4 +61,20 @@ public class MongoDBEventoDAO extends GenericMongoDAO<Evento> {
         return result;
     }
 
+    public List<Evento> getEventForUbicactionList(List<String> ubicaciones) {
+        ArrayList<Evento> events = new ArrayList<>();
+        for (String ubicacion : ubicaciones) {
+            events.addAll(this.find());
+        }
+        return events;
+    }
+
+    public List<Evento> getEventList(String entrenador) {
+        Aggregate.ResultsIterator<Evento> result = this.mongoCollection.aggregate("{ $match: {entrenador: # }}",entrenador)
+            .and("{$sort:{fechaEvento : -1 } }")
+            .as(Evento.class);
+
+        List<Evento> eventos = this.copyToList(result);
+        return eventos;
+    }
 }

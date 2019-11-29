@@ -1,5 +1,6 @@
 package ar.edu.unq.epers.bichomon.backend.dao.impl.neo4j;
 
+import ar.edu.unq.epers.bichomon.backend.dao.MapaDAO;
 import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner;
@@ -9,7 +10,7 @@ import org.neo4j.driver.v1.exceptions.NoSuchRecordException;
 
 import java.util.List;
 
-public class Neo4jMapaDAO {
+public class Neo4jMapaDAO implements MapaDAO {
 
     public void create(Ubicacion ubicacion) {
         Transaction session = (Transaction) TransactionRunner.getCurrentSession(TransactionType.NEO4J); //this.driver.session();
