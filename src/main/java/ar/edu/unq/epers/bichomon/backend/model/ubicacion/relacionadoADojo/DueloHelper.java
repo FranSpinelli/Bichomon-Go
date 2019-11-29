@@ -6,7 +6,6 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Dojo;
 import java.util.List;
 
 public class DueloHelper implements Estrategia{
-    /*todo REFACTOR DEL DUELO*/
 
     public DueloHelper(){}
 

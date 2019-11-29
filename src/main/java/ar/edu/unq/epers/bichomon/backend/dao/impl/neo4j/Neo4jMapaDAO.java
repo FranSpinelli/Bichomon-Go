@@ -60,18 +60,6 @@ public class Neo4jMapaDAO {
         //Similar a list.stream().map(...)
         return result.list(ubication -> ubication.get(0).get("name").asString());
     }
-/*
-    public int caminoDeUno(String nombreOrigen, String nombreDestino) {
-        Transaction session = (Transaction) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
-
-        String query = "MATCH (origen:Ubicacion {name: {nombreOrigen}}) " +
-                "MATCH (destino:Ubicacion {name: {nombreDestino}}) " +
-                "MATCH (origen)-[r]->(destino) " +
-                "RETURN r.precio";
-        StatementResult result = session.run(query, Values.parameters("nombreOrigen", nombreOrigen,
-                "nombreDestino", nombreDestino));
-        return result.next().get(0).get("precio").asInt();
-    }*/
 
     public Integer costoCaminoMasBarato(Ubicacion origen, Ubicacion destino) {
         Transaction session = (Transaction) TransactionRunner.getCurrentSession(TransactionType.NEO4J);
