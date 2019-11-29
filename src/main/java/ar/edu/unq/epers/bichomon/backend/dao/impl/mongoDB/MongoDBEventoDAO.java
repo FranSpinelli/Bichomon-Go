@@ -57,15 +57,6 @@ public class MongoDBEventoDAO extends GenericMongoDAO<Evento> implements EventoD
         }
     }
 
-    /**
-     * Copia el contenido de un iterable en una lista
-     */
-    protected <X> List<X> copyToList(Iterable<X> iterable) {
-        List<X> result = new ArrayList<>();
-        iterable.forEach(x -> result.add(x));
-        return result;
-    }
-
     public List<Evento> getEventList(String entrenador) {
         List<Evento> respuesta;
         try {

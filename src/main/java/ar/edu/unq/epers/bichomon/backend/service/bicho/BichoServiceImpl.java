@@ -29,17 +29,16 @@ public class BichoServiceImpl {
         this.eventoDAO = eventoDAO;
     }
 
-    //TODO persistir Captura de feedService
     public Bicho buscar(String entrenador){
        return run(() -> {
            Entrenador entrenador1 = this.getEntrenador(entrenador);
            Bicho bichoEncontrado = entrenador1.buscar();
-           eventoDAO.save(new Captura(entrenador, bichoEncontrado.getId(), bichoEncontrado.getEspecie().getNombre()));
+           eventoDAO.save(new Captura(entrenador1.getNombre(), bichoEncontrado.getId(),
+                                        bichoEncontrado.getEspecie().getNombre(), entrenador1.getUbicacionActual().getNombre()));
            return bichoEncontrado;
        }, this.hibernateTransaction);
     }
 
-    //TODO persistir Abandono de feedService
     public void abandonar(String nombreEntrenador, int idBicho){
         run(() -> {
                Entrenador entrenador = this.getEntrenador(nombreEntrenador);
@@ -79,8 +78,6 @@ public class BichoServiceImpl {
             return entrenador.hacerEvolucionar(bicho);
         }, this.hibernateTransaction);
     }
-
-
 
 //PRIVATE FUNCTIONS---------------------------------------------------------------------------------------------------------------------
     private Entrenador getEntrenador(String nombreDeEntrenador){
