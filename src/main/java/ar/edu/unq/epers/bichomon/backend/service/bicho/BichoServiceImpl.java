@@ -34,7 +34,7 @@ public class BichoServiceImpl {
        return run(() -> {
            Entrenador entrenador1 = this.getEntrenador(entrenador);
            Bicho bichoEncontrado = entrenador1.buscar();
-           eventoDAO.save(new Captura(entrenador, bichoEncontrado.getId(), bichoEncontrado.getEspecie().getNombre()));
+           eventoDAO.save(new Captura(entrenador, bichoEncontrado.getId(), bichoEncontrado.getEspecie().getNombre(), entrenador1.getUbicacionActual().getNombre()));
            return bichoEncontrado;
        }, this.hibernateTransaction);
     }
