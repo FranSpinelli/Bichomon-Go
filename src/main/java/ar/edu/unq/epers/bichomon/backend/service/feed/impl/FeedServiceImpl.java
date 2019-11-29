@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static ar.edu.unq.epers.bichomon.backend.service.runner.TransactionRunner.run;
+
 public class FeedServiceImpl implements FeedService {
     EntrenadorDAO entrenadorDAO;
     MapaDAO mapaDAO;
@@ -25,23 +27,28 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public List<Evento> feedEntrenador(String entrenador) {
-        return eventoDAO.getEventList(entrenador);
+        return run(() -> eventoDAO.getEventList(entrenador));
     }
 
     @Override
     public List<Evento> feedUbicacion(String entrenadorName) {
         Set<String> ubicaciones = new HashSet<>();
-        Entrenador entrenador = entrenadorDAO.recuperar(entrenadorName);
-        if (entrenador != null) {
+        Entrenador entrenador = this.getEntrenador(entrenadorName);
+
             String ubicacion = entrenador.getUbicacionActual().getNombre();
             ubicaciones.add(ubicacion);
             ubicaciones.addAll(mapaDAO.conectados(ubicacion, "Aereo"));
             ubicaciones.addAll(mapaDAO.conectados(ubicacion, "Terrestre"));
             ubicaciones.addAll(mapaDAO.conectados(ubicacion, "Maritimo"));
             return eventoDAO.getEventForUbicactionList(ubicaciones);
+    }
+    //PRIVATE FUNCTIONS---------------------------------------------------------------------------------------------------------------------
+
+    private Entrenador getEntrenador(String nombreDeEntrenador){
+        Entrenador entrenador = this.entrenadorDAO.recuperar(nombreDeEntrenador);
+        if(entrenador == null){
+            throw new EntrenadorInexistente(nombreDeEntrenador);
         }
-        else{
-            throw new EntrenadorInexistente(entrenadorName);
-        }
+        return entrenador;
     }
 }

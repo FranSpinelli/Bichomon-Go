@@ -29,7 +29,6 @@ public class BichoServiceImpl {
         this.eventoDAO = eventoDAO;
     }
 
-    //TODO persistir Captura de feedService
     public Bicho buscar(String entrenador){
        return run(() -> {
            Entrenador entrenador1 = this.getEntrenador(entrenador);
@@ -39,7 +38,6 @@ public class BichoServiceImpl {
        }, this.hibernateTransaction);
     }
 
-    //TODO persistir Abandono de feedService
     public void abandonar(String nombreEntrenador, int idBicho){
         run(() -> {
                Entrenador entrenador = this.getEntrenador(nombreEntrenador);
@@ -79,8 +77,6 @@ public class BichoServiceImpl {
             return entrenador.hacerEvolucionar(bicho);
         }, this.hibernateTransaction);
     }
-
-
 
 //PRIVATE FUNCTIONS---------------------------------------------------------------------------------------------------------------------
     private Entrenador getEntrenador(String nombreDeEntrenador){
