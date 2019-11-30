@@ -52,11 +52,12 @@ public class BichoServiceImpl {
         return run(() -> {
             Entrenador entrenador = this.getEntrenador(nombreEntrenador);
             Bicho bicho = this.getBicho(idBicho);
-            Bicho bichoCampeonAnterior = entrenador.getUbicacionActual().getCampeonActual().getBicho();
-            Entrenador entrenadorCampeonAnterior = bichoCampeonAnterior.getEntrenador();
             ResultadoCombate resultado = entrenador.desafiarCampeonActualCon(bicho);
-            if (entrenadorCampeonAnterior != resultado.getGanadorDelDuelo().getEntrenador()){
-                eventoDAO.save(new Coronacion(nombreEntrenador, entrenadorCampeonAnterior.getNombre(),entrenador.getUbicacionActual().getNombre(),bicho.getEspecie().getNombre(), idBicho, bichoCampeonAnterior.getEspecie().getNombre(), bichoCampeonAnterior.getId()));
+            Bicho bichoPerdedor = resultado.getPerdedorDelDuelo();
+            if (bicho != bichoPerdedor && bichoPerdedor != null){
+                eventoDAO.save(new Coronacion(nombreEntrenador, bichoPerdedor.getEntrenador().getNombre(),entrenador.getUbicacionActual().getNombre(),bicho.getEspecie().getNombre(), idBicho, bichoPerdedor.getEspecie().getNombre(), bichoPerdedor.getId()));
+            }else if(bicho != bichoPerdedor){
+                eventoDAO.save(new Coronacion(nombreEntrenador, null,entrenador.getUbicacionActual().getNombre(),bicho.getEspecie().getNombre(), idBicho, null, null));
             }
             return resultado;
         }, this.hibernateTransaction);

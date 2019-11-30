@@ -1,8 +1,5 @@
 package ar.edu.unq.epers.bichomon.backend.model.evento;
 
-import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
-
 public class Arribo extends Evento{
 
     private String ubicacion;
@@ -13,6 +10,6 @@ public class Arribo extends Evento{
         super(entrenador);
         this.ubicacion = ubicacion;
     }
-    String getUbicacion(){return this.ubicacion;}
-    void setUbicacion(String newUbicacion){this.ubicacion = newUbicacion;}
+    public String getUbicacion(){return this.ubicacion;}
+    public void setUbicacion(String newUbicacion){this.ubicacion = newUbicacion;}
 }

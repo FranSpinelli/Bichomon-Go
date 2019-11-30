@@ -81,6 +81,7 @@ public class MapaServiceImplTest {
         run(() -> {
             SessionFactoryProvider.destroy();
             this.neo4jMapaDAO.deleteAll();
+            this.eventoDAO.deleteAll();
         }
         , HIBERNATE, NEO4J);
     }

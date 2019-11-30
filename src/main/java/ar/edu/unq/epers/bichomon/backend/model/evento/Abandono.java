@@ -1,9 +1,5 @@
 package ar.edu.unq.epers.bichomon.backend.model.evento;
 
-import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
-import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
-import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Guarderia;
-
 public class Abandono extends Evento{
 
     private String ubicacion;
@@ -18,10 +14,10 @@ public class Abandono extends Evento{
         this.bichoId = bicho;
         this.ubicacion = guarderia;
     }
-    String getEspecie(){return this.especie;}
-    void setEspecie(String newEspecie){this.especie = newEspecie;}
-    String getUbicacion(){return this.ubicacion;}
-    void setUbicacion(String newUbicacion){this.ubicacion = newUbicacion;}
-    int getbichoId(){return this.bichoId;}
-    void setbichoId(int newBichoId){this.bichoId = newBichoId;}
+    public String getEspecie(){return this.especie;}
+    public void setEspecie(String newEspecie){this.especie = newEspecie;}
+    public String getUbicacion(){return this.ubicacion;}
+    public void setUbicacion(String newUbicacion){this.ubicacion = newUbicacion;}
+    public int getbichoId(){return this.bichoId;}
+    public void setbichoId(int newBichoId){this.bichoId = newBichoId;}
 }

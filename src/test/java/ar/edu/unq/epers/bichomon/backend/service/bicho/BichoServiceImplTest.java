@@ -70,6 +70,7 @@ public class BichoServiceImplTest {
     @After
     public void limpiarEscenario(){
         run(SessionFactoryProvider::destroy, this.hibernateTransaction);
+        this.eventoDAO.deleteAll();
     }
 
     @Test

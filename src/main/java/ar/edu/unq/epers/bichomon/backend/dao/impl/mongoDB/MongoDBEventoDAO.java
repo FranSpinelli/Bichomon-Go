@@ -3,14 +3,9 @@ package ar.edu.unq.epers.bichomon.backend.dao.impl.mongoDB;
 import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
 import ar.edu.unq.epers.bichomon.backend.model.evento.Evento;
 import org.bson.types.ObjectId;
-import org.jongo.Aggregate;
-import org.jongo.Jongo;
-import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -50,17 +45,18 @@ public class MongoDBEventoDAO extends GenericMongoDAO<Evento> implements EventoD
                     .as(Evento.class);
             List<Evento> result = this.copyToList(all);
             all.close();
-            System.out.println(result);
+//            System.out.println(result);
             respuesta = result;
 
 
-            System.out.println("AAAAAAAAAAAa");
-            System.out.println(result);
+
+//            System.out.println("AAAAAAAAAAAa");
+//            System.out.println(result);
         } catch (IOException e) {
-            System.out.println("ERRRRRRRRROR");
+//            System.out.println("ERRRRRRRRROR");
             throw new RuntimeException(e);
         }
-        System.out.println(respuesta);
+//        System.out.println(respuesta);
         return respuesta;
     }
 

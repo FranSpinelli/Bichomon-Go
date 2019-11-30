@@ -7,6 +7,7 @@ import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.evento.Evento;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.EntrenadorInexistente;
 import ar.edu.unq.epers.bichomon.backend.service.feed.FeedService;
+import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.HibernateTransaction;
 
 import java.util.HashSet;
 import java.util.List;
@@ -27,21 +28,24 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public List<Evento> feedEntrenador(String entrenador) {
-        return run(() -> eventoDAO.getEventList(entrenador));
+        return run(() -> {
+           this.getEntrenador(entrenador);
+           return eventoDAO.getEventList(entrenador);
+        }, new HibernateTransaction());
     }
 
     @Override
     public List<Evento> feedUbicacion(String entrenadorName) {
         return run(() ->{
-        Set<String> ubicaciones = new HashSet<>();
-        Entrenador entrenador = this.getEntrenador(entrenadorName);
+            Set<String> ubicaciones = new HashSet<>();
+            Entrenador entrenador = this.getEntrenador(entrenadorName);
             String ubicacion = entrenador.getUbicacionActual().getNombre();
             ubicaciones.add(ubicacion);
             ubicaciones.addAll(mapaDAO.conectados(ubicacion, "Aereo"));
             ubicaciones.addAll(mapaDAO.conectados(ubicacion, "Terrestre"));
             ubicaciones.addAll(mapaDAO.conectados(ubicacion, "Maritimo"));
             return eventoDAO.getEventForUbicactionList(ubicaciones);
-        });
+        }, new HibernateTransaction());
     }
     //PRIVATE FUNCTIONS---------------------------------------------------------------------------------------------------------------------
 

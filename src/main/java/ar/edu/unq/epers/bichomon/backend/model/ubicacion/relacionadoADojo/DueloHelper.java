@@ -69,8 +69,10 @@ public class DueloHelper implements Estrategia{
         if (!this.bichoCampeonSigueVivo(bichoCampeon, contenedorACompletar)) {
             lugarDePelea.setCampeonActual(bichoRetador);
             contenedorACompletar.setGanadorDelDuelo(bichoRetador);
+            contenedorACompletar.setPerdedorDelDuelo(bichoCampeon);
         }else{
             contenedorACompletar.setGanadorDelDuelo(bichoCampeon);
+            contenedorACompletar.setPerdedorDelDuelo(bichoRetador);
         }
 
         setearEnergiaYXPDeEntrenadorDe(bichoCampeon);

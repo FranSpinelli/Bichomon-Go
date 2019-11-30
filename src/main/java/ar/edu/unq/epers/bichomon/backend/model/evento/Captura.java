@@ -14,10 +14,10 @@ public class Captura extends Evento{
         this.especie = especie;
         this.ubicacion = ubicacion;
     }
-    String getEspecie(){return this.especie;}
-    void setEspecie(String newEspecie){this.especie = newEspecie;}
-    int getbichoId(){return this.bichoId;}
-    void setbichoId(int newBichoId){this.bichoId = newBichoId;}
-    String getUbicacion(){return this.ubicacion;}
-    void setUbicacion(String newUbicacion){this.ubicacion = newUbicacion;}
+    public String getEspecie(){return this.especie;}
+    public void setEspecie(String newEspecie){this.especie = newEspecie;}
+    public int getbichoId(){return this.bichoId;}
+    public void setbichoId(int newBichoId){this.bichoId = newBichoId;}
+    public String getUbicacion(){return this.ubicacion;}
+    public void setUbicacion(String newUbicacion){this.ubicacion = newUbicacion;}
 }
