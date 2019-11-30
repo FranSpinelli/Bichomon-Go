@@ -16,31 +16,16 @@ import java.util.Set;
 
 public class MongoDBEventoDAO extends GenericMongoDAO<Evento> implements EventoDAO{
 
-    protected MongoCollection mongoCollection;
-
     public MongoDBEventoDAO() {
         super(Evento.class);
-    }
-
-    public void deleteAll() {
-        this.mongoCollection.drop();
     }
 
     public List<Evento> getAll() {
         return this.find("{}");
     }
 
-    public void save(Evento object) {
-        this.mongoCollection.insert(object);
-    }
-
-    public void save(List<Evento> eventos) {
-        this.mongoCollection.insert(eventos.toArray());
-    }
-
     public Evento get(String id) {
         ObjectId objectId = new ObjectId(id);
-        System.out.println(this.mongoCollection.findOne(objectId));
         return this.mongoCollection.findOne(objectId).as(Evento.class);
     }
 
@@ -65,10 +50,17 @@ public class MongoDBEventoDAO extends GenericMongoDAO<Evento> implements EventoD
                     .as(Evento.class);
             List<Evento> result = this.copyToList(all);
             all.close();
+            System.out.println(result);
             respuesta = result;
+
+
+            System.out.println("AAAAAAAAAAAa");
+            System.out.println(result);
         } catch (IOException e) {
+            System.out.println("ERRRRRRRRROR");
             throw new RuntimeException(e);
         }
+        System.out.println(respuesta);
         return respuesta;
     }
 

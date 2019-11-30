@@ -15,4 +15,6 @@ public interface EventoDAO {
     List<Evento> getEventForUbicactionList(Set<String> ubicaciones);
 
     void save(Evento evento);
+
+    void deleteAll();
 }

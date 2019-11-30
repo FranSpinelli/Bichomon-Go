@@ -32,15 +32,16 @@ public class FeedServiceImpl implements FeedService {
 
     @Override
     public List<Evento> feedUbicacion(String entrenadorName) {
+        return run(() ->{
         Set<String> ubicaciones = new HashSet<>();
         Entrenador entrenador = this.getEntrenador(entrenadorName);
-
             String ubicacion = entrenador.getUbicacionActual().getNombre();
             ubicaciones.add(ubicacion);
             ubicaciones.addAll(mapaDAO.conectados(ubicacion, "Aereo"));
             ubicaciones.addAll(mapaDAO.conectados(ubicacion, "Terrestre"));
             ubicaciones.addAll(mapaDAO.conectados(ubicacion, "Maritimo"));
             return eventoDAO.getEventForUbicactionList(ubicaciones);
+        });
     }
     //PRIVATE FUNCTIONS---------------------------------------------------------------------------------------------------------------------
 

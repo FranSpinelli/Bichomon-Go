@@ -19,10 +19,12 @@ import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.service.feed.impl.FeedServiceImpl;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.MapaService;
 import ar.edu.unq.epers.bichomon.backend.service.mapa.impl.MapaServiceImpl;
+import ar.edu.unq.epers.bichomon.backend.service.runner.SessionFactoryProvider;
 import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.Transaction;
 import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.HibernateTransaction;
 import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.Neo4jTransaction;
 import ar.edu.unq.epers.bichomon.backend.service.runner.transaction.impl.TransactionManager;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -68,16 +70,27 @@ public class FeedServiceTest {
         }, HIBERNATE, NEO4J);
     }
 
+    @After
+    public void limpiarModelo(){
+        run(() -> {
+                    SessionFactoryProvider.destroy();
+                    this.neo4jMapaDAO.deleteAll();
+                    this.eventoDAO.deleteAll();
+                }
+                , HIBERNATE, NEO4J);
+
+    }
+
     @Test
     public void testFeedEntrenadorYFeedEntrenadorVacio(){
-        assertEquals(0, feedService.feedEntrenador(ash.getNombre()));
-        assertEquals(0, feedService.feedEntrenador(puebloA.getNombre()));
+        assertEquals(new ArrayList<>() , feedService.feedEntrenador(ash.getNombre()));
+        assertEquals(new ArrayList<>() , feedService.feedEntrenador(puebloA.getNombre()));
     }
 
     @Test
     public void testEventoDeArriboAPuebloB(){
         mapaService.mover(ash.getNombre(), puebloB.getNombre());
-        assertEquals(1, feedService.feedEntrenador(ash.getNombre()));
+        assertEquals(1, feedService.feedEntrenador(ash.getNombre()).size());
     }
 
     /*    Create the model functions    */
