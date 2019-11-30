@@ -1,13 +1,16 @@
 package ar.edu.unq.epers.bichomon.backend.service.mapa.impl;
 
 import ar.edu.unq.epers.bichomon.backend.dao.EntrenadorDAO;
+import ar.edu.unq.epers.bichomon.backend.dao.EventoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.UbicacionDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.exceptions.DojoSinCampeon;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.mongoDB.MongoDBEventoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.neo4j.Neo4jMapaDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Entrenador;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.MonedasInsuficientesException;
 import ar.edu.unq.epers.bichomon.backend.model.camino.TipoCamino;
+import ar.edu.unq.epers.bichomon.backend.model.evento.Arribo;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.Ubicacion;
 import ar.edu.unq.epers.bichomon.backend.model.ubicacion.relacionadoADojo.Campeon;
 import ar.edu.unq.epers.bichomon.backend.service.bicho.serviceExeptions.EntrenadorInexistente;
@@ -31,14 +34,17 @@ public class MapaServiceImpl implements MapaService {
 	private Neo4jMapaDAO neo4jMapaDAO;
 	private EntrenadorDAO entrenadorDAO;
 	private UbicacionDAO ubicacionDAO;
+	private EventoDAO eventoDAO;
 	private Transaction hibernateTransaction = new HibernateTransaction();
 	private Transaction neo4jTransaction = new Neo4jTransaction();
 	private TransactionManager transactionManager;
 
-	public MapaServiceImpl(EntrenadorDAO entrenadorDAO, UbicacionDAO ubicacionDAO, Neo4jMapaDAO neo4jMapaDAO) {
-		this.entrenadorDAO = entrenadorDAO;
-		this.ubicacionDAO = ubicacionDAO;
-		this.neo4jMapaDAO = neo4jMapaDAO;
+	public MapaServiceImpl(EntrenadorDAO entrenadorDAO, UbicacionDAO ubicacionDAO, Neo4jMapaDAO neo4jMapaDAO, EventoDAO eventoDAO) {
+		this.entrenadorDAO 	= entrenadorDAO;
+		this.ubicacionDAO 	= ubicacionDAO;
+		this.neo4jMapaDAO 	= neo4jMapaDAO;
+		this.eventoDAO 		= eventoDAO;
+		//TODO .addPossibleTransaction(this.mongoDBTransaction)
 		this.transactionManager = new TransactionManager().addPossibleTransaction(this.hibernateTransaction).addPossibleTransaction(this.neo4jTransaction);
 	}
 
@@ -147,12 +153,16 @@ public class MapaServiceImpl implements MapaService {
 	}
 
 	private void moverse(Entrenador entrenador, Ubicacion ubicacion, Supplier<Integer> calcularCosto){
+		/*Precondicion esta dentro de una session*/
 			if(entrenador.estaEn(ubicacion)){
 				throw new UbicacionActualException("El entrenador no se puede mover a la ubicacion pues ya se encuentra alli");
 			}
 			Integer costo = this.getCosto(calcularCosto);
 			try{
 				entrenador.mover(ubicacion, costo);
+				Arribo arribo = new Arribo(entrenador.getNombre(), ubicacion.getNombre());
+				//TODO REFACTORIZA ESTO, ESTA ASQUEROSO!!
+				eventoDAO.save(arribo);
 			}catch(MonedasInsuficientesException e){
 				throw new CaminoMuyCostoso("El entrenador no puede pagar el costo del camino");
 			}

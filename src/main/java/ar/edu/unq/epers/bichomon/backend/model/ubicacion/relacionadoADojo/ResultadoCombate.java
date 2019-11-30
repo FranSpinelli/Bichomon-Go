@@ -14,7 +14,8 @@ public class ResultadoCombate {
     private int id;
     @ManyToOne(cascade = CascadeType.ALL)
     private Bicho ganadorDelDuelo;
-
+    @ManyToOne
+    private Bicho perdedorDelDuelo;
     @ManyToMany
     private List<Double>danhoRecibidoPorBichoCampeon;
     @ManyToMany
@@ -56,5 +57,12 @@ public class ResultadoCombate {
 
     public List<Double> getListaDeDanhoRecibidoPorBichoRetador(){
         return this.danhoRecibidoPorBichoRetador;
+    }
+
+    public void setPerdedorDelDuelo(Bicho bichoPerdedor) {
+        this.perdedorDelDuelo = bichoPerdedor;
+    }
+    public Bicho getPerdedorDelDuelo() {
+        return this.perdedorDelDuelo;
     }
 }

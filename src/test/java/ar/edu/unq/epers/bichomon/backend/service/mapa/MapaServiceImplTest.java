@@ -4,6 +4,7 @@ import ar.edu.unq.epers.bichomon.backend.dao.*;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.*;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.exceptions.DojoNoUtilizado;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.hibernate.exceptions.DojoSinCampeon;
+import ar.edu.unq.epers.bichomon.backend.dao.impl.mongoDB.MongoDBEventoDAO;
 import ar.edu.unq.epers.bichomon.backend.dao.impl.neo4j.Neo4jMapaDAO;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.AbstractNivel;
 import ar.edu.unq.epers.bichomon.backend.model.bicho.Bicho;
@@ -59,6 +60,7 @@ public class MapaServiceImplTest {
     private Especie picachu, charizard, squirtle;
     private AbstractNivel nivel;
     private NivelDAO nivelDAO;
+    private EventoDAO eventoDAO;
     private Transaction hibernateTransaction = new HibernateTransaction();
     private TransactionManager transactionManager = new TransactionManager().addPossibleTransaction(this.hibernateTransaction).addPossibleTransaction(new Neo4jTransaction());
 
@@ -66,9 +68,9 @@ public class MapaServiceImplTest {
     public void crearModelo(){
         run(() -> {
             this.crearDAOs();
-            this.mapaService = new MapaServiceImpl(entrenadorDAO, ubicacionDAO, neo4jMapaDAO);
+            this.mapaService = new MapaServiceImpl(entrenadorDAO, ubicacionDAO, neo4jMapaDAO, eventoDAO);
             this.crearUbicaciones();
-            this.crearEntrenadores();//Los entrenadores estan por defecto en 'PuebloPorDefecto'
+            this.crearEntrenadores();
             this.crearEspecies();
             this.crearBichos();
         }, HIBERNATE, NEO4J);
@@ -79,6 +81,7 @@ public class MapaServiceImplTest {
         run(() -> {
             SessionFactoryProvider.destroy();
             this.neo4jMapaDAO.deleteAll();
+            this.eventoDAO.deleteAll();
         }
         , HIBERNATE, NEO4J);
     }
@@ -116,10 +119,6 @@ public class MapaServiceImplTest {
 
     @Test
     public void testMover(){
-        /*run(() -> {
-            this.ashRecuperado = this.entrenadorDAO.recuperar(this.ash.getNombre());
-            this.ashRecuperado.setUbicacionActual(this.dojo);
-        }, this.hibernateTransaction);*/
         this.mapaService.mover(this.ash.getNombre(), this.puebloOrigen.getNombre());//Una moneda
         this.mapaService.mover(this.ash.getNombre(), this.puebloDestino.getNombre());//4 monedas
         run(() -> {
@@ -162,10 +161,6 @@ public class MapaServiceImplTest {
 
     @Test
     public void testMoverMasCorto(){
-        /*run(() -> {
-            this.ashRecuperado = this.entrenadorDAO.recuperar(this.ash.getNombre());
-            this.ashRecuperado.setUbicacionActual(this.dojo);
-        }, this.hibernateTransaction);*/
         this.mapaService.moverMasCorto(this.ash.getNombre(), this.puebloOrigen.getNombre());//Una moneda
         this.mapaService.moverMasCorto(this.ash.getNombre(), this.puebloDestino.getNombre());//10 monedas
         run(() -> {
@@ -307,32 +302,33 @@ public class MapaServiceImplTest {
     }
 
     private void crearDAOs() {
-        this.nivelDAO = new HibernateNivelDAO();
-        this.entrenadorDAO = new HibernateEntrenadorDAO();
-        this.ubicacionDAO = new HibernateUbicacionDAO();
-        this.neo4jMapaDAO = new Neo4jMapaDAO();
-        this.especieDAO = new HibernateEspecieDAO();
-        this.bichoDAO = new HibernateBichoDAO();
-        this.campeonDAO = new HibernateCampeonDAO();
+        this.nivelDAO       = new HibernateNivelDAO();
+        this.entrenadorDAO  = new HibernateEntrenadorDAO();
+        this.ubicacionDAO   = new HibernateUbicacionDAO();
+        this.neo4jMapaDAO   = new Neo4jMapaDAO();
+        this.especieDAO     = new HibernateEspecieDAO();
+        this.bichoDAO       = new HibernateBichoDAO();
+        this.campeonDAO     = new HibernateCampeonDAO();
+        this.eventoDAO      = new MongoDBEventoDAO();
     }
 
     private void crearUbicaciones() {
-        this.dojo = new Dojo("Dojo");
-        this.dojo1 = new Dojo("Dojo1");
-        this.dojo2 = new Dojo("Dojo2");
-        this.dojo3 = new Dojo("Dojo3");
-        this.dojo4 = new Dojo("Dojo4");
-        this.guarderia = new Guarderia("Guarderia");
-        this.guarderia1 = new Guarderia("Guarderia1");
-        this.guarderia2 = new Guarderia("Guarderia2");
-        this.guarderia3 = new Guarderia("Guarderia3");
-        this.guarderia4 = new Guarderia("Guarderia4");
-        this.pueblo = new Pueblo("Pueblo");
-        this.pueblo1 = new Pueblo("Pueblo1");
-        this.puebloOrigen = new Pueblo("PuebloOrigen");
-        this.puebloDestino = new Pueblo("PuebloDestino");
-        this.puebloSinSalida = new Pueblo("PuebloSinSalida");
-        this.puebloPorDefecto = new Pueblo("PuebloPorDefecto");
+        this.dojo               = new Dojo("Dojo");
+        this.dojo1              = new Dojo("Dojo1");
+        this.dojo2              = new Dojo("Dojo2");
+        this.dojo3              = new Dojo("Dojo3");
+        this.dojo4              = new Dojo("Dojo4");
+        this.guarderia          = new Guarderia("Guarderia");
+        this.guarderia1         = new Guarderia("Guarderia1");
+        this.guarderia2         = new Guarderia("Guarderia2");
+        this.guarderia3         = new Guarderia("Guarderia3");
+        this.guarderia4         = new Guarderia("Guarderia4");
+        this.pueblo             = new Pueblo("Pueblo");
+        this.pueblo1            = new Pueblo("Pueblo1");
+        this.puebloOrigen       = new Pueblo("PuebloOrigen");
+        this.puebloDestino      = new Pueblo("PuebloDestino");
+        this.puebloSinSalida    = new Pueblo("PuebloSinSalida");
+        this.puebloPorDefecto   = new Pueblo("PuebloPorDefecto");
         this.persistirUbicaciones(this.listaDeUbicaciones());
         this.conectarUbicaciones();
         //        this.ubicacionDAO.guardarTodos(this.listaDeUbicaciones());
@@ -392,25 +388,25 @@ public class MapaServiceImplTest {
     }
 
     private void crearBichos() {
-        this.bichoPicachu = new Bicho(this.picachu);
+        this.bichoPicachu   = new Bicho(this.picachu);
         this.bichoCharizard = new Bicho(this.charizard);
-        this.bichoSquirtle = new Bicho(this.squirtle);
+        this.bichoSquirtle  = new Bicho(this.squirtle);
         this.bichoDAO.guardarTodos(this.listaDeBichos());
     }
 
     private void crearEspecies() {
-        this.picachu = new Especie("Picachu", ELECTRICIDAD);
-        this.charizard = new Especie("Charizard", FUEGO);
-        this.squirtle = new Especie("Squirtle", AGUA);
+        this.picachu    = new Especie("Picachu", ELECTRICIDAD);
+        this.charizard  = new Especie("Charizard", FUEGO);
+        this.squirtle   = new Especie("Squirtle", AGUA);
         this.especieDAO.guardarTodos(this.listaDeEspecies());
     }
 
     private void crearEntrenadores() {
-        this.nivel = new UltimoNivel(10,0, 100);
+        this.nivel      = new UltimoNivel(10,0, 100);
         this.nivelDAO.guardar(nivel);
-        this.ash = new Entrenador("Ash", nivel);
-        this.brook = new Entrenador("Brook", nivel);
-        this.misty = new Entrenador("Misty", nivel);
+        this.ash        = new Entrenador("Ash", nivel);
+        this.brook      = new Entrenador("Brook", nivel);
+        this.misty      = new Entrenador("Misty", nivel);
         this.ash.setUbicacionActual(this.puebloPorDefecto);
         this.brook.setUbicacionActual(this.puebloPorDefecto);
         this.misty.setUbicacionActual(this.puebloPorDefecto);
